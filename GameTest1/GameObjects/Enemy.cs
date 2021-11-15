@@ -8,7 +8,6 @@ namespace GameTest1.GameObjects
     {
         public Enemy()
         {
-            int YearofFormation;
         }
     }
 }
