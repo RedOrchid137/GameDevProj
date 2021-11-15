@@ -6,5 +6,9 @@ namespace GameTest1.GameObjects
 {
     class Enemy
     {
+        public Enemy()
+        {
+
+        }
     }
 }
