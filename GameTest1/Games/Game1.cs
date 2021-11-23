@@ -7,15 +7,18 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 
 namespace GameTest1
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private static GraphicsDeviceManager _graphics;
+        public static GraphicsDeviceManager Graphics { get { return _graphics; }}
         Character testchar;
         Static testblock;
+        private List<GameObject>objectList = new List<GameObject>();
 
 
         public Game1()
@@ -39,10 +42,10 @@ namespace GameTest1
             Spritesheet test = new Spritesheet(Content.Load<Texture2D>("Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
             Spritesheet grass = new Spritesheet(Content.Load<Texture2D>("GrassBlock"), new List<int> {1});
             //Spritesheet test = new Spritesheet(Content.Load<Texture2D>("ground_monk_FREE_v1.2-SpriteSheet_288x128"), new List<int> { 6,8,3,6,12,24,25,16,6,13,6,14 });
-            testchar = new Character(test,new SpriteBatch(GraphicsDevice),window,5, new KeyboardReader(),2.5f);
+            testchar = new Character(test,new SpriteBatch(GraphicsDevice),window, new KeyboardReader(),2.5f,5);
 
-            testblock = new Static(grass,new SpriteBatch(GraphicsDevice),window,2f);
-            testblock.Position = new Vector2(World.screenWidth/2, 800);
+            testblock = new Static(grass,new SpriteBatch(GraphicsDevice),window,2.5f);
+            testblock.Position = new Vector2(World.screenWidth/2, World.FloorHeight-testblock.Texture.Height*testblock.Scale);
         }
 
         protected override void Update(GameTime gameTime)
@@ -56,12 +59,11 @@ namespace GameTest1
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.AliceBlue);
+            Debug.WriteLine(1/gameTime.ElapsedGameTime.TotalSeconds);
+            GraphicsDevice.Clear(Color.White);
             testchar.Draw(testchar.curAnimation.CurrentFrame.SourceRectangle);
             testblock.Draw();
             base.Draw(gameTime);
         }
-
-
         }
     }

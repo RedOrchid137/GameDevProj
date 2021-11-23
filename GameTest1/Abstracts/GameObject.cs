@@ -19,6 +19,8 @@ namespace GameTest1
         protected Rectangle _window;
         private float _maxSpeed;
 
+
+        public Rectangle CollisionRectangle { get; set; }
         public float Scale { get; set; }
         public bool FlipFlagX { get; set; } = false;
         public bool FlipFlagY { get; set; } = false;
@@ -49,12 +51,12 @@ namespace GameTest1
         {
             Animation anime = new Animation();
             anime.Type = type;
-            anime.GetFramesFromTextureProperties(spritesheet.Width, spritesheet.Height, spritesheet.Max, spritesheet.RowCounts.Count, spritesheet.RowCounts, rowsNeeded);
+            anime.GetFramesFromTextureProperties(spritesheet, rowsNeeded);
             anime.CurrentFrame = anime.Frames[0];
             animationList[type] = anime;
         }
 
-        public GameObject(Spritesheet spritesheet,SpriteBatch spritebatch,Rectangle window, float maxSpeed,float scale=1)
+        public GameObject(Spritesheet spritesheet,SpriteBatch spritebatch,Rectangle window, float scale=1,float maxSpeed=0)
         {
             this.Scale = scale;
             animationList = new Dictionary<AnimationType, Animation>();
@@ -63,7 +65,6 @@ namespace GameTest1
             _window = window;
             _texture = this.spritesheet.Texture;
             _spriteBatch = spritebatch;
-            AnimationManager.setTimer();
         }
     }
 }

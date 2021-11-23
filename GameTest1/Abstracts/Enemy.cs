@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GameTest1.GameObjects
+namespace GameTest1.Abstracts
 {
-    class Enemy
+    public abstract class Enemy
     {
         public Enemy()
         {

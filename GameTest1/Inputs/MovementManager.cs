@@ -55,13 +55,15 @@ namespace GameTest1.Inputs
                     (movable as Character).JumpFlag = true;
                     movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y - movable.Acceleration.Y);
                 }
-                if(movable.Position.Y>World.FloorHeight)
+
+                int spriteheight = movable.curAnimation.CurrentFrame.SourceRectangle.Height;
+                if (movable.Position.Y>World.FloorHeight-spriteheight*movable.Scale)
                 {
                     movable.Speed = new Vector2(movable.Speed.X, 0);
                     (movable as Character).JumpFlag = false;
-                    movable.Position = new Vector2(movable.Position.X, World.FloorHeight);
+                    movable.Position = new Vector2(movable.Position.X, World.FloorHeight- spriteheight * movable.Scale);
                 }
-                else if(movable.Position.Y < World.FloorHeight)
+                else if(movable.Position.Y < World.FloorHeight - spriteheight * movable.Scale)
                 {
                     movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y + Physics.gravConst);
                 }

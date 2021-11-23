@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameTest1.Animations;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,21 +35,55 @@ namespace GameTest1
         internal AnimationFrame CurrentFrame { get { return currentFrame; } set { currentFrame = value; } }
         internal List<AnimationFrame> Frames { get { return frames; } set { frames = value; } }
 
-        
-        public void GetFramesFromTextureProperties(int width, int height, int maxnumberOfColummns, int rowsTotal,List<int>rowsCount,List<int> rowsNeeded)
+
+        //public void GetFramesFromTextureProperties(int width, int height, int maxnumberOfColummns, int rowsTotal,List<int>rowsCount,List<int> rowsNeeded)
+        //{
+        //    int widthOfFrame = width / maxnumberOfColummns;
+        //    int heightOfFrame = height / rowsTotal;
+
+        //    int curX;
+        //    int curY = rowsNeeded[0]*heightOfFrame;
+        //    for (int i = 0; i < rowsNeeded.Count; i++)
+        //    {
+        //        curX = 0;
+        //        curY += i * heightOfFrame;
+        //        for (int j = 0; j < rowsCount[rowsNeeded[i]]; j++)
+        //        {
+        //            //new Rectangle(curX,curY,widthOfFrame,heightOfFrame
+        //            frames.Add(new AnimationFrame(new Rectangle(CalculateBounds.GetSmallestRectangleFromTexture())));
+        //            curX += widthOfFrame;
+        //        }
+        //    }
+        //}
+        private Texture2D Crop(Texture2D image, Rectangle source)
         {
-            int widthOfFrame = width / maxnumberOfColummns;
-            int heightOfFrame = height / rowsTotal;
+            //var graphics = image.GraphicsDevice;
+            //var ret = new RenderTarget2D(graphics, source.Width, source.Height);
+            //Texture2D retimg = (Texture2D)ret;
+            //return retimg
+            Texture2D cropTexture = new Texture2D(Game1.Graphics.GraphicsDevice, source.Width, source.Height);
+            Color[] data = new Color[source.Width * source.Height];
+            image.GetData(0, source, data, 0, data.Length);
+            cropTexture.SetData(data);
+            return cropTexture;
+        }
+        public void GetFramesFromTextureProperties(Spritesheet sheet, List<int> rowsNeeded)
+        {
+            int widthOfFrame = sheet.Width / sheet.Max;
+            int heightOfFrame = sheet.Height / sheet.RowCounts.Count;
 
             int curX;
-            int curY = rowsNeeded[0]*heightOfFrame;
+            int curY = rowsNeeded[0] * heightOfFrame;
             for (int i = 0; i < rowsNeeded.Count; i++)
             {
                 curX = 0;
                 curY += i * heightOfFrame;
-                for (int j = 0; j < rowsCount[rowsNeeded[i]]; j++)
+                for (int j = 0; j < sheet.RowCounts[rowsNeeded[i]]; j++)
                 {
-                    frames.Add(new AnimationFrame(new Rectangle(curX,curY,widthOfFrame,heightOfFrame)));
+                    //new Rectangle(curX,curY,widthOfFrame,heightOfFrame
+                    Rectangle framerect = CalculateBounds.GetSmallestRectangleFromTexture(Crop(sheet.Texture, new Rectangle(curX, curY, widthOfFrame, heightOfFrame)));
+                    Rectangle sourcerect = new Rectangle(curX + framerect.X,curY+framerect.Y,framerect.Width,framerect.Height);
+                    frames.Add(new AnimationFrame(sourcerect));
                     curX += widthOfFrame;
                 }
             }
