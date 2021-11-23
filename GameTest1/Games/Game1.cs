@@ -1,4 +1,5 @@
 ﻿using GameTest1.Animations;
+using GameTest1.Collision;
 using GameTest1.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,6 +16,7 @@ namespace GameTest1
         Character testchar;
         const int screenWidth = 1600;
         const int screenHeight = 970;
+        CollisionManager collisionManager;
 
         public Game1()
         {
@@ -27,6 +29,7 @@ namespace GameTest1
 
         protected override void Initialize()
         {
+            collisionManager = new CollisionManager();
             base.Initialize();
         }
 
