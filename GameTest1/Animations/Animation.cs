@@ -37,7 +37,7 @@ namespace GameTest1
         public void GetFramesFromTextureProperties(int width, int height, int maxnumberOfColummns, int rowsTotal,List<int>rowsCount,List<int> rowsNeeded)
         {
             int widthOfFrame = width / maxnumberOfColummns;
-            int heightOfFrame = height / rowsTotal+1;
+            int heightOfFrame = height / rowsTotal;
 
             int curX;
             int curY = rowsNeeded[0]*heightOfFrame;

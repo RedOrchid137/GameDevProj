@@ -17,7 +17,6 @@ namespace GameTest1
         protected SpriteBatch _spriteBatch;
         protected Texture2D _texture;
         protected Rectangle _window;
-        protected float _resize;
         private float _maxSpeed;
 
         public float Scale { get; set; }
@@ -27,14 +26,12 @@ namespace GameTest1
         public SpriteBatch SpriteBatch { get { return _spriteBatch; } set { _spriteBatch = value; } }
         public Texture2D Texture { get { return _texture; } set { _texture = value; } }
         public Rectangle Window { get { return _window; } set { _window = value; } }
-        public float Resize { get { return _resize; } set { _resize = value; } }
         public IInputReader InputReader { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Speed { get; set; }
         public Vector2 Acceleration { get; set; }
 
         internal Spritesheet spritesheet { get; set; }
-        internal bool isMoving;
         internal Animation curAnimation;
 
         protected Vector2 Limit(Vector2 v, float max)
@@ -57,13 +54,12 @@ namespace GameTest1
             animationList[type] = anime;
         }
 
-        public GameObject(Spritesheet spritesheet,SpriteBatch spritebatch,Rectangle window, float maxSpeed,float scale,float resize = 1)
+        public GameObject(Spritesheet spritesheet,SpriteBatch spritebatch,Rectangle window, float maxSpeed,float scale=1)
         {
             this.Scale = scale;
             animationList = new Dictionary<AnimationType, Animation>();
             this.spritesheet = spritesheet;
             _maxSpeed = maxSpeed;
-            _resize = resize;
             _window = window;
             _texture = this.spritesheet.Texture;
             _spriteBatch = spritebatch;

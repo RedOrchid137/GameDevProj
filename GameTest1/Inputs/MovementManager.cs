@@ -67,19 +67,6 @@ namespace GameTest1.Inputs
                 }
             }
             movable.Position += movable.Speed;
-            HandleCollisions(movable);
-        }
-        public static void HandleCollisions (GameObject movable)
-        {
-            //TODO Verder Uitwerken
-            if (movable.Position.X < 0)
-            {
-                movable.Position = new Vector2(movable.Window.Width, movable.Position.Y);
-            }
-            if (movable.Position.X > movable.Window.Width)
-            {
-                movable.Position = new Vector2(0, movable.Position.Y);
-            }
         }
 
     }

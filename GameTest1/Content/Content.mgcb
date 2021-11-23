@@ -37,6 +37,30 @@
 /processorParam:TextureFormat=Color
 /build:Fox Sprite Sheet.png
 
+#begin GrassBlock.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GrassBlock.png
+
+#begin ground_monk_FREE_v1.2-SpriteSheet_288x128.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ground_monk_FREE_v1.2-SpriteSheet_288x128.png
+
 #begin mario1.png
 /importer:TextureImporter
 /processor:TextureProcessor
