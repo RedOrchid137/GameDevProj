@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using static GameTest1.GameObject;
 
 namespace GameTest1
@@ -48,6 +49,12 @@ namespace GameTest1
                 Exit();
 
             testchar.Update(gameTime);
+            /*testblok.Update(gameTime)
+
+            if (collisionManager.CheckCollsion(testchar.CollisionRectangle, testblok.CollisionRectangle)
+            {
+                Debug.WriteLine("Collision detected!");
+            }*/
             base.Update(gameTime);
         }
 

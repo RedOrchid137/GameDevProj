@@ -14,6 +14,8 @@ namespace GameTest1
 
         public bool JumpFlag { get; set; }
         public bool IsSleeping { get; set; }
+        public Rectangle CollisionRectangle { get; set; }
+        private Rectangle _collisionRectangle { get; set; }
         public Character(Spritesheet spritesheet, SpriteBatch spritebatch, Rectangle window, float maxSpeed, IInputReader reader,float scale, float resize = 1) : base(spritesheet, spritebatch, window, maxSpeed,scale, resize)
         {
             this.Acceleration = new Vector2(0.2f,5f);
@@ -24,6 +26,10 @@ namespace GameTest1
             AddAnimation(AnimationType.Sleep, new List<int> { 5 });
             AddAnimation(AnimationType.Crouch, new List<int> { 6});
             this.curAnimation = animationList[AnimationType.Idle];
+
+
+            Position = new Vector2(0, 0);
+            _collisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, 130, 385);
         }
 
         public void Update(GameTime gametime)
@@ -31,6 +37,12 @@ namespace GameTest1
             AnimationManager.setCurrentAnimation(this);
             this.curAnimation.Update(gametime);
             MovementManager.Move(this);
+
+            //--- animatie.Update(gametime)
+            //_collisionRectangle.Update(gametime);
+            //_collisionRectangle.X = (int)Position.X;
+            CollisionRectangle = _collisionRectangle;
+
         }
 
         public void Draw()
