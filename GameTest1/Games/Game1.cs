@@ -61,7 +61,7 @@ namespace GameTest1
         {
             Debug.WriteLine(1/gameTime.ElapsedGameTime.TotalSeconds);
             GraphicsDevice.Clear(Color.White);
-            testchar.Draw(testchar.curAnimation.CurrentFrame.SourceRectangle);
+            testchar.Draw();
             testblock.Draw();
             base.Draw(gameTime);
         }

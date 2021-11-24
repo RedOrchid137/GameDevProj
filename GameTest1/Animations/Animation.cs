@@ -1,4 +1,5 @@
 ﻿using GameTest1.Animations;
+using GameTest1.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -55,18 +56,7 @@ namespace GameTest1
         //        }
         //    }
         //}
-        private Texture2D Crop(Texture2D image, Rectangle source)
-        {
-            //var graphics = image.GraphicsDevice;
-            //var ret = new RenderTarget2D(graphics, source.Width, source.Height);
-            //Texture2D retimg = (Texture2D)ret;
-            //return retimg
-            Texture2D cropTexture = new Texture2D(Game1.Graphics.GraphicsDevice, source.Width, source.Height);
-            Color[] data = new Color[source.Width * source.Height];
-            image.GetData(0, source, data, 0, data.Length);
-            cropTexture.SetData(data);
-            return cropTexture;
-        }
+
         public void GetFramesFromTextureProperties(Spritesheet sheet, List<int> rowsNeeded)
         {
             int widthOfFrame = sheet.Width / sheet.Max;
@@ -81,9 +71,12 @@ namespace GameTest1
                 for (int j = 0; j < sheet.RowCounts[rowsNeeded[i]]; j++)
                 {
                     //new Rectangle(curX,curY,widthOfFrame,heightOfFrame
-                    Rectangle framerect = CalculateBounds.GetSmallestRectangleFromTexture(Crop(sheet.Texture, new Rectangle(curX, curY, widthOfFrame, heightOfFrame)));
-                    Rectangle sourcerect = new Rectangle(curX + framerect.X,curY+framerect.Y,framerect.Width,framerect.Height);
-                    frames.Add(new AnimationFrame(sourcerect));
+                    Rectangle sourcerect = new Rectangle(curX + 1, curY + 1, widthOfFrame-1, heightOfFrame-1);
+                    AnimationFrame curFrame = new AnimationFrame(sourcerect);
+                    Rectangle smallestrect = CalculateBounds.GetSmallestRectangleFromTexture(ExtensionMethods.Crop(sheet.Texture, new Rectangle(curX, curY, widthOfFrame, heightOfFrame)));
+                    Rectangle boundingbox = new Rectangle(curX + smallestrect.X, curY + smallestrect.Y, smallestrect.Width, smallestrect.Height);
+                    curFrame.HitBox = boundingbox;
+                    frames.Add(curFrame);
                     curX += widthOfFrame;
                 }
             }

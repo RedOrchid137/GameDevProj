@@ -31,31 +31,28 @@ namespace GameTest1
         {
             AnimationManager.setCurrentAnimation(this);
             this.curAnimation.Update(gametime);
-            this.CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)(this.curAnimation.CurrentFrame.SourceRectangle.Width * Scale), (int)(this.curAnimation.CurrentFrame.SourceRectangle.Height * Scale));
+            //new Rectangle((int)Position.X, (int)Position.Y, (int)(this.curAnimation.CurrentFrame.HitBox.Width * Scale), (int)(this.curAnimation.CurrentFrame.HitBox.Height * Scale));
+            Vector2 offsets = ExtensionMethods.CalcOffsets(curAnimation.CurrentFrame.SourceRectangle, curAnimation.CurrentFrame.HitBox);
+            this.CollisionRectangle = new Rectangle((int)(Position.X+offsets.X/2*Scale), (int)(Position.Y + offsets.Y*Scale), (int)(this.curAnimation.CurrentFrame.HitBox.Width * Scale), (int)(this.curAnimation.CurrentFrame.HitBox.Height * Scale));
             MovementManager.Move(this);
         }
 
         public void Draw()
         {
-
-        }
-        public void Draw(Rectangle rectangle)
-        {
             //TODO: Bounding Box en Drawing Box splitsen zodat draw statisch blijft en collision dynamisch
             _spriteBatch.Begin();
             if (FlipFlagX)
             {
-                _spriteBatch.Draw(_texture, new Vector2(Position.X, Position.Y), rectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
-                _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), CollisionRectangle, Color.Red * 0.5f);
+                _spriteBatch.Draw(_texture, Position, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
+                //_spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch),new Vector2(CollisionRectangle.X,CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
             //new Vector2(CollisionRectangle.Width, 0)
             else
             {
-                _spriteBatch.Draw(_texture, Position, rectangle, Color.White, 0f, new Vector2(CollisionRectangle.Width / 2, 0), Scale, SpriteEffects.None, 0f);
-                _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), Position, rectangle, Color.Red*0.5f, 0f, new Vector2(CollisionRectangle.Width / 2, 0), Scale, SpriteEffects.None, 0f);
+                _spriteBatch.Draw(_texture, Position, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+                //_spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
             _spriteBatch.End();
         }
-
     }
 }

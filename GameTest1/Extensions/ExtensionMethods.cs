@@ -18,5 +18,24 @@ namespace GameTest1.Extensions
             }
             return _blankTexture;
         }
+        public static Texture2D Crop(this Texture2D image, Rectangle source)
+        {
+            //var graphics = image.GraphicsDevice;
+            //var ret = new RenderTarget2D(graphics, source.Width, source.Height);
+            //Texture2D retimg = (Texture2D)ret;
+            //return retimg
+            Texture2D cropTexture = new Texture2D(Game1.Graphics.GraphicsDevice, source.Width, source.Height);
+            Color[] data = new Color[source.Width * source.Height];
+            image.GetData(0, source, data, 0, data.Length);
+            cropTexture.SetData(data);
+            return cropTexture;
+        }
+        public static Vector2 CalcOffsets(this Rectangle source, Rectangle comp)
+        {
+            Vector2 ret = new Vector2();
+            ret.X = source.Width - comp.Width;
+            ret.Y = source.Height - comp.Height;
+            return ret;
+        }
     }
 }
