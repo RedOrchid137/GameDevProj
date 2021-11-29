@@ -11,13 +11,13 @@ namespace GameTest1.GameObjects
     {
         public Static(Spritesheet ss,SpriteBatch sb,Rectangle window,float scale):base(ss,sb, window, scale)
         {
-            this.CollisionRectangle = new Rectangle((int)Position.X,(int)Position.Y,Texture.Width,Texture.Height);
         }
 
-        public void Update(GameTime gametime)
+        public override void Update(GameTime gametime)
         {
+            this.CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)(Texture.Width*Scale), (int)(Scale*Texture.Height));
         }
-        public void Draw()
+        public override void Draw()
         {
             _spriteBatch.Begin();
             if (FlipFlagX)

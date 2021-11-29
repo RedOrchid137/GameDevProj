@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace GameTest1
 {
-    public abstract class GameObject
+    public abstract class GameObject:INeedsUpdate
     {
         public enum AnimationType { Run, Jump, Idle, Crouch, Attack, Block, Sleep }
         internal Dictionary<AnimationType, Animation> animationList;
@@ -55,6 +55,8 @@ namespace GameTest1
             anime.CurrentFrame = anime.Frames[0];
             animationList[type] = anime;
         }
+        public abstract void Update(GameTime gametime);
+        public abstract void Draw();
 
         public GameObject(Spritesheet spritesheet,SpriteBatch spritebatch,Rectangle window, float scale=1,float maxSpeed=0)
         {

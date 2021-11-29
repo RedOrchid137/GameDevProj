@@ -7,8 +7,8 @@ namespace GameTest1.Engine
 {
     public class World
     {
-        public static int screenWidth = Screen.PrimaryScreen.Bounds.Width;
-        public static int screenHeight = Screen.PrimaryScreen.Bounds.Height;
-        public static float FloorHeight = 800;
+        public static int screenWidth = Screen.PrimaryScreen.Bounds.Width/2;
+        public static int screenHeight = Screen.PrimaryScreen.Bounds.Height/2;
+        public static float FloorHeight = 400;
     }
 }

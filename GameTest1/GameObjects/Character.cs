@@ -27,7 +27,7 @@ namespace GameTest1
             this.curAnimation = animationList[AnimationType.Idle];
         }
 
-        public void Update(GameTime gametime)
+        public override void Update(GameTime gametime)
         {
             AnimationManager.setCurrentAnimation(this);
             this.curAnimation.Update(gametime);
@@ -37,20 +37,20 @@ namespace GameTest1
             MovementManager.Move(this);
         }
 
-        public void Draw()
+        public override void Draw()
         {
             //TODO: Bounding Box en Drawing Box splitsen zodat draw statisch blijft en collision dynamisch
             _spriteBatch.Begin();
             if (FlipFlagX)
             {
                 _spriteBatch.Draw(_texture, Position, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
-                //_spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch),new Vector2(CollisionRectangle.X,CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch),new Vector2(CollisionRectangle.X,CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
             //new Vector2(CollisionRectangle.Width, 0)
             else
             {
                 _spriteBatch.Draw(_texture, Position, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
-                //_spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
             _spriteBatch.End();
         }
