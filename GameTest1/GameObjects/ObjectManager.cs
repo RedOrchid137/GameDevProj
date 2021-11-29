@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace GameTest1.GameObjects
@@ -15,7 +16,7 @@ namespace GameTest1.GameObjects
 
 
         private List<GameObject> _objectList;
-        public List<GameObject> ObjectList { get { return _objectList; } set {_objectList = value ; } }
+        public List<GameObject> ObjectList { get { return _objectList; } set { _objectList = value; } }
 
         public ObjectManager()
         {
@@ -34,6 +35,28 @@ namespace GameTest1.GameObjects
             foreach (var item in _objectList)
             {
                 item.Draw();
+            }
+        }
+        public void CollisionCheck()
+        {
+            foreach (var item in _objectList)
+            {
+                for (int i = 0; i < _objectList.Count; i++)
+                {
+                    if (_objectList[i] != item)
+                    {
+                        if(CollisionManager.CheckCollision(item.CollisionRectangle, _objectList[i].CollisionRectangle))
+                        {
+                            item.IsColliding = true;
+                            _objectList[i].IsColliding = true;
+                        }
+                        else
+                        {
+                            item.IsColliding = false;
+                            _objectList[i].IsColliding = false;
+                        }
+                    }
+                }
             }
         }
     }

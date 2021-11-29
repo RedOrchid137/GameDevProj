@@ -1,4 +1,5 @@
 ﻿using GameTest1.Engine;
+using GameTest1.Extensions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace GameTest1.Inputs
 {
     public class MovementManager
     {
-        public static void Move(GameObject movable)
+        public static void MoveCharacter(GameObject movable)
         {
             var direction = movable.InputReader.ReadInput();
             if (movable.InputReader.IsDestinationInput)
@@ -57,18 +58,19 @@ namespace GameTest1.Inputs
                 }
 
                 int spriteheight = movable.curAnimation.CurrentFrame.SourceRectangle.Height;
-                if (movable.Position.Y>World.FloorHeight-spriteheight*movable.Scale)
+                if (movable.CurPosition.Y>World.FloorHeight-spriteheight*movable.Scale)
                 {
                     movable.Speed = new Vector2(movable.Speed.X, 0);
                     (movable as Character).JumpFlag = false;
-                    movable.Position = new Vector2(movable.Position.X, World.FloorHeight- spriteheight * movable.Scale);
+                    movable.CurPosition = new Vector2(movable.CurPosition.X, World.FloorHeight- spriteheight * movable.Scale);
                 }
-                else if(movable.Position.Y < World.FloorHeight - spriteheight * movable.Scale)
+                else if(movable.CurPosition.Y < World.FloorHeight - spriteheight * movable.Scale)
                 {
                     movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y + Physics.gravConst);
                 }
             }
-            movable.Position += movable.Speed;
+            movable.PrevPosition = movable.CurPosition;
+            movable.CurPosition += movable.Speed;
         }
 
     }

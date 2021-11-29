@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace GameTest1.Engine
 {
@@ -10,7 +10,7 @@ namespace GameTest1.Engine
     {
         public static bool CheckCollision(Rectangle rect1, Rectangle rect2)
         {
-            if (rect1.IntersectsWith(rect2))
+            if (rect1.Intersects(rect2))
             {
                 Debug.WriteLine("collision");
                 return true;

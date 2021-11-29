@@ -49,10 +49,10 @@ namespace GameTest1
             Spritesheet test = new Spritesheet(Content.Load<Texture2D>("Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
             Spritesheet grass = new Spritesheet(Content.Load<Texture2D>("GrassBlock"), new List<int> { 1 });
             //Spritesheet test = new Spritesheet(Content.Load<Texture2D>("ground_monk_FREE_v1.2-SpriteSheet_288x128"), new List<int> { 6,8,3,6,12,24,25,16,6,13,6,14 });
+            
             testchar = new Character(test, new SpriteBatch(Game1.Graphics.GraphicsDevice), window, new KeyboardReader(), 2.5f, 5);
-
             testblock = new Static(grass, new SpriteBatch(Game1.Graphics.GraphicsDevice), window, 2f);
-            testblock.Position = new Vector2(World.screenWidth / 2, World.FloorHeight - testblock.Texture.Height * testblock.Scale);
+            testblock.CurPosition = new Vector2(World.screenWidth / 2, World.FloorHeight - testblock.Texture.Height * testblock.Scale);
 
             oMan.ObjectList.Add(testchar);
             oMan.ObjectList.Add(testblock);
@@ -63,6 +63,7 @@ namespace GameTest1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
             oMan.UpdateAll(gameTime);
+            oMan.CollisionCheck();
             base.Update(gameTime);
         }
 

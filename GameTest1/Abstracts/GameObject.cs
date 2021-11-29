@@ -24,12 +24,14 @@ namespace GameTest1
         public float Scale { get; set; }
         public bool FlipFlagX { get; set; } = false;
         public bool FlipFlagY { get; set; } = false;
+        public bool IsColliding { get; set; } = false;
         public float MaxSpeed { get { return _maxSpeed; } set { _maxSpeed = value; } }
         public SpriteBatch SpriteBatch { get { return _spriteBatch; } set { _spriteBatch = value; } }
         public Texture2D Texture { get { return _texture; } set { _texture = value; } }
         public Rectangle Window { get { return _window; } set { _window = value; } }
         public IInputReader InputReader { get; set; }
-        public Vector2 Position { get; set; }
+        public Vector2 PrevPosition { get; set; }
+        public Vector2 CurPosition { get; set; }
         public Vector2 Speed { get; set; }
         public Vector2 Acceleration { get; set; }
 
