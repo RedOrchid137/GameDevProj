@@ -64,7 +64,7 @@ namespace GameTest1.Inputs
                     (movable as Character).JumpFlag = false;
                     movable.CurPosition = new Vector2(movable.CurPosition.X, World.FloorHeight- spriteheight * movable.Scale);
                 }
-                else if(movable.CurPosition.Y < World.FloorHeight - spriteheight * movable.Scale)
+                else if(movable.CurPosition.Y < World.FloorHeight - spriteheight * movable.Scale&&(movable as Character).JumpFlag == true)
                 {
                     movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y + Physics.gravConst);
                 }

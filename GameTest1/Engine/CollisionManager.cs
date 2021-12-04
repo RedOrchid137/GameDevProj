@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using GameTest1.GameObjects;
 using Microsoft.Xna.Framework;
+using static GameTest1.GameObject;
 
 namespace GameTest1.Engine
 {
@@ -16,6 +18,35 @@ namespace GameTest1.Engine
                 return true;
             }
             return false;
+        }
+        public static void HandleCollisionsCharacter(Character player)
+        {
+            foreach (var item in player.CollisionList)
+            {
+                if (item.Key.GetType() == typeof(Static))
+                {
+                    switch (item.Value)
+                    {
+                        case CollisionType.Top:
+                            player.Speed = new Vector2(player.Speed.X, 0);
+                            player.CurPosition = new Vector2(player.CurPosition.X, item.Key.CollisionRectangle.Top - player.curAnimation.CurrentFrame.SourceRectangle.Height * player.Scale);
+                            break;
+                        case CollisionType.Left:
+                            player.Speed = new Vector2(0, player.Speed.Y);
+                            player.CurPosition = new Vector2(item.Key.CollisionRectangle.Left - player.curAnimation.CurrentFrame.SourceRectangle.Width * player.Scale+player.Offsets.X, player.CurPosition.Y);
+                            break;
+                        case CollisionType.Right:
+                            player.Speed = new Vector2(0, player.Speed.Y);
+                            player.CurPosition = new Vector2(item.Key.CollisionRectangle.Right - player.Offsets.X, player.CurPosition.Y);
+                            break;
+                        case CollisionType.Bottom:
+                            player.Speed = new Vector2(player.Speed.X, 0);
+                            player.CurPosition = new Vector2(player.CurPosition.X, item.Key.CollisionRectangle.Bottom);
+                            break;
+                    }
+                }
+
+            }
         }
     }
 }

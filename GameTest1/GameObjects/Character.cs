@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
+using GameTest1.Engine;
 
 namespace GameTest1
 {
@@ -29,21 +31,25 @@ namespace GameTest1
 
         public override void Update(GameTime gametime)
         {
+
+            //new Rectangle((int)Position.X, (int)Position.Y, (int)(this.curAnimation.CurrentFrame.HitBox.Width * Scale), (int)(this.curAnimation.CurrentFrame.HitBox.Height * Scale));
+            
+            //Update Location
+            MovementManager.MoveCharacter(this);
+            
+            //Update Animation
             AnimationManager.setCurrentAnimation(this);
             this.curAnimation.Update(gametime);
-            //new Rectangle((int)Position.X, (int)Position.Y, (int)(this.curAnimation.CurrentFrame.HitBox.Width * Scale), (int)(this.curAnimation.CurrentFrame.HitBox.Height * Scale));
-            Vector2 offsets = ExtensionMethods.CalcOffsets(curAnimation.CurrentFrame.SourceRectangle, curAnimation.CurrentFrame.HitBox);
-            CollisionRectangle = new Rectangle((int)(CurPosition.X + Speed.X + offsets.X / 2 * Scale), (int)(CurPosition.Y + Speed.Y + offsets.Y * Scale), (int)(curAnimation.CurrentFrame.HitBox.Width * Scale), (int)(curAnimation.CurrentFrame.HitBox.Height * Scale));
-            MovementManager.MoveCharacter(this);
-            if (IsColliding)
-            {
-                CurPosition = PrevPosition;
-            }
+
+            //Check+deal w/ collisions
+            Offsets = ExtensionMethods.CalcOffsets(curAnimation.CurrentFrame.SourceRectangle, curAnimation.CurrentFrame.HitBox);
+            CollisionRectangle = new Rectangle((int)(CurPosition.X + Speed.X + Offsets.X / 2 * Scale), (int)(CurPosition.Y + Speed.Y + Offsets.Y * Scale), (int)(curAnimation.CurrentFrame.HitBox.Width * Scale), (int)(curAnimation.CurrentFrame.HitBox.Height * Scale));
+            this.CollisionCheck(Game1.ObjManager);
+            CollisionManager.HandleCollisionsCharacter(this);
         }
 
         public override void Draw()
         {
-            //TODO: Bounding Box en Drawing Box splitsen zodat draw statisch blijft en collision dynamisch
             _spriteBatch.Begin();
             if (FlipFlagX)
             {

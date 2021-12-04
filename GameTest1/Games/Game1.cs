@@ -18,7 +18,8 @@ namespace GameTest1
         int count = 0;
         private static GraphicsDeviceManager _graphics;
         public static GraphicsDeviceManager Graphics { get { return _graphics; }}
-        private ObjectManager oMan;
+        private static ObjectManager oMan;
+        public static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
 
         public Game1()
         {
@@ -63,7 +64,6 @@ namespace GameTest1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
             oMan.UpdateAll(gameTime);
-            oMan.CollisionCheck();
             base.Update(gameTime);
         }
 

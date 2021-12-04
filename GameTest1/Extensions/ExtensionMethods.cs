@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static GameTest1.GameObject;
 
 namespace GameTest1.Extensions
 {
@@ -36,6 +37,21 @@ namespace GameTest1.Extensions
             ret.X = source.Width - comp.Width;
             ret.Y = source.Height - comp.Height;
             return ret;
+        }
+        public static CollisionType GetOpposite(this CollisionType type)
+        {
+            switch (type)
+            {
+                case CollisionType.Top:
+                    return CollisionType.Bottom;
+                case CollisionType.Bottom:
+                    return CollisionType.Top;
+                case CollisionType.Right:
+                    return CollisionType.Left;
+                case CollisionType.Left:
+                    return CollisionType.Right;
+            }
+            return type;
         }
     }
 }

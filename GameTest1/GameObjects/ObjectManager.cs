@@ -45,7 +45,7 @@ namespace GameTest1.GameObjects
                 {
                     if (_objectList[i] != item)
                     {
-                        if(CollisionManager.CheckCollision(item.CollisionRectangle, _objectList[i].CollisionRectangle))
+                        if (CollisionManager.CheckCollision(item.CollisionRectangle, _objectList[i].CollisionRectangle))
                         {
                             item.IsColliding = true;
                             _objectList[i].IsColliding = true;

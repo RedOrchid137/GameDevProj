@@ -15,6 +15,7 @@ namespace GameTest1
         private List<AnimationFrame> frames;
         private int curFrame;
         private AnimationFrame currentFrame;
+        private AnimationFrame previousFrame;
         private int fps;
         internal bool Looping { get; set; }
         public AnimationType Type { get; set; }
@@ -34,6 +35,7 @@ namespace GameTest1
         }
 
         internal AnimationFrame CurrentFrame { get { return currentFrame; } set { currentFrame = value; } }
+        internal AnimationFrame PreviousFrame { get { return previousFrame; } set { previousFrame = value; } }
         internal List<AnimationFrame> Frames { get { return frames; } set { frames = value; } }
 
 
