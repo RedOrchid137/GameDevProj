@@ -3,6 +3,7 @@ using GameTest1.Engine;
 using GameTest1.GameObjects;
 using GameTest1.Inputs;
 using GameTest1.Misc;
+using GameTest1.Perspective;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -22,7 +23,11 @@ namespace GameTest1
         private static ObjectManager oMan;
         public static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
 
+        Character testchar;
+
         SpriteBatch spriteBatch;
+
+        private Camera _camera;
 
         private List<BewegendeAchtergrond> _scrollingBackgrounds;
 
@@ -52,7 +57,7 @@ namespace GameTest1
         }
         public void InitObjects()
         {
-            Character testchar;
+            
             Static testblock;
             Rectangle window = new Rectangle(0, 0, Game1.Graphics.PreferredBackBufferWidth, Game1.Graphics.PreferredBackBufferHeight);
 
@@ -102,6 +107,7 @@ namespace GameTest1
                   Laag = 0.1f,
                 },
             };
+            _camera = new Camera();
 
         }
         protected override void Update(GameTime gameTime)
@@ -111,6 +117,7 @@ namespace GameTest1
             oMan.UpdateAll(gameTime);
             foreach (var sb in _scrollingBackgrounds)
                 sb.Update(gameTime);
+            _camera.Follow(testchar);
             base.Update(gameTime);
         }
 
@@ -118,7 +125,7 @@ namespace GameTest1
         {
             GraphicsDevice.Clear(Color.White);
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: _camera.Transform);
 
             foreach (var sb in _scrollingBackgrounds)
                 sb.Draw(gameTime, spriteBatch);

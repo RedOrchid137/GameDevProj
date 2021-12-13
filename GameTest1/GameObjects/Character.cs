@@ -17,6 +17,7 @@ namespace GameTest1
 
         public bool JumpFlag { get; set; }
         public bool IsSleeping { get; set; }
+        
         public Character(Spritesheet spritesheet, SpriteBatch spritebatch, Rectangle window, IInputReader reader,float scale, float maxSpeed) : base(spritesheet, spritebatch, window, scale, maxSpeed)
         {
             this.Acceleration = new Vector2(0.2f,5f);
