@@ -2,6 +2,7 @@
 using GameTest1.Engine;
 using GameTest1.GameObjects;
 using GameTest1.Inputs;
+using GameTest1.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,6 +22,11 @@ namespace GameTest1
         private static ObjectManager oMan;
         public static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
 
+        SpriteBatch spriteBatch;
+
+        private List<ScrollingBackground> _scrollingBackgrounds;
+
+
         public Game1()
         {
             oMan = new ObjectManager();
@@ -33,13 +39,16 @@ namespace GameTest1
 
         protected override void Initialize()
         {
+
             InitObjects();
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            
         }
         public void InitObjects()
         {
@@ -57,20 +66,67 @@ namespace GameTest1
 
             oMan.ObjectList.Add(testchar);
             oMan.ObjectList.Add(testblock);
-        
+
+            _scrollingBackgrounds = new List<ScrollingBackground>()
+            {
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Trees"), testchar, 60f)
+                {
+                  Layer = 0.99f,
+                },
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Floor"), testchar, 60f)
+                {
+                  Layer = 0.9f,
+                },
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Hills_Front"), testchar, 40f)
+                {
+                  Layer = 0.8f,
+                },
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Hills_Middle"), testchar, 30f)
+                {
+                  Layer = 0.79f,
+                },
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Clouds_Fast"), testchar, 25f, true)
+                {
+                  Layer = 0.78f,
+                },
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Hills_Back"), testchar, 0f)
+                {
+                  Layer = 0.77f,
+                },
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Clouds_Slow"), testchar, 10f, true)
+                {
+                  Layer = 0.7f,
+                },
+                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Sky"), testchar, 0f)
+                {
+                  Layer = 0.1f,
+                },
+            };
+
         }
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
             oMan.UpdateAll(gameTime);
+            foreach (var sb in _scrollingBackgrounds)
+                sb.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
+
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+
+            foreach (var sb in _scrollingBackgrounds)
+                sb.Draw(gameTime, spriteBatch);
+
+            spriteBatch.End();
+
             oMan.DrawAll();
+            
             base.Draw(gameTime);
         }
         }
