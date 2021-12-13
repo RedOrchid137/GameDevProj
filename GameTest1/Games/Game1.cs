@@ -24,7 +24,7 @@ namespace GameTest1
 
         SpriteBatch spriteBatch;
 
-        private List<ScrollingBackground> _scrollingBackgrounds;
+        private List<BewegendeAchtergrond> _scrollingBackgrounds;
 
 
         public Game1()
@@ -67,39 +67,39 @@ namespace GameTest1
             oMan.ObjectList.Add(testchar);
             oMan.ObjectList.Add(testblock);
 
-            _scrollingBackgrounds = new List<ScrollingBackground>()
+            _scrollingBackgrounds = new List<BewegendeAchtergrond>()
             {
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Trees"), testchar, 60f)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Trees"), testchar, 60f)
                 {
-                  Layer = 0.99f,
+                  Laag = 0.99f,
                 },
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Floor"), testchar, 60f)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Floor"), testchar, 60f)
                 {
-                  Layer = 0.9f,
+                  Laag = 0.9f,
                 },
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Hills_Front"), testchar, 40f)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Hills_Front"), testchar, 40f)
                 {
-                  Layer = 0.8f,
+                  Laag = 0.8f,
                 },
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Hills_Middle"), testchar, 30f)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Hills_Middle"), testchar, 30f)
                 {
-                  Layer = 0.79f,
+                  Laag = 0.79f,
                 },
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Clouds_Fast"), testchar, 25f, true)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Clouds_Fast"), testchar, 25f, true)
                 {
-                  Layer = 0.78f,
+                  Laag = 0.78f,
                 },
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Hills_Back"), testchar, 0f)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Hills_Back"), testchar, 0f)
                 {
-                  Layer = 0.77f,
+                  Laag = 0.77f,
                 },
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Clouds_Slow"), testchar, 10f, true)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Clouds_Slow"), testchar, 10f, true)
                 {
-                  Layer = 0.7f,
+                  Laag = 0.7f,
                 },
-                new ScrollingBackground(Content.Load<Texture2D>("ScrollingBackground/Sky"), testchar, 0f)
+                new BewegendeAchtergrond(Content.Load<Texture2D>("ScrollingBackground/Sky"), testchar, 0f)
                 {
-                  Layer = 0.1f,
+                  Laag = 0.1f,
                 },
             };
 

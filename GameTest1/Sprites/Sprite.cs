@@ -8,16 +8,16 @@ namespace GameTest1.Sprites
 {
     public class Sprite : Component
     {
-        protected float _layer { get; set; }
+        protected float _laag { get; set; }
 
         protected Texture2D _texture;
 
-        public float Layer
+        public float Laag
         {
-            get { return _layer; }
+            get { return _laag; }
             set
             {
-                _layer = value;
+                _laag = value;
             }
         }
 
@@ -37,7 +37,7 @@ namespace GameTest1.Sprites
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Position, null, Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, Layer);
+            spriteBatch.Draw(_texture, Position, null, Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, Laag);
         }
 
         public override void Update(GameTime gameTime)

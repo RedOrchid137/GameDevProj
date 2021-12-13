@@ -9,41 +9,41 @@ using GameTest1.Sprites;
 
 namespace GameTest1.Misc
 {
-    public class ScrollingBackground : Component
+    public class BewegendeAchtergrond : Component
     {
-        private bool _constantSpeed;
+        private bool _constanteVersnelling;
 
-        private float _layer;
+        private float _laag;
 
         private float _scrollingSpeed;
 
         private List<Sprite> _sprites;
 
-        private readonly Character _player;
+        private readonly Character _charachter;
 
-        private float _speed;
+        private float _versnelling;
 
-        public float Layer
+        public float Laag
         {
-            get { return _layer; }
+            get { return _laag; }
             set
             {
-                _layer = value;
+                _laag = value;
 
                 foreach (var sprite in _sprites)
-                    sprite.Layer = _layer;
+                    sprite.Laag = _laag;
             }
         }
 
-        public ScrollingBackground(Texture2D texture, Character player, float scrollingSpeed, bool constantSpeed = false)
+        public BewegendeAchtergrond(Texture2D texture, Character player, float scrollingSpeed, bool constantSpeed = false)
           : this(new List<Texture2D>() { texture, texture }, player, scrollingSpeed, constantSpeed)
         {
 
         }
 
-        public ScrollingBackground(List<Texture2D> textures, Character player, float scrollingSpeed, bool constantSpeed = false)
+        public BewegendeAchtergrond(List<Texture2D> textures, Character player, float scrollingSpeed, bool constantSpeed = false)
         {
-            _player = player;
+            _charachter = player;
 
             _sprites = new List<Sprite>();
 
@@ -59,26 +59,26 @@ namespace GameTest1.Misc
 
             _scrollingSpeed = scrollingSpeed;
 
-            _constantSpeed = constantSpeed;
+            _constanteVersnelling = constantSpeed;
         }
 
         public override void Update(GameTime gameTime)
         {
-            ApplySpeed(gameTime);
+            VersnellingToepassen(gameTime);
 
             CheckPosition();
         }
 
-        private void ApplySpeed(GameTime gameTime)
+        private void VersnellingToepassen(GameTime gameTime)
         {
-            _speed = (float)(_scrollingSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            _versnelling = (float)(_scrollingSpeed * gameTime.ElapsedGameTime.TotalSeconds);
 
-            if (!_constantSpeed || _player.Speed.X > 0)
-                _speed *= _player.Speed.X;
+            if (!_constanteVersnelling || _charachter.Speed.X > 0)
+                _versnelling *= _charachter.Speed.X;
 
             foreach (var sprite in _sprites)
             {
-                sprite.Position.X -= _speed;
+                sprite.Position.X -= _versnelling;
             }
         }
 
@@ -95,7 +95,7 @@ namespace GameTest1.Misc
                     if (index < 0)
                         index = _sprites.Count - 1;
 
-                    sprite.Position.X = _sprites[index].Rectangle.Right - (_speed * 2);
+                    sprite.Position.X = _sprites[index].Rectangle.Right - (_versnelling * 2);
                 }
             }
         }
