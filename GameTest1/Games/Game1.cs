@@ -2,8 +2,10 @@
 using GameTest1.Engine;
 using GameTest1.GameObjects;
 using GameTest1.Inputs;
+using GameTest1.Knop;
 using GameTest1.Misc;
 using GameTest1.Perspective;
+using GameTest1.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,7 +21,7 @@ namespace GameTest1
         //testing vars
         int count = 0;
         private static GraphicsDeviceManager _graphics;
-        public static GraphicsDeviceManager Graphics { get { return _graphics; }}
+        public static GraphicsDeviceManager Graphics { get { return _graphics; } }
         private static ObjectManager oMan;
         public static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
 
@@ -30,6 +32,15 @@ namespace GameTest1
         private Camera _camera;
 
         private List<BewegendeAchtergrond> _scrollingBackgrounds;
+
+        private Status _huidigeStatus;
+
+        private Status _volgendeStatus;
+
+        public void WisselStatus(Status status)
+        {
+            _volgendeStatus = status;
+        }
 
 
         public Game1()
@@ -44,6 +55,7 @@ namespace GameTest1
 
         protected override void Initialize()
         {
+            IsMouseVisible = true;
 
             InitObjects();
             base.Initialize();
@@ -53,18 +65,19 @@ namespace GameTest1
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            
+            _huidigeStatus = new MenuState(this, _graphics.GraphicsDevice, Content);
         }
+
         public void InitObjects()
         {
-            
+
             Static testblock;
             Rectangle window = new Rectangle(0, 0, Game1.Graphics.PreferredBackBufferWidth, Game1.Graphics.PreferredBackBufferHeight);
 
             Spritesheet test = new Spritesheet(Content.Load<Texture2D>("Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
             Spritesheet grass = new Spritesheet(Content.Load<Texture2D>("GrassBlock"), new List<int> { 1 });
             //Spritesheet test = new Spritesheet(Content.Load<Texture2D>("ground_monk_FREE_v1.2-SpriteSheet_288x128"), new List<int> { 6,8,3,6,12,24,25,16,6,13,6,14 });
-            
+
             testchar = new Character(test, new SpriteBatch(Game1.Graphics.GraphicsDevice), window, new KeyboardReader(), 2.5f, 5);
             testblock = new Static(grass, new SpriteBatch(Game1.Graphics.GraphicsDevice), window, 2f);
             testblock.CurPosition = new Vector2(World.screenWidth / 2, World.FloorHeight - testblock.Texture.Height * testblock.Scale);
@@ -112,29 +125,43 @@ namespace GameTest1
         }
         protected override void Update(GameTime gameTime)
         {
+            if (_volgendeStatus != null)
+            {
+                _huidigeStatus = _volgendeStatus;
+
+                _volgendeStatus = null;
+            }
+
+            _huidigeStatus.Update(gameTime);
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
             oMan.UpdateAll(gameTime);
             foreach (var sb in _scrollingBackgrounds)
                 sb.Update(gameTime);
             _camera.Follow(testchar);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
-
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: _camera.Transform);
-
-            foreach (var sb in _scrollingBackgrounds)
-                sb.Draw(gameTime, spriteBatch);
-
-            spriteBatch.End();
-
-            oMan.DrawAll();
             
+            GraphicsDevice.Clear(Color.MediumVioletRed);
+
+            _huidigeStatus.Draw(gameTime, spriteBatch);
+
+            //spriteBatch.Begin(SpriteSortMode.FrontToBack/*, transformMatrix: _camera.Transform*/);
+
+            
+            //foreach (var sb in _scrollingBackgrounds)
+            //    sb.Draw(gameTime, spriteBatch);
+
+            //spriteBatch.End();
+
+            //oMan.DrawAll();
+
             base.Draw(gameTime);
         }
-        }
     }
+}

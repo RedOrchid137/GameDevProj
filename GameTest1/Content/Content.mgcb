@@ -25,6 +25,13 @@
 /processorParam:TextureFormat=Color
 /build:Ball.png
 
+#begin Font/Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font/Font.spritefont
+
 #begin Fox Sprite Sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,6 +67,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ground_monk_FREE_v1.2-SpriteSheet_288x128.png
+
+#begin Knop/Button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Knop/Button.png
 
 #begin mario1.png
 /importer:TextureImporter
