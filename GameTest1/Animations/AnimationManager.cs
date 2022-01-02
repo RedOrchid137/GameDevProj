@@ -14,7 +14,7 @@ namespace GameTest1.Animations
         private static Timer Timer = new Timer(10000);
         private static Keys lastKey = CurKey;
         private static Animation TimerAnimation = new Animation();
-        public static void setCurrentAnimation(GameObject o)
+        public static void setCurrentAnimationCharacter(GameObject o)
         {
             o.curAnimation = o.animationList[TimerAnimation.Type];
             state = Keyboard.GetState();
@@ -50,6 +50,12 @@ namespace GameTest1.Animations
             lastKey = CurKey;
 
         }
+        public static void setCurrentAnimationEnemy(GameObject o)
+        {
+            o.curAnimation = o.animationList[AnimationType.Idle];
+        }
+
+
         public static void setTimer()
         {
             Timer.Elapsed += OnTimerElapse;

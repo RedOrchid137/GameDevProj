@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GameTest1.Sprites;
-
+using GameTest1.World;
 
 namespace GameTest1.Misc
 {
@@ -53,7 +53,7 @@ namespace GameTest1.Misc
 
                 _sprites.Add(new Sprite(texture)
                 {
-                    Position = new Vector2(i * texture.Width - Math.Min(i, i + 1), World.screenHeight - texture.Height),
+                    Position = new Vector2(i * texture.Width - Math.Min(i, i + 1), Level.screenHeight - texture.Height),
                 });
             }
 

@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -180,4 +181,43 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Shardsoul Slayer Sprite Sheet.png
+
+#begin SpriteSheetHuntress.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheetHuntress.png
+
+#begin TileMapResources/Level1/5z1KX.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TileMapResources/Level1/5z1KX.png
+
+#begin TileMapResources/Level1/8bitTiles.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:TileMapResources/Level1/8bitTiles.tsx
+
+#begin TileMapResources/Level1/Level1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TileMapResources/Level1/Level1.tmx
+
+#begin TileMapResources/Level1/Level1Simple.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TileMapResources/Level1/Level1Simple.tmx
 

@@ -1,6 +1,7 @@
 ﻿using GameTest1.Animations;
 using GameTest1.Engine;
 using GameTest1.Inputs;
+using GameTest1.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -23,40 +24,18 @@ namespace GameTest1.GameObjects
             _objectList = new List<GameObject>();
         }
 
-        public void UpdateAll(GameTime time)
+        public void UpdateAll(GameTime time,Level curLevel,SpriteBatch sb)
         {
             foreach (var item in _objectList)
             {
-                item.Update(time);
+                item.Update(time,curLevel,sb);
             }
         }
-        public void DrawAll()
+        public void DrawAll(SpriteBatch spriteBatch)
         {
             foreach (var item in _objectList)
             {
-                item.Draw();
-            }
-        }
-        public void CollisionCheck()
-        {
-            foreach (var item in _objectList)
-            {
-                for (int i = 0; i < _objectList.Count; i++)
-                {
-                    if (_objectList[i] != item)
-                    {
-                        if (CollisionManager.CheckCollision(item.CollisionRectangle, _objectList[i].CollisionRectangle))
-                        {
-                            item.IsColliding = true;
-                            _objectList[i].IsColliding = true;
-                        }
-                        else
-                        {
-                            item.IsColliding = false;
-                            _objectList[i].IsColliding = false;
-                        }
-                    }
-                }
+                item.Draw(spriteBatch);
             }
         }
     }

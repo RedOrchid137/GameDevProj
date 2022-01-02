@@ -4,11 +4,16 @@ using GameTest1.Extensions;
 using GameTest1.GameObjects;
 using GameTest1.Inputs;
 using GameTest1.Interfaces;
+using GameTest1.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+
 
 namespace GameTest1
 {
@@ -19,39 +24,53 @@ namespace GameTest1
         protected Texture2D _texture;
         protected Rectangle _window;
         private float _maxSpeed;
-        
-        
+
+
         //Boolean Flags
         public bool FlipFlagX { get; set; } = false;
         public bool FlipFlagY { get; set; } = false;
-        public bool IsColliding { get; set; } = false;
+        public bool IsFalling { get; set; } = false;
 
 
         //Location params
+        private Vector2 startingtile;
+        public Vector2 StartingTile
+        {
+            get { return startingtile; }
+            set
+            {
+                startingtile = new Vector2(value.X * CurLevel.TileWidth, value.Y * CurLevel.TileWidth);
+            }
+        }
         public float MaxSpeed { get { return _maxSpeed; } set { _maxSpeed = value; } }
         public Vector2 PrevPosition { get; set; }
         public Vector2 CurPosition { get; set; }
         public Vector2 Speed { get; set; }
         public Vector2 Acceleration { get; set; }
+        public TiledMapTile CurrentTile { get; set; }
+        public Level CurLevel { get; set; }
 
         //Collision
 
         public Rectangle CollisionRectangle { get; set; }
         public Dictionary<GameObject,CollisionType> CollisionList;
-
+        public List<Rectangle> TileRectList { get; set; } = new List<Rectangle>();
+        public float Ground { get; set; }
+        public bool onGround { get; set; }
 
         //Animation+Drawing params
-        public enum AnimationType { Run, Jump, Idle, Crouch, Attack, Block, Sleep }
+        public enum AnimationType { Run, Jump, Idle, Crouch, Attack, Block, Sleep,Death,Damage }
         internal Dictionary<AnimationType, Animation> animationList;
         internal Spritesheet spritesheet { get; set; }
         internal Animation curAnimation;
-        public SpriteBatch SpriteBatch { get { return _spriteBatch; } set { _spriteBatch = value; } }
         public Texture2D Texture { get { return _texture; } set { _texture = value; } }
         public Rectangle Window { get { return _window; } set { _window = value; } }
         public IInputReader InputReader { get; set; }
         public float Scale { get; set; }
         public enum CollisionType { Top,Bottom,Right,Left}
         public Vector2 Offsets { get; set; }
+        public float Layer { get; set; }
+
 
         protected Vector2 Limit(Vector2 v, float max)
         {
@@ -72,7 +91,7 @@ namespace GameTest1
             anime.CurrentFrame = anime.Frames[0];
             animationList[type] = anime;
         }
-        public void CollisionCheck(ObjectManager man)
+        public void CollisionCheckFull(ObjectManager man)
         {
             foreach (var item in man.ObjectList)
             {
@@ -101,34 +120,73 @@ namespace GameTest1
                             }
 
                             this.CollisionList[item] = test;
-                            this.IsColliding = true;
+                            Debug.WriteLine(item);
                             item.CollisionList[this] = test.GetOpposite();
                         }
                         else
                         {
-                            item.IsColliding = false;
                             this.CollisionList.Remove(item);
-                            this.IsColliding = false;
-                            item.CollisionList.Remove(this);
                         }
                     }
                 }
             }
         }
+        public void CollisionCheckTile(Rectangle CollisionRectangle, SpriteBatch sb,int id)
+        {
+            if (this.TileRectList.Contains(CollisionRectangle))
+            {
+                return;
+            }
+            var item = new Tile(ExtensionMethods.BlankTexture(sb), CollisionRectangle, 1, id);
+            item.CollisionRectangle = CollisionRectangle;
 
-        public abstract void Update(GameTime gametime);
-        public abstract void Draw();
+            if (CollisionManager.CheckCollision(this.CollisionRectangle, CollisionRectangle))
+            {
+                Debug.WriteLine("adding tile to coll list player " + CollisionRectangle.X + " : " + CollisionRectangle.Y);
+                CollisionType test = new CollisionType();
+                if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Top && this.Speed.Y >= 0)
+                {
+                    test = CollisionType.Top;
+                }
+                else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Bottom && this.Speed.Y<0)
+                {
+                    test = CollisionType.Bottom;
+                }
+                else if (this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Right < item.CollisionRectangle.Right && this.Speed.X>0)
+                {
+                    test = CollisionType.Left;
+                }
+                else if (this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Left > item.CollisionRectangle.Left && this.Speed.X < 0)
+                { 
+                    test = CollisionType.Right;
+                }
+                this.CollisionList[item] = test;
+                if (!this.TileRectList.Contains(CollisionRectangle))
+                {
+                    this.TileRectList.Add(CollisionRectangle);
+                }
+            }
+        }
+        public abstract void Update(GameTime gametime,Level curLevel, SpriteBatch sb);
+        public abstract void Draw(SpriteBatch spriteBatch);
 
-        public GameObject(Spritesheet spritesheet,SpriteBatch spritebatch,Rectangle window, float scale=1,float maxSpeed=0)
+        public GameObject(Spritesheet spritesheet,Rectangle window,Level curlevel, float scale=1,float maxSpeed=0)
         {
             this.Scale = scale;
+            CurLevel = curlevel;
             animationList = new Dictionary<AnimationType, Animation>();
             CollisionList = new Dictionary<GameObject, CollisionType>();
             this.spritesheet = spritesheet;
             _maxSpeed = maxSpeed;
             _window = window;
             _texture = this.spritesheet.Texture;
-            _spriteBatch = spritebatch;
+        }
+        public GameObject(Texture2D texture, Rectangle window, float scale)
+        {
+            CollisionList = new Dictionary<GameObject, CollisionType>();
+            this.Scale = scale;
+            this.Texture = texture;
+            this.Window = window;
         }
     }
 }

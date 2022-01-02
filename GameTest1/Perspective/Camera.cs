@@ -1,5 +1,6 @@
 ﻿using GameTest1.Engine;
 using GameTest1.Sprites;
+using GameTest1.World;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ namespace GameTest1.Perspective
               0);
 
             var offset = Matrix.CreateTranslation(
-                World.screenWidth / 2,
-                World.screenHeight / 2,
+                Level.screenWidth/2,
+                Level.screenHeight/2,
                 0);
 
             Transform = position * offset;

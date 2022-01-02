@@ -25,7 +25,7 @@ namespace GameTest1.Extensions
             //var ret = new RenderTarget2D(graphics, source.Width, source.Height);
             //Texture2D retimg = (Texture2D)ret;
             //return retimg
-            Texture2D cropTexture = new Texture2D(Game1.Graphics.GraphicsDevice, source.Width, source.Height);
+            Texture2D cropTexture = new Texture2D(Game2.Graphics.GraphicsDevice, source.Width, source.Height);
             Color[] data = new Color[source.Width * source.Height];
             image.GetData(0, source, data, 0, data.Length);
             cropTexture.SetData(data);
@@ -52,6 +52,12 @@ namespace GameTest1.Extensions
                     return CollisionType.Right;
             }
             return type;
+        }
+
+        //van https://stackoverflow.com/questions/4144778/get-properties-and-values-from-unknown-object
+        static public object GetValObjDy(this object obj, string propertyName)
+        {
+            return obj.GetType().GetProperty(propertyName).GetValue(obj, null);
         }
     }
 }
