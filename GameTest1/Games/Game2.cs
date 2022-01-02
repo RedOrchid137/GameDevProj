@@ -14,37 +14,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using GameTest1.Extensions;
+using GameTest1.State;
+using GameTest1.States;
 
 namespace GameTest1
 {
-    public class Game2 : Game
+    public class Game2 : GameBase
     {
-        //testing vars
-        private static GraphicsDeviceManager _graphics;
-        public static GraphicsDeviceManager Graphics { get { return _graphics; }}
 
-        private static ObjectManager oMan;
-        public static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
-        public static List<Rectangle> tilelist { get; set; }
-
-        
-        SpriteBatch _spriteBatch { get; set; }
-        Character testchar;
-        public Level Level1 { get; set; }
-        private Camera _camera;
-
-        TiledMap _tiledMap;
-        TiledMapRenderer _tiledMapRenderer;
-
-
-        public Game2()
+        public Game2():base()
         {
-            oMan = new ObjectManager();
-            _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = (int)Level.screenWidth;
-            _graphics.PreferredBackBufferHeight = (int)Level.screenHeight;
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
         }
 
         protected override void Initialize()
@@ -58,6 +37,7 @@ namespace GameTest1
             _tiledMap = Content.Load<TiledMap>("TileMapResources/Level1/Level1Simple");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             Level1 = new Level(_tiledMap, 32);
+            _huidigeStatus = new MenuState(this, _graphics.GraphicsDevice, Content);
             InitObjects();
         }
 
@@ -65,6 +45,16 @@ namespace GameTest1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
+
+            if (_volgendeStatus != null)
+            {
+                _huidigeStatus = _volgendeStatus;
+
+                _volgendeStatus = null;
+            }
+
+            _huidigeStatus.Update(gameTime);
+
             oMan.UpdateAll(gameTime,Level1,_spriteBatch);
             _camera.Follow(testchar);
             _tiledMapRenderer.Update(gameTime);
@@ -73,24 +63,28 @@ namespace GameTest1
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
-            _spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: _camera.Transform);
-            foreach (var item in _tiledMap.Layers)
-            {
-                _tiledMapRenderer.Draw(item, _camera.Transform);
-            }
-            foreach (var item in tilelist)
-            {
-                _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(item.X, item.Y), item, Color.Red * 0.5f);
-            }
-            oMan.DrawAll(_spriteBatch);
-            _spriteBatch.End();
+            //GraphicsDevice.Clear(Color.White);
+            //_huidigeStatus.Draw(gameTime, _spriteBatch);
+
+
+
+            //_spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: _camera.Transform);
+            //foreach (var item in _tiledMap.Layers)
+            //{
+            //    _tiledMapRenderer.Draw(item, _camera.Transform);
+            //}
+            //foreach (var item in tilelist)
+            //{
+            //    _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(item.X, item.Y), item, Color.Red * 0.5f);
+            //}
+            //oMan.DrawAll(_spriteBatch);
+            //_spriteBatch.End();
             base.Draw(gameTime);
         }
 
 
 
-        public void InitObjects()
+        public new void InitObjects()
         {
 
             Rectangle window = new Rectangle(0, 0, Game2.Graphics.PreferredBackBufferWidth, Game2.Graphics.PreferredBackBufferHeight);
