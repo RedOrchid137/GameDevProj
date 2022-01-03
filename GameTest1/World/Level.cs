@@ -14,8 +14,8 @@ namespace GameTest1.World
 {
     public class Level
     {
-        public static float screenWidth = Screen.PrimaryScreen.Bounds.Width/2;
-        public static float screenHeight = Screen.PrimaryScreen.Bounds.Height/2;
+        public static float screenWidth { get; set; }
+        public static float screenHeight { get; set; }
         public TiledMap Map { get; set; }
         public TiledMapTileLayer CollisionLayer { get; set; }
         public Rectangle curCollisionRectangle { get; set; }
@@ -51,7 +51,6 @@ namespace GameTest1.World
             //check bot
             foreach (var item in xvals)
             {
-                Debug.WriteLine("Checking xval :   ---" + item);
                 CollisionLayer.TryGetTile(item, tybot, out tile);
                 if (tile.HasValue&&!tilelist.Contains(tile))
                 {
@@ -62,7 +61,6 @@ namespace GameTest1.World
             //check top
             foreach (var item in xvals)
             {
-                Debug.WriteLine("Checking xval :   ---" + item);
                 CollisionLayer.TryGetTile(item, tytop, out tile);
                 if (tile.HasValue && !tilelist.Contains(tile))
                 {
@@ -75,7 +73,7 @@ namespace GameTest1.World
                 curCollisionRectangle = new Rectangle((int)tileOrigin.X, (int)tileOrigin.Y, TileWidth, TileWidth);
                 if (!Game2.tilelist.Contains(curCollisionRectangle))
                 {
-                    Debug.WriteLine("adding tile at: "+ curCollisionRectangle.X + " " +curCollisionRectangle.Y);
+                   
                     Game2.tilelist.Add(curCollisionRectangle);
                 }
                 entity.CollisionCheckTile(curCollisionRectangle, sb, item.Value.GlobalIdentifier);

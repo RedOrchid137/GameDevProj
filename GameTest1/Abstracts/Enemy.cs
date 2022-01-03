@@ -13,6 +13,10 @@ namespace GameTest1.Abstracts
 {
     public abstract class Enemy:GameObject
     {
+
+        //Starting Tile is de coordinaat van de tegel waarop een gameobject zal spawnen. 
+        //Niet hetzelfde als pixel coords, het is de coordinaat van de tegel in een 2d array zogezegd
+        //Voor pixel coords wordt dit nog eens vermenigvuldigd met de breedte(in pixels) van een tegel
         public Enemy(Spritesheet spritesheet, Rectangle window, Level curlevel, Vector2 startingtile, float scale = 1, float maxSpeed = 0) : base(spritesheet, window, curlevel, scale, maxSpeed)
         {
             this.Acceleration = new Vector2(0.2f, 5f);
@@ -29,7 +33,6 @@ namespace GameTest1.Abstracts
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
                 spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
-            //new Vector2(CollisionRectangle.Width, 0)
             else
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);

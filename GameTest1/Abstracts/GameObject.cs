@@ -120,7 +120,6 @@ namespace GameTest1
                             }
 
                             this.CollisionList[item] = test;
-                            Debug.WriteLine(item);
                             item.CollisionList[this] = test.GetOpposite();
                         }
                         else
@@ -142,7 +141,7 @@ namespace GameTest1
 
             if (CollisionManager.CheckCollision(this.CollisionRectangle, CollisionRectangle))
             {
-                Debug.WriteLine("adding tile to coll list player " + CollisionRectangle.X + " : " + CollisionRectangle.Y);
+                
                 CollisionType test = new CollisionType();
                 if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Top && this.Speed.Y >= 0)
                 {

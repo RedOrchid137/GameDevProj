@@ -39,26 +39,6 @@ namespace GameTest1
         internal List<AnimationFrame> Frames { get { return frames; } set { frames = value; } }
 
 
-        //public void GetFramesFromTextureProperties(int width, int height, int maxnumberOfColummns, int rowsTotal,List<int>rowsCount,List<int> rowsNeeded)
-        //{
-        //    int widthOfFrame = width / maxnumberOfColummns;
-        //    int heightOfFrame = height / rowsTotal;
-
-        //    int curX;
-        //    int curY = rowsNeeded[0]*heightOfFrame;
-        //    for (int i = 0; i < rowsNeeded.Count; i++)
-        //    {
-        //        curX = 0;
-        //        curY += i * heightOfFrame;
-        //        for (int j = 0; j < rowsCount[rowsNeeded[i]]; j++)
-        //        {
-        //            //new Rectangle(curX,curY,widthOfFrame,heightOfFrame
-        //            frames.Add(new AnimationFrame(new Rectangle(CalculateBounds.GetSmallestRectangleFromTexture())));
-        //            curX += widthOfFrame;
-        //        }
-        //    }
-        //}
-
         public void GetFramesFromTextureProperties(Spritesheet sheet, List<int> rowsNeeded)
         {
             int widthOfFrame = sheet.Width / sheet.Max;

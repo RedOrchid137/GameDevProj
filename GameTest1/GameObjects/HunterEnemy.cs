@@ -16,12 +16,13 @@ namespace GameTest1.GameObjects
     {
         public HunterEnemy(Spritesheet spritesheet, Rectangle window, Level curlevel,Vector2 startingtile, float scale = 1, float maxSpeed = 5) : base(spritesheet, window, curlevel,startingtile,scale, maxSpeed)
         {
-            AddAnimation(AnimationType.Idle, new List<int> { 4 });
-            AddAnimation(AnimationType.Run, new List<int> { 6 });
+            AddAnimation(AnimationType.Idle, new List<int> { 0 });
+            AddAnimation(AnimationType.Run, new List<int> { 1 });
             AddAnimation(AnimationType.Jump, new List<int> { 2 });
-            AddAnimation(AnimationType.Attack, new List<int> { 1 });
-            AddAnimation(AnimationType.Death, new List<int> { 2 });
+            AddAnimation(AnimationType.Attack, new List<int> { 3 });
+            AddAnimation(AnimationType.Death, new List<int> { 4 });
             this.curAnimation = animationList[AnimationType.Idle];
+            Speed = new Vector2(2,0);
         }
 
         

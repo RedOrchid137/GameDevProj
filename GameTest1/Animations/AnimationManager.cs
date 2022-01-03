@@ -52,7 +52,15 @@ namespace GameTest1.Animations
         }
         public static void setCurrentAnimationEnemy(GameObject o)
         {
-            o.curAnimation = o.animationList[AnimationType.Idle];
+            
+            if (o.Speed.X!=0)
+            {
+                o.curAnimation = o.animationList[AnimationType.Run];
+            }
+            else
+            {
+                o.curAnimation = o.animationList[AnimationType.Idle];
+            }
         }
 
 

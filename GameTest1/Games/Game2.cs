@@ -19,8 +19,11 @@ using GameTest1.States;
 
 namespace GameTest1
 {
+
+    //Alle generieke dingen gaan via GameBase zodat de Game klasses zelf overzichtelijk blijven.
     public class Game2 : GameBase
     {
+
 
         public Game2():base()
         {
@@ -34,8 +37,14 @@ namespace GameTest1
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+
+            //tiledmap klasse gebruikt .tmx uit Tiled software om de TileLayers te gebruiken voor collision detection
+            //tiledmap renderer tekent de TileLayers
             _tiledMap = Content.Load<TiledMap>("TileMapResources/Level1/Level1Simple");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
+
+
             Level1 = new Level(_tiledMap, 32);
             _huidigeStatus = new MenuState(this, _graphics.GraphicsDevice, Content);
             InitObjects();
@@ -43,6 +52,7 @@ namespace GameTest1
 
         protected override void Update(GameTime gameTime)
         {
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
 
@@ -63,22 +73,6 @@ namespace GameTest1
 
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(Color.White);
-            //_huidigeStatus.Draw(gameTime, _spriteBatch);
-
-
-
-            //_spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: _camera.Transform);
-            //foreach (var item in _tiledMap.Layers)
-            //{
-            //    _tiledMapRenderer.Draw(item, _camera.Transform);
-            //}
-            //foreach (var item in tilelist)
-            //{
-            //    _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(item.X, item.Y), item, Color.Red * 0.5f);
-            //}
-            //oMan.DrawAll(_spriteBatch);
-            //_spriteBatch.End();
             base.Draw(gameTime);
         }
 
@@ -86,15 +80,14 @@ namespace GameTest1
 
         public new void InitObjects()
         {
-
-            Rectangle window = new Rectangle(0, 0, Game2.Graphics.PreferredBackBufferWidth, Game2.Graphics.PreferredBackBufferHeight);
-            tilelist = new List<Rectangle>();
+            base.InitObjects();
             Spritesheet test = new Spritesheet(Content.Load<Texture2D>("Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
-            Spritesheet testen = new Spritesheet(Content.Load<Texture2D>("SpriteSheetHuntress"), new List<int> { 6, 10, 2, 3, 10, 2, 8 });
-            testchar = new Character(test, window,Level1,new Vector2(0,0), new KeyboardReader(), 2f, 5);
-            HunterEnemy testenemy = new HunterEnemy(testen, window, Level1, new Vector2(10, 0),1f,5);
+            Spritesheet testen = new Spritesheet(Content.Load<Texture2D>("Shardsoul Slayer Sprite Sheet"), new List<int> { 8,8,5,4,6 });
+            testchar = new Character(test, WindowRectangle,Level1,new Vector2(0,0), new KeyboardReader(), 2f, 5);
+            HunterEnemy testenemy = new HunterEnemy(testen, WindowRectangle, Level1, new Vector2(10, 0),1.2f,5);
             
             oMan.ObjectList.Add(testchar);
+            oMan.ObjectList.Add(testenemy);
             _camera = new Camera();
         }
     }
