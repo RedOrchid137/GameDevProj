@@ -30,14 +30,13 @@ namespace GameTest1.Engine
             int topcount = 0;
             foreach (var item in player.CollisionList)
             {
-
+                var tile = item.Key as Tile;
                 //Checken of tiles in lijst wel degelijk colliden met character
                 //Indien niet: verwijderen uit de lijst zodat character vrij kan bewegen
-                bool t = CheckCollision(player.CollisionRectangle, item.Key.CollisionRectangle);
-                if (!t)
+                if (!CheckCollision(player.CollisionRectangle, tile.CollisionRectangle))
                 {
-                    player.TileRectList.Remove(item.Key.CollisionRectangle);
-                    player.CollisionList.Remove(item.Key);
+                    player.TileRectList.Remove(tile.CollisionRectangle);
+                    player.CollisionList.Remove(tile);
                 }
                 if (item.Key.GetType() == typeof(Tile))
                 {
@@ -50,7 +49,7 @@ namespace GameTest1.Engine
                         //Met een boolean onGround kan nagegaan worden of de char op de grond staat en of deze dus moet vallen of niet
                         case CollisionType.Top:
                             player.Speed = new Vector2(player.Speed.X, 0);
-                            player.Ground = item.Key.CollisionRectangle.Top;
+                            player.Ground = tile.CollisionRectangle.Top;
                             player.CurPosition = new Vector2(player.CurPosition.X, player.Ground-spriteheight);                     
                             topcount++;
                             break;
@@ -59,15 +58,18 @@ namespace GameTest1.Engine
                         //Char raakt een tile aan de zijkant, de positie wordt geupdate om te zorgen dat de char niet door de tile kan lopen
                         case CollisionType.Left:
                             player.Speed = new Vector2(0, player.Speed.Y);
-                            player.CurPosition = new Vector2(item.Key.CollisionRectangle.Left  - spritewidth + player.Offsets.X, player.CurPosition.Y);
+                            //player.CurPosition = new Vector2(item.Key.CollisionRectangle.Left  - spritewidth + player.Offsets.X-5, player.CurPosition.Y);
+                            player.CurPosition = new Vector2(player.CurPosition.X-tile.IntersectSurface.Width,player.CurPosition.Y);
                             break;
                         case CollisionType.Right:
                             player.Speed = new Vector2(0, player.Speed.Y);
-                            player.CurPosition = new Vector2(item.Key.CollisionRectangle.Right - player.Offsets.X, player.CurPosition.Y);
+                            //player.CurPosition = new Vector2(item.Key.CollisionRectangle.Right - player.Offsets.X+5, player.CurPosition.Y);
+                            player.CurPosition = new Vector2(player.CurPosition.X + tile.IntersectSurface.Width, player.CurPosition.Y);
                             break;
                         case CollisionType.Bottom:
                             player.Speed = new Vector2(player.Speed.X, 0);
-                            player.CurPosition = new Vector2(player.CurPosition.X, item.Key.CollisionRectangle.Bottom+player.Offsets.Y);
+                            //player.CurPosition = new Vector2(player.CurPosition.X, item.Key.CollisionRectangle.Bottom+player.Offsets.Y);
+                            player.CurPosition = new Vector2(player.CurPosition.X, player.CurPosition.Y + tile.IntersectSurface.Height);
                             break;
                     }
 

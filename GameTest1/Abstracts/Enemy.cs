@@ -14,29 +14,29 @@ namespace GameTest1.Abstracts
     public abstract class Enemy:GameObject
     {
 
+        public Vector2 Path { get; set; }
+
+        public bool Direction { get; set; }
+
         //Starting Tile is de coordinaat van de tegel waarop een gameobject zal spawnen. 
         //Niet hetzelfde als pixel coords, het is de coordinaat van de tegel in een 2d array zogezegd
         //Voor pixel coords wordt dit nog eens vermenigvuldigd met de breedte(in pixels) van een tegel
-        public Enemy(Spritesheet spritesheet, Rectangle window, Level curlevel, Vector2 startingtile, float scale = 1, float maxSpeed = 0) : base(spritesheet, window, curlevel, scale, maxSpeed)
+        public Enemy(Spritesheet spritesheet, Rectangle window, Level curlevel, Vector2 startingtile,Vector2 path, float scale = 1, float maxSpeed = 0) : base(spritesheet, window, curlevel,startingtile, scale, maxSpeed)
         {
-            this.Acceleration = new Vector2(0.2f, 5f);
-            this.CurLevel = curlevel;
-            this.StartingTile = startingtile;
-            Debug.WriteLine(StartingTile);
-            this.CurPosition = StartingTile;
-            this.Ground = CurPosition.Y;
+            this.Direction = true;
+            Path = new Vector2(path.X*CurLevel.TileWidth,path.Y*CurLevel.TileWidth);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (FlipFlagX)
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
             else
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
         }
 

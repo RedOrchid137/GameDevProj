@@ -22,7 +22,6 @@ namespace GameTest1
     public abstract class GameBase : Game
     {
         //testing vars
-        Stopwatch _watch;
         protected static GraphicsDeviceManager _graphics;
         public static GraphicsDeviceManager Graphics { get { return _graphics; }}
 
@@ -32,22 +31,17 @@ namespace GameTest1
 
         public static List<Rectangle> tilelist { get; set; }
         public static Rectangle WindowRectangle { get; set; }
-
+        public static Level CurLevel { get; set; }
 
         protected SpriteBatch _spriteBatch { get; set; }
         protected Character testchar;
 
-        SpriteFont FPSFont;
-        float curFPS;
-        //Levels
-        public Level Level1 { get; set; }
-        public Level Level2 { get; set; }
+
 
 
         //Rendering
 
         protected Camera _camera;
-        protected TiledMap _tiledMap;
         protected TiledMapRenderer _tiledMapRenderer;
 
 
@@ -56,7 +50,6 @@ namespace GameTest1
 
         public GameBase()
         {
-            _watch = new Stopwatch();
             oMan = new ObjectManager();
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -75,12 +68,12 @@ namespace GameTest1
 
         protected override void LoadContent()
         {
-            InitObjects();
+            _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, CurLevel.Map);
+            _camera = new Camera();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            _watch.Start();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
             base.Update(gameTime);
@@ -88,6 +81,7 @@ namespace GameTest1
 
         protected override void Draw(GameTime gameTime)
         {
+            _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, CurLevel.Map);
             GraphicsDevice.Clear(Color.White);
             if (_huidigeStatus.GetType() == typeof(MenuState))
             {
@@ -95,11 +89,18 @@ namespace GameTest1
             }
             else if (_huidigeStatus.GetType() == typeof(GameState))
             {
+                _spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null,Matrix.CreateScale(CurLevel.BackgroundScale));
+                //_spriteBatch.Draw(CurLevel.Background, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, CurLevel.BackgroundScale, SpriteEffects.None, 0f);
+                _spriteBatch.Draw(CurLevel.Background,new Rectangle(0,0,CurLevel.Background.Width,CurLevel.Background.Height),Color.White);
+                _spriteBatch.End();
                 _spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: _camera.Transform);
-                foreach (var item in _tiledMap.Layers)
+                
+                foreach (var item in CurLevel.Map.Layers)
                 {
                     _tiledMapRenderer.Draw(item, _camera.Transform);
                 }
+                
+                
                 //foreach (var item in tilelist)
                 //{
                 //    _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(item.X, item.Y), item, Color.Red * 0.5f);
@@ -110,19 +111,15 @@ namespace GameTest1
             }
 
             base.Draw(gameTime);
-            _watch.Stop();
-            curFPS = _watch.ElapsedMilliseconds;
-            _watch.Reset();
         }
 
 
 
         public void InitObjects()
         {
-            FPSFont =  Content.Load<SpriteFont>("Font/Font");
             tilelist = new List<Rectangle>();     
-            _graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width/2;
-            _graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height/2;
+            _graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width/1.3);
+            _graphics.PreferredBackBufferHeight = (int)(GraphicsDevice.DisplayMode.Height / 1.3);
             _graphics.ApplyChanges();
             WindowRectangle = new Rectangle(0, 0, Game2.Graphics.PreferredBackBufferWidth, Game2.Graphics.PreferredBackBufferHeight);
             Level.screenWidth = _graphics.PreferredBackBufferWidth;

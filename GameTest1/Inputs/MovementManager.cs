@@ -1,4 +1,5 @@
-﻿using GameTest1.Engine;
+﻿using GameTest1.Abstracts;
+using GameTest1.Engine;
 using GameTest1.Extensions;
 using GameTest1.World;
 using Microsoft.Xna.Framework;
@@ -16,33 +17,44 @@ namespace GameTest1.Inputs
         {
             int spriteheight = movable.curAnimation.CurrentFrame.SourceRectangle.Height;
             var direction = movable.InputReader.ReadInput();
+
             if (movable.InputReader.IsDestinationInput)
             {
-                //Sprite orientation + horiz. speed
-                if (direction.X > 0)
+                if (!(movable.Speed.X == 0 && movable.hKeyPressed))
                 {
-                    movable.FlipFlagX = false;
-                    movable.Speed = new Vector2(movable.Speed.X + movable.Acceleration.X, movable.Speed.Y);
-                }
-                else if (direction.X < 0)
-                {
-                    movable.FlipFlagX = true;
-                    movable.Speed = new Vector2(movable.Speed.X - movable.Acceleration.X, movable.Speed.Y);
-                }
-                else
-                {
-                    if (movable.Speed.X > 0)
+                    //Sprite orientation + horiz. speed
+                    if (direction.X > 0)
                     {
-                        float newspeed = movable.Speed.X - Physics.frictionConst;
-                        movable.Speed = new Vector2(newspeed < 0 ? 0 : newspeed, movable.Speed.Y);
+                        movable.FlipFlagX = false;
+                        movable.Speed = new Vector2(movable.Speed.X + movable.Acceleration.X, movable.Speed.Y);
+                        movable.hKeyPressed = true;
                     }
-                    else if (movable.Speed.X < 0)
+                    else if (direction.X < 0)
                     {
-                        float newspeed = movable.Speed.X + Physics.frictionConst;
-                        movable.Speed = new Vector2(newspeed > 0 ? 0 : newspeed, movable.Speed.Y);
+                        movable.FlipFlagX = true;
+                        movable.Speed = new Vector2(movable.Speed.X - movable.Acceleration.X, movable.Speed.Y);
+                        movable.hKeyPressed = true;
                     }
+                    else
+                    {
+                        if (movable.Speed.X > 0)
+                        {
+                            float newspeed = movable.Speed.X - Physics.frictionConst;
+                            movable.Speed = new Vector2(newspeed < 0 ? 0 : newspeed, movable.Speed.Y);
+                        }
+                        else if (movable.Speed.X < 0)
+                        {
+                            float newspeed = movable.Speed.X + Physics.frictionConst;
+                            movable.Speed = new Vector2(newspeed > 0 ? 0 : newspeed, movable.Speed.Y);
+                        }
+                        movable.hKeyPressed = false;
+                    }
+                }
+                else if (direction.X==0)
+                {
+                    movable.hKeyPressed = false;
+                }
 
-                }
 
                 //handle jumping and falling
 
@@ -124,9 +136,20 @@ namespace GameTest1.Inputs
                 //}
             }
         }
-        public static void MoveEnemy(GameObject movable, Level curLevel, SpriteBatch sb)
+        public static void MoveEnemy(Enemy movable, Level curLevel, SpriteBatch sb)
         {
             int spriteheight = movable.curAnimation.CurrentFrame.SourceRectangle.Height;
+
+            movable.FlipFlagX = !movable.Direction;
+            if (movable.Direction)
+            {
+                movable.Speed = new Vector2(movable.Speed.X+movable.Acceleration.X, 0);
+            }
+            else
+            {
+                movable.Speed = new Vector2(movable.Speed.X - movable.Acceleration.X, 0);
+            }
+
             //handle jumping and falling
 
             if (movable.CurPosition.Y >= movable.Ground - spriteheight * movable.Scale)
@@ -139,10 +162,7 @@ namespace GameTest1.Inputs
             {
                 movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y + Physics.gravConst);
             }
-            //if (movable.IsFalling)
-            //{
-            //    movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y + Physics.gravConst);
-            //}
+
             //limit speed
             if (movable.Speed.X > movable.MaxSpeed)
             {
@@ -161,6 +181,14 @@ namespace GameTest1.Inputs
                 movable.Speed = new Vector2(movable.Speed.X, -Physics.terminalVel);
             }
             movable.CurPosition += movable.Speed;
+            if (movable.CurPosition.X >= movable.Path.Y)
+            {
+                movable.Direction = false;
+            }
+            else if (movable.CurPosition.X <= movable.Path.X)
+            {
+                movable.Direction = true;
+            }
             movable.Offsets = ExtensionMethods.CalcOffsets(movable.curAnimation.CurrentFrame.SourceRectangle, movable.curAnimation.CurrentFrame.HitBox);
 
             if (movable.CurPosition != movable.PrevPosition)
@@ -182,9 +210,10 @@ namespace GameTest1.Inputs
                 movable.Ground = 99999999;
             }
             movable.PrevPosition = movable.CurPosition;
-
-
-
+            if (movable.CurPosition.Y > 1000)
+            {
+                movable.CurPosition = movable.StartingTile;
+            }
         }
 
     }

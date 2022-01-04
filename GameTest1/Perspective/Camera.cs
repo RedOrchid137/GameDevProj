@@ -16,7 +16,7 @@ namespace GameTest1.Perspective
         {
             var position = Matrix.CreateTranslation(
               -target.CurPosition.X - (target.curAnimation.CurrentFrame.SourceRectangle.Width / 2),
-              -target.CurPosition.Y - (target.curAnimation.CurrentFrame.SourceRectangle.Height / 2),
+              -Level.screenHeight / 2,
               0);
 
             var offset = Matrix.CreateTranslation(

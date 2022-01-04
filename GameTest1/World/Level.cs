@@ -20,11 +20,15 @@ namespace GameTest1.World
         public TiledMapTileLayer CollisionLayer { get; set; }
         public Rectangle curCollisionRectangle { get; set; }
         public int TileWidth{ get;set;} 
-        public Level(TiledMap map, Character player, int tilewidth)
+        public Texture2D Background { get; set; }
+        public float BackgroundScale { get; set; }
+        public Level(TiledMap map, int tilewidth, Texture2D bg)
         {
             this.Map = map;
             this.CollisionLayer = this.Map.TileLayers[0];
             TileWidth = tilewidth;
+            Background = bg;
+            BackgroundScale =  (float)screenWidth/(float)Background.Width;
         }
         public Level(TiledMap map, int tilewidth)
         {
