@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static GameTest1.GameObject;
+using static GameTest1.Entity;
 
 namespace GameTest1.Extensions
 {

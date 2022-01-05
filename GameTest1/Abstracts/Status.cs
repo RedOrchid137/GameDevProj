@@ -14,7 +14,6 @@ namespace GameTest1.State
         protected GraphicsDevice _graphicsDevice;
 
         protected GameBase _spel;
-
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
         

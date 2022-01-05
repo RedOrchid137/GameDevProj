@@ -13,7 +13,7 @@ namespace GameTest1.Inputs
 {
     public class MovementManager
     {
-        public static void MoveCharacter(GameObject movable,Level curLevel,SpriteBatch sb)
+        public static void MoveCharacter(Entity movable,Level curLevel,SpriteBatch sb)
         {
             int spriteheight = movable.curAnimation.CurrentFrame.SourceRectangle.Height;
             var direction = movable.InputReader.ReadInput();
@@ -181,6 +181,25 @@ namespace GameTest1.Inputs
                 movable.Speed = new Vector2(movable.Speed.X, -Physics.terminalVel);
             }
             movable.CurPosition += movable.Speed;
+
+
+            movable.UpdateFOV();
+            if (movable.CurLevel.Player.CollisionRectangle.Intersects(movable.FieldOfView))
+            {
+                movable.Chasing = true;
+            }
+            else
+            {
+                movable.Chasing = false;
+                movable.Running = false;
+                movable.MaxSpeed = 5;
+            }
+            if (movable.Chasing&&!movable.Running)
+            {
+                movable.MaxSpeed += 2;
+                movable.Running = true;
+            }
+
             if (movable.CurPosition.X >= movable.Path.Y)
             {
                 movable.Direction = false;

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameTest1.Engine;
+using GameTest1.World;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,8 @@ namespace GameTest1.GameObjects
     {
         public int Id { get; set; }
         public Rectangle IntersectSurface { get; set; }
+        public bool Solid { get; set; }
+        public float Resistance { get; set; }
         public Tile(Texture2D texture, Rectangle window, float scale,int id) : base(texture, window, scale)
         {
             this.Texture = texture;

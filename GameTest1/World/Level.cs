@@ -22,6 +22,7 @@ namespace GameTest1.World
         public int TileWidth{ get;set;} 
         public Texture2D Background { get; set; }
         public float BackgroundScale { get; set; }
+        public Character Player { get; set; }
         public Level(TiledMap map, int tilewidth, Texture2D bg)
         {
             this.Map = map;
@@ -30,14 +31,14 @@ namespace GameTest1.World
             Background = bg;
             BackgroundScale =  (float)screenWidth/(float)Background.Width;
         }
-        public Level(TiledMap map, int tilewidth)
+        public Level(TiledMap map,int tilewidth)
         {
             this.Map = map;
             this.CollisionLayer = this.Map.TileLayers[0];
             TileWidth = tilewidth;
         }
 
-        public void CheckCollision(GameObject entity, SpriteBatch sb)
+        public void CheckCollision(Entity entity, SpriteBatch sb)
         {
             List<TiledMapTile?> tilelist = new List<TiledMapTile?>();
             List<ushort> xvals = new List<ushort>();
@@ -83,6 +84,25 @@ namespace GameTest1.World
                 entity.CollisionCheckTile(curCollisionRectangle, sb, item.Value.GlobalIdentifier);
             }
 
+        }
+
+        public bool existsTile(int x, int y,Rectangle scanRect)
+        {
+            ushort _x = (ushort)(x / TileWidth);
+            ushort _y = (ushort)(y / TileWidth);
+            TiledMapTile? tile = null;
+            CollisionLayer.TryGetTile(_x, _y, out tile);
+            if (tile.HasValue)
+            {
+                Vector2 tileOrigin = new Vector2(tile.Value.X * TileWidth, tile.Value.Y * TileWidth);
+                curCollisionRectangle = new Rectangle((int)tileOrigin.X, (int)tileOrigin.Y, TileWidth, TileWidth);
+                if (curCollisionRectangle.Intersects(scanRect))
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
 
     }

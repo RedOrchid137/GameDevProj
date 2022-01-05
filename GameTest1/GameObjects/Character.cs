@@ -13,7 +13,7 @@ using GameTest1.World;
 
 namespace GameTest1
 {
-    public class Character : GameObject, IMobile, INeedsUpdate 
+    public class Character : Entity, IMobile, INeedsUpdate 
     {
         public bool IsSleeping { get; set; }
         public Character(Spritesheet spritesheet, Rectangle window,Level curlevel,Vector2 startingtile, IInputReader reader,float scale, float maxSpeed) : base(spritesheet, window, curlevel,startingtile, scale, maxSpeed)

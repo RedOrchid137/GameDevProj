@@ -9,7 +9,7 @@ using System.Text;
 
 namespace GameTest1.GameObjects
 {
-    public class Static:GameObject,INeedsUpdate
+    public class Static:Entity,INeedsUpdate
     {
         public Static(Texture2D texture,Rectangle window,float scale):base(texture,window, scale)
         {

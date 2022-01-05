@@ -26,6 +26,8 @@ namespace GameTest1
 
         public Level Level1 { get; set; }
         public Level Level2 { get; set; }
+
+        public static Character CurPlayer { get; set; }
         public Game2():base()
         {
         }
@@ -43,11 +45,12 @@ namespace GameTest1
             //tiledmap klasse gebruikt .tmx uit Tiled software om de TileLayers te gebruiken voor collision detection
             //tiledmap renderer tekent de TileLayer
             base.InitObjects();
-            Level1 = new Level(Content.Load<TiledMap>("TileMapResources/Level1/Level1"), 32, Content.Load<Texture2D>("TileMapResources/Level1/Background"));
+            Level1 = new Level(Content.Load<TiledMap>("TileMapResources/Level1/Level1"),32, Content.Load<Texture2D>("TileMapResources/Level1/Background"));
             _huidigeStatus = new MenuState(this, _graphics.GraphicsDevice, Content);
             CurLevel = Level1;
             base.LoadContent();
             InitObjects();
+            CurLevel.Player = CurPlayer;
         }
 
         protected override void Update(GameTime gameTime)
@@ -83,6 +86,7 @@ namespace GameTest1
             Spritesheet test = new Spritesheet(Content.Load<Texture2D>("Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
             Spritesheet testen = new Spritesheet(Content.Load<Texture2D>("Shardsoul Slayer Sprite Sheet"), new List<int> { 8,8,5,4,6 });
             testchar = new Character(test, WindowRectangle,Level1, new Vector2(2, 16), new KeyboardReader(), 2f, 5);
+            CurPlayer = testchar;
             HunterEnemy testenemy = new HunterEnemy(testen, WindowRectangle, Level1, new Vector2(2,7),new Vector2(1,13),1.5f,2);
             
             oMan.ObjectList.Add(testchar);

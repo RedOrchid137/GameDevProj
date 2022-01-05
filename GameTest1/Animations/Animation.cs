@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static GameTest1.GameObject;
+using static GameTest1.Entity;
 
 namespace GameTest1
 {

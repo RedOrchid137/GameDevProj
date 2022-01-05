@@ -5,7 +5,7 @@ using System.Text;
 using GameTest1.GameObjects;
 using GameTest1.World;
 using Microsoft.Xna.Framework;
-using static GameTest1.GameObject;
+using static GameTest1.Entity;
 
 namespace GameTest1.Engine
 {
@@ -14,18 +14,18 @@ namespace GameTest1.Engine
         public static bool CheckCollision(Rectangle rect1, Rectangle rect2)
         {
             //Collision circumstances: (rect1.Bottom==rect2.Top||rect1.Top == rect2.Bottom)&&(rect1.X)    || rect1.Left == rect2.Right|| rect1.Right == rect2.Left
-            
+
             if (rect1.Intersects(rect2))
             {
-                
+
                 return true;
             }
             return false;
         }
-        public static void HandleCollisionsCharacter(GameObject player)
+        public static void HandleCollisionsCharacter(Entity player)
         {
-            
-            int spriteheight = (int)(player.curAnimation.CurrentFrame.SourceRectangle.Height*player.Scale);
+
+            int spriteheight = (int)(player.curAnimation.CurrentFrame.SourceRectangle.Height * player.Scale);
             int spritewidth = (int)(player.curAnimation.CurrentFrame.SourceRectangle.Height * player.Scale);
             int topcount = 0;
             foreach (var item in player.CollisionList)
@@ -35,14 +35,13 @@ namespace GameTest1.Engine
                 //Indien niet: verwijderen uit de lijst zodat character vrij kan bewegen
                 if (!CheckCollision(player.CollisionRectangle, tile.CollisionRectangle))
                 {
-                    player.TileRectList.Remove(tile.CollisionRectangle);
-                    player.CollisionList.Remove(tile);
+                    player.TileRectList.Remove(item.Key.CollisionRectangle);
+                    player.CollisionList.Remove(item.Key);
                 }
                 if (item.Key.GetType() == typeof(Tile))
                 {
                     switch (item.Value)
                     {
-
                         //Type van collision is top, de rectangle raakt de andere aan de bovenkant
                         //Dit wil zeggen dat wanneer de tile solid is, de character er op moet blijven staan
                         //De Ground variabele geeft aan wat de y-waarde van de huidige "vloer" voor char is
@@ -50,7 +49,7 @@ namespace GameTest1.Engine
                         case CollisionType.Top:
                             player.Speed = new Vector2(player.Speed.X, 0);
                             player.Ground = tile.CollisionRectangle.Top;
-                            player.CurPosition = new Vector2(player.CurPosition.X, player.Ground-spriteheight);                     
+                            player.CurPosition = new Vector2(player.CurPosition.X, player.Ground - spriteheight);
                             topcount++;
                             break;
 
@@ -59,7 +58,7 @@ namespace GameTest1.Engine
                         case CollisionType.Left:
                             player.Speed = new Vector2(0, player.Speed.Y);
                             //player.CurPosition = new Vector2(item.Key.CollisionRectangle.Left  - spritewidth + player.Offsets.X-5, player.CurPosition.Y);
-                            player.CurPosition = new Vector2(player.CurPosition.X-tile.IntersectSurface.Width,player.CurPosition.Y);
+                            player.CurPosition = new Vector2(player.CurPosition.X - tile.IntersectSurface.Width, player.CurPosition.Y);
                             break;
                         case CollisionType.Right:
                             player.Speed = new Vector2(0, player.Speed.Y);
@@ -76,12 +75,12 @@ namespace GameTest1.Engine
                 }
 
             }
-            
-            if (player.CollisionList.Count==0)
+
+            if (player.CollisionList.Count == 0)
             {
-                
+
             }
-            if(topcount > 0)
+            if (topcount > 0)
             {
                 player.onGround = true;
             }
@@ -90,7 +89,7 @@ namespace GameTest1.Engine
                 player.onGround = false;
             }
         }
-        public static bool AnyCollisionsCharacter(GameObject player)
+        public static bool AnyCollisionsCharacter(Entity player)
         {
             if (player.CollisionList.Count != 0)
             {

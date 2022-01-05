@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace GameTest1
 {
-    public abstract class GameObject:INeedsUpdate
+    public abstract class Entity:INeedsUpdate
     {
         //protected vars
         protected SpriteBatch _spriteBatch;
@@ -54,7 +54,7 @@ namespace GameTest1
         //Collision
 
         public Rectangle CollisionRectangle { get; set; }
-        public Dictionary<GameObject,CollisionType> CollisionList;
+        public Dictionary<Entity,CollisionType> CollisionList;
         public List<Rectangle> TileRectList { get; set; } = new List<Rectangle>();
         public float Ground { get; set; }
         public bool onGround { get; set; }
@@ -72,6 +72,10 @@ namespace GameTest1
         public Vector2 Offsets { get; set; }
         public float Layer { get; set; }
 
+        //LifeCycle Vars
+
+        public bool Alive { get; set; }
+        public int Lives { get; set; }
 
         protected Vector2 Limit(Vector2 v, float max)
         {
@@ -172,12 +176,12 @@ namespace GameTest1
         public abstract void Update(GameTime gametime,Level curLevel, SpriteBatch sb);
         public abstract void Draw(SpriteBatch spriteBatch);
 
-        public GameObject(Spritesheet spritesheet,Rectangle window,Level curlevel,Vector2 startingtile, float scale=1,float maxSpeed=0)
+        public Entity(Spritesheet spritesheet,Rectangle window,Level curlevel,Vector2 startingtile, float scale=1,float maxSpeed=0)
         {
             this.Scale = scale;
             CurLevel = curlevel;
             animationList = new Dictionary<AnimationType, Animation>();
-            CollisionList = new Dictionary<GameObject, CollisionType>();
+            CollisionList = new Dictionary<Entity, CollisionType>();
             this.spritesheet = spritesheet;
             _maxSpeed = maxSpeed;
             _window = window;
@@ -187,9 +191,9 @@ namespace GameTest1
             this.Ground = CurPosition.Y;
             this.CurLevel = curlevel;
         }
-        public GameObject(Texture2D texture, Rectangle window, float scale)
+        public Entity(Texture2D texture, Rectangle window, float scale)
         {
-            CollisionList = new Dictionary<GameObject, CollisionType>();
+            CollisionList = new Dictionary<Entity, CollisionType>();
             this.Scale = scale;
             this.Texture = texture;
             this.Window = window;

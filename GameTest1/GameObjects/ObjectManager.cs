@@ -16,12 +16,12 @@ namespace GameTest1.GameObjects
 
 
 
-        private List<GameObject> _objectList;
-        public List<GameObject> ObjectList { get { return _objectList; } set { _objectList = value; } }
+        private List<Entity> _objectList;
+        public List<Entity> ObjectList { get { return _objectList; } set { _objectList = value; } }
 
         public ObjectManager()
         {
-            _objectList = new List<GameObject>();
+            _objectList = new List<Entity>();
         }
 
         public void UpdateAll(GameTime time,Level curLevel,SpriteBatch sb)

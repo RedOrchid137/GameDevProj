@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Timers;
-using static GameTest1.GameObject;
+using static GameTest1.Entity;
 
 namespace GameTest1.Animations
 {
@@ -14,7 +14,7 @@ namespace GameTest1.Animations
         private static Timer Timer = new Timer(10000);
         private static Keys lastKey = CurKey;
         private static Animation TimerAnimation = new Animation();
-        public static void setCurrentAnimationCharacter(GameObject o)
+        public static void setCurrentAnimationCharacter(Entity o)
         {
             o.curAnimation = o.animationList[TimerAnimation.Type];
             state = Keyboard.GetState();
@@ -50,7 +50,7 @@ namespace GameTest1.Animations
             lastKey = CurKey;
 
         }
-        public static void setCurrentAnimationEnemy(GameObject o)
+        public static void setCurrentAnimationEnemy(Entity o)
         {
             
             if (o.Speed.X!=0)

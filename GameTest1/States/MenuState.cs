@@ -1,5 +1,6 @@
 ﻿using GameTest1.Knop;
 using GameTest1.States;
+using GameTest1.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,14 +13,14 @@ namespace GameTest1.State
     public class MenuState : Status
     {
         private List<Component> _spelComponenten;
-        public MenuState(GameBase spel, GraphicsDevice graphicsDevice, ContentManager content) : base(spel, graphicsDevice, content)
+        public MenuState(GameBase spel, GraphicsDevice graphicsDevice, ContentManager content) : base(spel, graphicsDevice, content )
         {
             var buttonTexture = _content.Load<Texture2D>("Knop/Button");
             var buttonFont = _content.Load<SpriteFont>("Font/Font");
 
             var startKnop = new Knoppen(buttonTexture, buttonFont)
             {
-                Positie = new Vector2(400, 200),
+                Positie = new Vector2(Level.screenWidth/2-buttonTexture.Width, Level.screenHeight / 2-buttonTexture.Height),
                 Text = "New Game",
             };
 
@@ -27,7 +28,7 @@ namespace GameTest1.State
 
             var exitKnop = new Knoppen(buttonTexture, buttonFont)
             {
-                Positie = new Vector2(400, 300),
+                Positie = new Vector2(Level.screenWidth / 2 - buttonTexture.Width, Level.screenHeight / 2+100 - buttonTexture.Height),
                 Text = "Exit",
             };
 
