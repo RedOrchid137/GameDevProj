@@ -14,16 +14,16 @@ namespace GameTest1.Abstracts
 {
     public abstract class Enemy:Entity
     {
-
-        public Vector2 Path { get; set; }
-
+        //States
+        public bool Chasing { get; set; }
+        public bool Running { get; set; }
+        public bool Attacking { get; set; }
         public bool Direction { get; set; }
 
+        //Calc vars
+        public float AttackRange { get; set; }
+        public Vector2 Path { get; set; }
         public Rectangle FieldOfView { get; set; }
-
-        public bool Chasing { get; set; }
-
-        public bool Running { get; set; }
 
         //Starting Tile is de coordinaat van de tegel waarop een gameobject zal spawnen. 
         //Niet hetzelfde als pixel coords, het is de coordinaat van de tegel in een 2d array zogezegd
@@ -41,13 +41,13 @@ namespace GameTest1.Abstracts
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
                 spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);           
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.5f);
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.2f);
             }
             else
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
                 spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.5f);
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.2f);
             }
         }
 
@@ -96,6 +96,12 @@ namespace GameTest1.Abstracts
             {
                 this.FieldOfView = new Rectangle(this.CollisionRectangle.X - nearest, this.CollisionRectangle.Y, nearest, this.CollisionRectangle.Height);
             }
+        }
+        public int distanceToPlayer(Rectangle playerCollisionRectangle)
+        {
+            Rectangle overlap = Rectangle.Intersect(this.FieldOfView, playerCollisionRectangle);
+            int distance = Math.Abs(overlap.X - this.CollisionRectangle.Center.X);
+            return distance;
         }
     }
 }

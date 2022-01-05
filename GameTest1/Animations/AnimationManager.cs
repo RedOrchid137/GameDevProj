@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using GameTest1.Abstracts;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Timers;
 using static GameTest1.Entity;
@@ -50,10 +52,24 @@ namespace GameTest1.Animations
             lastKey = CurKey;
 
         }
-        public static void setCurrentAnimationEnemy(Entity o)
+        public static void setCurrentAnimationEnemy(Enemy o)
         {
-            
-            if (o.Speed.X!=0)
+            if (o.Chasing == true)
+            {
+                Debug.WriteLine("Stats-------");
+                Debug.WriteLine(o.distanceToPlayer(o.CurLevel.Player.CollisionRectangle));
+                Debug.WriteLine(o.CollisionRectangle.Width);
+            }
+
+            if (o.Chasing==true && o.distanceToPlayer(o.CurLevel.Player.CollisionRectangle)<o.AttackRange)
+            {
+                o.curAnimation = o.animationList[AnimationType.Attack];
+            }
+            else if (o.Speed.Y < 0)
+            {
+                o.curAnimation = o.animationList[AnimationType.Jump];
+            }
+            else if (o.Speed.X!=0)
             {
                 o.curAnimation = o.animationList[AnimationType.Run];
             }

@@ -80,7 +80,7 @@ namespace GameTest1
 
             if (curFrame >= frames.Count)
             {
-                if(this.Type == AnimationType.Idle || this.Type == AnimationType.Run)
+                if(this.Type == AnimationType.Idle || this.Type == AnimationType.Run|| this.Type == AnimationType.Attack)
                 {
                     curFrame = 0;
                 }

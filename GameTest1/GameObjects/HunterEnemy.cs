@@ -19,13 +19,17 @@ namespace GameTest1.GameObjects
             this.Acceleration = new Vector2(0.2f,5);
             AddAnimation(AnimationType.Idle, new List<int> { 0 });
             AddAnimation(AnimationType.Run, new List<int> { 1 });
-            AddAnimation(AnimationType.Jump, new List<int> { 2 });
-            AddAnimation(AnimationType.Attack, new List<int> { 3 });
+            AddAnimation(AnimationType.Jump, new List<int> { 3 });
+            AddAnimation(AnimationType.Attack, new List<int> { 2 });
             AddAnimation(AnimationType.Death, new List<int> { 4 });
             this.curAnimation = animationList[AnimationType.Idle];
             this.Direction = true;
         }
+        public override void Update(GameTime gametime, Level curLevel, SpriteBatch sb)
+        {
+            base.Update(gametime, curLevel, sb);
+            this.AttackRange = CollisionRectangle.Width * 2;
+        }
 
-        
     }
 }
