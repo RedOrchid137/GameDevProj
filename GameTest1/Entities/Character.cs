@@ -10,6 +10,7 @@ using System.Text;
 using System.Diagnostics;
 using GameTest1.Engine;
 using GameTest1.World;
+using static GameTest1.Animation;
 
 namespace GameTest1.Entities
 {
@@ -18,9 +19,10 @@ namespace GameTest1.Entities
         public bool IsSleeping { get; set; }
 
         public bool Hit { get; set; }
+        public int Score { get; set; }
         public Character(Spritesheet spritesheet, Rectangle window,Level curlevel,Vector2 startingtile, IInputReader reader,float scale, float maxSpeed) : base(spritesheet, window, curlevel,startingtile, scale, maxSpeed)
         {
-            this.Acceleration = new Vector2(0.2f,6.5f);
+            this.Acceleration = new Vector2(0.2f,6.3f);
             this.InputReader = reader;
             AddAnimation(AnimationType.Idle,new List<int>{0,1});
             AddAnimation(AnimationType.Run, new List<int> {2});

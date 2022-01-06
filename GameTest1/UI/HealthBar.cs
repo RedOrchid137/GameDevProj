@@ -29,7 +29,7 @@ namespace GameTest1.UI
         {
             float count = this.Hearts;
 
-            for (int i = 0; i < Math.Round(Hearts); i++)
+            for (int i = 0; i < Math.Ceiling(Hearts); i++)
             {
                 if (count == 0.5)
                 {

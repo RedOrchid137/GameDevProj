@@ -106,7 +106,7 @@ namespace GameTest1.Inputs
                     movable.Offsets = ExtensionMethods.CalcOffsets(movable.curAnimation.CurrentFrame.SourceRectangle, movable.curAnimation.CurrentFrame.HitBox);
                     movable.CollisionRectangle = new Rectangle((int)(movable.CurPosition.X + movable.Speed.X + movable.Offsets.X / 2 * movable.Scale), (int)(movable.CurPosition.Y + movable.Speed.Y + movable.Offsets.Y * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Width * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Height * movable.Scale));
                     curLevel.CheckCollision(movable, sb);
-                    movable.CollisionCheckFull(Game2.ObjManager);
+                    movable.CollisionCheckFull(Game2.CurLevel.oMan);
                     CollisionManager.HandleCollisionsCharacter(movable);
                 }
                 if (movable.onGround)
@@ -131,15 +131,21 @@ namespace GameTest1.Inputs
 
 
             //Update Direction and Flip Sprite
+
             movable.FlipFlagX = !movable.Direction;
-            if (movable.Direction)
+            if (!movable.Attacking)
             {
-                movable.Speed = new Vector2(movable.Speed.X+movable.Acceleration.X, movable.Speed.Y);
+                if (movable.Direction)
+                {
+                    movable.Speed = new Vector2(movable.Speed.X + movable.Acceleration.X, movable.Speed.Y);
+                }
+                else
+                {
+                    movable.Speed = new Vector2(movable.Speed.X - movable.Acceleration.X, movable.Speed.Y);
+                }
             }
-            else
-            {
-                movable.Speed = new Vector2(movable.Speed.X - movable.Acceleration.X, movable.Speed.Y);
-            }
+            
+
 
             //handle jumping and falling
 

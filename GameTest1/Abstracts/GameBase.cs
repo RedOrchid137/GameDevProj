@@ -25,19 +25,25 @@ namespace GameTest1
         //testing vars
         protected static GraphicsDeviceManager _graphics;
         internal static GraphicsDeviceManager Graphics { get { return _graphics; }}
-
-        protected static ObjectManager oMan { get; set; }
-        internal static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
-
-
-        internal static List<Rectangle> tilelist { get; set; }
         internal static Rectangle WindowRectangle { get; set; }
-        internal static Level CurLevel { get; set; }
+        private static Level curLevel;
 
+        public static Level CurLevel
+        {
+            get { return curLevel; }
+            set { curLevel = value; curLevel.Player = CurPlayer; }
+        }
+
+        internal static Character CurPlayer { get; set; }
+        internal static List<Level> lvlList { get; set; }
+        internal static int lvlAmount{ get; set; }
+        internal static int lvlCount { get; set; }
         internal SpriteBatch _spriteBatch { get; set; }
         internal Character player;
 
 
+        //https://stackoverflow.com/questions/16556071/xna-how-to-exit-game-from-class-other-than-main/29089475
+        public static Game self;
 
 
         //Rendering
@@ -52,7 +58,7 @@ namespace GameTest1
 
         public GameBase()
         {
-            oMan = new ObjectManager();
+            self = this;
             UI = new UIOverlay();
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -66,13 +72,15 @@ namespace GameTest1
 
         protected override void Initialize()
         {
+            lvlList = new List<Level>();
+            _camera = new Camera();
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, CurLevel.Map);
-            _camera = new Camera();
+            base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,7 +117,7 @@ namespace GameTest1
                 //{
                 //    _spriteBatch.Draw(ExtensionMethods.BlankTexture(_spriteBatch), new Vector2(item.X, item.Y), item, Color.Red * 0.5f);
                 //}
-                oMan.DrawAll(_spriteBatch);
+                CurLevel.oMan.DrawAll(_spriteBatch);
                 
                 _spriteBatch.End();
 
@@ -125,7 +133,6 @@ namespace GameTest1
 
         protected void InitObjects()
         {
-            tilelist = new List<Rectangle>();     
             _graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width/1.3);
             _graphics.PreferredBackBufferHeight = (int)(GraphicsDevice.DisplayMode.Height / 1.3);
             _graphics.ApplyChanges();

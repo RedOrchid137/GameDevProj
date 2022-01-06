@@ -26,6 +26,42 @@
 /processorParam:TextureFormat=Color
 /build:Ball.png
 
+#begin Collectibles/blueberry.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Collectibles/blueberry.png
+
+#begin Collectibles/Raspberry.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Collectibles/Raspberry.png
+
+#begin Collectibles/Strawberry.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Collectibles/Strawberry.png
+
 #begin Font/Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -201,6 +237,18 @@
 /processorParam:TextureFormat=Color
 /build:Shardsoul Slayer Sprite Sheet.png
 
+#begin SpriteSheetHuntress.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpriteSheetHuntress.png
+
 #begin TileMapResources/Level1/5z1KX.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -234,6 +282,11 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:TileMapResources/Level1/Level1.tmx
+
+#begin TileMapResources/Level1/Level2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TileMapResources/Level1/Level2.tmx
 
 #begin UI/FullHeart.png
 /importer:TextureImporter

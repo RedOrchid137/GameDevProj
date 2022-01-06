@@ -43,17 +43,17 @@ namespace GameTest1.Abstracts
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
                 
                 //CollisionRectangle
-                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);           
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);           
                 
                 //Field of View               
-                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
             }
             else
             {
                 
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
-                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
-                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
             }
         }
 
@@ -78,6 +78,10 @@ namespace GameTest1.Abstracts
                 {
                     scanRect = new Rectangle(scanRect.X+1, scanRect.Y, 1, 1);
                     distance++;
+                    if (distance>Game2.CurLevel.TileWidth*Game2.CurLevel.Map.Width)
+                    {
+                        break;
+                    }
                 }
             }
             else 
@@ -87,6 +91,10 @@ namespace GameTest1.Abstracts
                 {
                     scanRect = new Rectangle(scanRect.X - 1, scanRect.Y,1,1);
                     distance++;
+                    if (distance > Game2.CurLevel.TileWidth * Game2.CurLevel.Map.Width)
+                    {
+                        break;
+                    }
                 }
             }
             return distance;

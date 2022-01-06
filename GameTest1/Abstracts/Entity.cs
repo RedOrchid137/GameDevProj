@@ -13,7 +13,7 @@ using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using static GameTest1.Animation;
 
 namespace GameTest1
 {
@@ -30,7 +30,7 @@ namespace GameTest1
         public bool FlipFlagX { get; set; } = false;
         public bool FlipFlagY { get; set; } = false;
         public bool IsFalling { get; set; } = false;
-
+        public bool Interacting { get; set; }
 
         //Location params
         private Vector2 startingtile;
@@ -40,6 +40,7 @@ namespace GameTest1
             set
             {
                 startingtile = new Vector2(value.X * CurLevel.TileWidth, value.Y * CurLevel.TileWidth);
+                this.CurPosition = startingtile;
             }
         }
         public float MaxSpeed { get { return _maxSpeed; } set { _maxSpeed = value; } }
@@ -60,7 +61,6 @@ namespace GameTest1
         public bool onGround { get; set; }
 
         //Animation+Drawing params
-        public enum AnimationType { Run, Jump, Idle, Crouch, Attack, Block, Sleep,Death,Damage }
         internal Dictionary<AnimationType, Animation> animationList;
         internal Spritesheet spritesheet { get; set; }
         internal Animation curAnimation;
@@ -75,8 +75,10 @@ namespace GameTest1
         //LifeCycle Vars
 
         public bool Alive { get; set; }
-        public float Lives { get; set; }
 
+        private float _lives;
+        public float Lives { get {return _lives; } set { if (value <= 3) _lives = value;}}
+        
         protected Vector2 Limit(Vector2 v, float max)
         {
             if (v.Length() > max)
@@ -96,6 +98,8 @@ namespace GameTest1
             anime.CurrentFrame = anime.Frames[0];
             animationList[type] = anime;
         }
+
+        #region Collisions
         public void CollisionCheckFull(ObjectManager man)
         {
             foreach (var item in man.ObjectList)
@@ -106,20 +110,21 @@ namespace GameTest1
                     {
                         if (CollisionManager.CheckCollision(this.CollisionRectangle, item.CollisionRectangle))
                         {
+                            Rectangle intersectSurface = Rectangle.Intersect(this.CollisionRectangle, item.CollisionRectangle);
                             CollisionType test = new CollisionType();
-                            if (this.CollisionRectangle.Bottom>item.CollisionRectangle.Top && this.CollisionRectangle.Center.Y < item.CollisionRectangle.Top)
+                            if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Top && this.Speed.Y >= 0 && intersectSurface.Width > intersectSurface.Height)
                             {
                                 test = CollisionType.Top;
                             }
-                            else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Center.Y > item.CollisionRectangle.Bottom )
+                            else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Bottom && this.Speed.Y < 0 && intersectSurface.Width > intersectSurface.Height)
                             {
                                 test = CollisionType.Bottom;
                             }
-                            else if (this.CollisionRectangle.Right > item.CollisionRectangle.Left&& this.CollisionRectangle.Center.X < item.CollisionRectangle.Right )
+                            else if (this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Right < item.CollisionRectangle.Right && this.Speed.X > 0 && intersectSurface.Width < intersectSurface.Height)
                             {
                                 test = CollisionType.Left;
                             }
-                            else if (this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Center.X > item.CollisionRectangle.Left )
+                            else if (this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Left > item.CollisionRectangle.Left && this.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
                             {
                                 test = CollisionType.Right;
                             }
@@ -167,6 +172,7 @@ namespace GameTest1
                 }
             }
         }
+        #endregion
         public abstract void Update(GameTime gametime,Level curLevel, SpriteBatch sb);
         public abstract void Draw(SpriteBatch spriteBatch);
 
@@ -181,9 +187,9 @@ namespace GameTest1
             _window = window;
             _texture = this.spritesheet.Texture;
             this.StartingTile = startingtile;
-            this.CurPosition = StartingTile;
             this.Ground = CurPosition.Y;
             this.CurLevel = curlevel;
+            this.Alive = true;
         }
         public Entity(Texture2D texture, Rectangle window, float scale)
         {

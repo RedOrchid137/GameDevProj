@@ -1,4 +1,5 @@
-﻿using GameTest1.Animations;
+﻿using GameTest1.Abstracts;
+using GameTest1.Animations;
 using GameTest1.Engine;
 using GameTest1.Inputs;
 using GameTest1.World;
@@ -30,6 +31,18 @@ namespace GameTest1.Entities
             {
                 item.Update(time,curLevel,sb);
             }
+            if (CollisionManager.ActionList!= null)
+            {
+                foreach (var action in CollisionManager.ActionList)
+                {
+                    if (action != null)
+                    {
+                        action.Update(time);
+                    }
+                }
+            }
+            RemovePickedUpItems();
+            RemoveDeadEnemies();
         }
         public void DrawAll(SpriteBatch spriteBatch)
         {
@@ -37,6 +50,15 @@ namespace GameTest1.Entities
             {
                 item.Draw(spriteBatch);
             }
+        }
+
+        public void RemovePickedUpItems()
+        {
+            _objectList.RemoveAll(o => o.GetType() == typeof(Collectible) && (o as Collectible).PickedUp);     
+        }
+        public void RemoveDeadEnemies()
+        {
+            _objectList.RemoveAll(o => o.GetType().BaseType == typeof(Enemy) && !(o as Enemy).Alive);
         }
     }
 }

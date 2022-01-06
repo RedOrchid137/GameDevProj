@@ -35,7 +35,7 @@ namespace GameTest1.Abstracts
             this.SpriteBatch = sb;
             this.Scale = scale;
         }
-        public UIElement(Rectangle window, SpriteBatch sb)
+        public UIElement(Rectangle window, SpriteBatch sb,SpriteFont font)
         {
             this.Window = window;
             this.SpriteBatch = sb;

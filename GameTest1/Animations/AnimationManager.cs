@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Timers;
+using static GameTest1.Animation;
 using static GameTest1.Entity;
 
 namespace GameTest1.Animations
@@ -58,6 +59,10 @@ namespace GameTest1.Animations
                 o.curAnimation = o.animationList[AnimationType.Idle];
             }
             o.Attacking = false;
+        }
+        public static void setCurrentAnimationObject(Collectible c)
+        {
+
         }
     }
 }

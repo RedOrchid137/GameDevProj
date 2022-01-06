@@ -33,7 +33,6 @@ namespace GameTest1.Engine
         {
             toPerform = toImplement;
             Duration = duration;
-            Debug.WriteLine(Duration);
             if (repeatCount == 0)
             {
                 Repeat = false;
@@ -44,9 +43,6 @@ namespace GameTest1.Engine
                 Interval = Math.Round(Duration/RepeatInterval);
                 Repeat = true;
             }
-            Debug.WriteLine(Interval);
-            Debug.WriteLine(Repeat);
-
         }
         public void performAction()
         {
@@ -60,7 +56,7 @@ namespace GameTest1.Engine
                 return;
             }
             double millisecs = gametime.TotalGameTime.TotalMilliseconds;
-            Debug.WriteLine(millisecs);
+            //Debug.WriteLine("ms: " + millisecs);
             if (Start == 0)
             {
                 Start = millisecs;
@@ -71,9 +67,13 @@ namespace GameTest1.Engine
 
             if (Repeat)
             {
-                Debug.WriteLine(millisecs);
                 ElapsedMilliSecondsInterval = millisecs - IntervalStart;
-                Debug.WriteLine(ElapsedMilliSecondsInterval);
+                //Debug.WriteLine("-----Cur Elapsed ms: "+ElapsedMilliSecondsInterval);
+                //Debug.WriteLine("Interval: " + Interval);
+                if (ElapsedMilliSecondsInterval == 0)
+                {
+                    performAction();
+                }
                 if (ElapsedMilliSecondsInterval >= Interval)
                 {
                     IntervalStart = millisecs;

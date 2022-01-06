@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using static GameTest1.Animation;
 
 namespace GameTest1.Enemies
 {

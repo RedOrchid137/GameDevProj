@@ -12,6 +12,8 @@ namespace GameTest1
 {
     public class Animation
     {
+        public enum AnimationType { Run, Jump, Idle, Crouch, Attack, Block, Sleep, Death, Damage }
+
         private List<AnimationFrame> frames;
         private int curFrame;
         private AnimationFrame currentFrame;

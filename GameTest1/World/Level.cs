@@ -19,23 +19,32 @@ namespace GameTest1.World
         public TiledMap Map { get; set; }
         public TiledMapTileLayer CollisionLayer { get; set; }
         public Rectangle curCollisionRectangle { get; set; }
-        public int TileWidth{ get;set;} 
+        public int TileWidth { get; set; }
         public Texture2D Background { get; set; }
         public float BackgroundScale { get; set; }
         public Character Player { get; set; }
-        public Level(TiledMap map, int tilewidth, Texture2D bg)
+        public int RequiredScore { get; set; }
+        public Vector2 StartingTile { get; set; }
+
+        public ObjectManager oMan {get;set;}
+
+        public Level(TiledMap map, int tilewidth, Texture2D bg,int requiredscore,Vector2 startingtile)
         {
             this.Map = map;
             this.CollisionLayer = this.Map.TileLayers[0];
             TileWidth = tilewidth;
             Background = bg;
             BackgroundScale =  (float)screenWidth/(float)Background.Width;
+            this.RequiredScore = requiredscore;
+            this.StartingTile = startingtile;
+            this.oMan = new ObjectManager();
         }
         public Level(TiledMap map,int tilewidth)
         {
             this.Map = map;
             this.CollisionLayer = this.Map.TileLayers[0];
             TileWidth = tilewidth;
+            this.oMan = new ObjectManager();
         }
 
         public void CheckCollision(Entity entity, SpriteBatch sb)

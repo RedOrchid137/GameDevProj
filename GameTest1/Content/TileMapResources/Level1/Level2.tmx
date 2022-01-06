@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" source="D:/Users/omar_/OneDrive/Desktop/School 2021-2022/Semester 1/Game Development/Finale/GameTest1/Content/TileMapResources/Level1/8bitTiles.tsx"/>
+ <tileset firstgid="1" source="./8bitTiles.tsx"/>
  <layer id="1" name="Tilelaag 1" width="50" height="30">
   <data encoding="csv">
 116,0,0,0,0,0,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,116,
