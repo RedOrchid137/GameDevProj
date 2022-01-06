@@ -1,4 +1,5 @@
 ﻿using GameTest1.Abstracts;
+using GameTest1.Entities;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -12,58 +13,37 @@ namespace GameTest1.Animations
     public class AnimationManager
     {
         private static KeyboardState state;
-        public static Keys CurKey { get; set; } = Keys.None;
-        private static Timer Timer = new Timer(10000);
-        private static Keys lastKey = CurKey;
-        private static Animation TimerAnimation = new Animation();
+        private static Animation CurAnimation = new Animation();
         public static void setCurrentAnimationCharacter(Entity o)
         {
-            o.curAnimation = o.animationList[TimerAnimation.Type];
             state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.Up))
-                {
-                TimerAnimation.Type = AnimationType.Jump;
-                CurKey = Keys.Up;
-                }
-                else if (state.IsKeyDown(Keys.Down))
-                {
-                TimerAnimation.Type = AnimationType.Crouch;
-                CurKey = Keys.Down;
-            }
-                else if (o.Speed.X != 0)
-                {
-                TimerAnimation.Type = AnimationType.Run;
-                CurKey = Keys.Right;
-            }
-            else if(!(o as Character).IsSleeping)
             {
-                CurKey = Keys.None;
-                TimerAnimation.Type = AnimationType.Idle;
-                Timer.Start();
+                CurAnimation.Type = AnimationType.Jump;
             }
-            if(lastKey != CurKey)
+            else if (o.Speed.X != 0)
             {
-                if (o.curAnimation.Type != AnimationType.Idle)
-                {
-                    Timer.Stop();
-                }
-                o.curAnimation.Reset();
+                CurAnimation.Type = AnimationType.Run;
             }
-            lastKey = CurKey;
+            else
+            {
+                CurAnimation.Type = AnimationType.Idle;
+            }
 
+            if (o.Alive==false)
+            {
+                CurAnimation.Type = AnimationType.Death;
+            }
+            o.curAnimation = o.animationList[CurAnimation.Type];
         }
         public static void setCurrentAnimationEnemy(Enemy o)
         {
-            if (o.Chasing == true)
-            {
-                Debug.WriteLine("Stats-------");
-                Debug.WriteLine(o.distanceToPlayer(o.CurLevel.Player.CollisionRectangle));
-                Debug.WriteLine(o.CollisionRectangle.Width);
-            }
 
             if (o.Chasing==true && o.distanceToPlayer(o.CurLevel.Player.CollisionRectangle)<o.AttackRange)
             {
+                o.Attacking = true;
                 o.curAnimation = o.animationList[AnimationType.Attack];
+                return;
             }
             else if (o.Speed.Y < 0)
             {
@@ -77,17 +57,7 @@ namespace GameTest1.Animations
             {
                 o.curAnimation = o.animationList[AnimationType.Idle];
             }
-        }
-
-
-        public static void setTimer()
-        {
-            Timer.Elapsed += OnTimerElapse;
-            Timer.AutoReset = true;
-        }
-        private static void OnTimerElapse(Object source, ElapsedEventArgs e)
-        {
-            TimerAnimation.Type = AnimationType.Sleep;
+            o.Attacking = false;
         }
     }
 }

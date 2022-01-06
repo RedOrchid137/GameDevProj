@@ -1,4 +1,5 @@
 ﻿using GameTest1.Engine;
+using GameTest1.Entities;
 using GameTest1.Sprites;
 using GameTest1.World;
 using Microsoft.Xna.Framework;

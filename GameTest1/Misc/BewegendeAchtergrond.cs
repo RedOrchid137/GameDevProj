@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using GameTest1.Sprites;
 using GameTest1.World;
+using GameTest1.Entities;
 
 namespace GameTest1.Misc
 {

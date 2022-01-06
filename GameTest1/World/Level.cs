@@ -1,5 +1,5 @@
-﻿using GameTest1.Extensions;
-using GameTest1.GameObjects;
+﻿using GameTest1.Entities;
+using GameTest1.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
@@ -76,11 +76,6 @@ namespace GameTest1.World
             {
                 Vector2 tileOrigin = new Vector2(item.Value.X * TileWidth, item.Value.Y * TileWidth);
                 curCollisionRectangle = new Rectangle((int)tileOrigin.X, (int)tileOrigin.Y, TileWidth, TileWidth);
-                if (!Game2.tilelist.Contains(curCollisionRectangle))
-                {
-                   
-                    Game2.tilelist.Add(curCollisionRectangle);
-                }
                 entity.CollisionCheckTile(curCollisionRectangle, sb, item.Value.GlobalIdentifier);
             }
 

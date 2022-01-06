@@ -28,7 +28,7 @@ namespace GameTest1.Abstracts
         //Starting Tile is de coordinaat van de tegel waarop een gameobject zal spawnen. 
         //Niet hetzelfde als pixel coords, het is de coordinaat van de tegel in een 2d array zogezegd
         //Voor pixel coords wordt dit nog eens vermenigvuldigd met de breedte(in pixels) van een tegel
-        public Enemy(Spritesheet spritesheet, Rectangle window, Level curlevel, Vector2 startingtile,Vector2 path, float scale = 1, float maxSpeed = 0) : base(spritesheet, window, curlevel,startingtile, scale, maxSpeed)
+        public Enemy(Spritesheet spritesheet, Rectangle window, Level curlevel, Vector2 startingtile,Vector2 path, float scale = 1, float maxSpeed = 5f) : base(spritesheet, window, curlevel,startingtile, scale, maxSpeed)
         {
             this.Chasing = false;
             this.Running = false;
@@ -39,15 +39,21 @@ namespace GameTest1.Abstracts
         {
             if (FlipFlagX)
             {
+                //Texture
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);           
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.2f);
+                
+                //CollisionRectangle
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);           
+                
+                //Field of View               
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
             }
             else
             {
+                
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.2f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
             }
         }
 

@@ -11,11 +11,13 @@ using System.Diagnostics;
 using GameTest1.Engine;
 using GameTest1.World;
 
-namespace GameTest1
+namespace GameTest1.Entities
 {
     public class Character : Entity, IMobile, INeedsUpdate 
     {
         public bool IsSleeping { get; set; }
+
+        public bool Hit { get; set; }
         public Character(Spritesheet spritesheet, Rectangle window,Level curlevel,Vector2 startingtile, IInputReader reader,float scale, float maxSpeed) : base(spritesheet, window, curlevel,startingtile, scale, maxSpeed)
         {
             this.Acceleration = new Vector2(0.2f,6.5f);
@@ -23,9 +25,10 @@ namespace GameTest1
             AddAnimation(AnimationType.Idle,new List<int>{0,1});
             AddAnimation(AnimationType.Run, new List<int> {2});
             AddAnimation(AnimationType.Jump, new List<int> { 3 });
-            AddAnimation(AnimationType.Sleep, new List<int> { 5 });
-            AddAnimation(AnimationType.Crouch, new List<int> { 6});
+            AddAnimation(AnimationType.Death, new List<int> { 6 });
             this.curAnimation = animationList[AnimationType.Idle];
+            this.Lives = 3;
+            this.Alive = true;
         }
 
         public override void Update(GameTime gametime,Level curLevel,SpriteBatch sb)
@@ -39,26 +42,30 @@ namespace GameTest1
             AnimationManager.setCurrentAnimationCharacter(this);
             this.curAnimation.Update(gametime);
 
-            //Check + deal w / collisions
-            //Offsets = ExtensionMethods.CalcOffsets(curAnimation.CurrentFrame.SourceRectangle, curAnimation.CurrentFrame.HitBox);
-            //CollisionRectangle = new Rectangle((int)(CurPosition.X + Speed.X + Offsets.X / 2 * Scale), (int)(CurPosition.Y + Speed.Y + Offsets.Y * Scale), (int)(curAnimation.CurrentFrame.HitBox.Width * Scale), (int)(curAnimation.CurrentFrame.HitBox.Height * Scale));
-            //curLevel.CheckCollision(this, sb);
-            //this.CollisionCheckFull(Game2.ObjManager);
-            //this.checkFloor();
-            //CollisionManager.HandleCollisionsCharacter(this);
+            //Update LifeCycle
+            if (Lives<=0)
+            {
+                this.Alive = false;
+                Debug.WriteLine("ded");
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            Color Drawcolor = Color.White;
+            if (this.Hit)
+            {
+                Drawcolor = Color.Red;
+            }
+
             if (FlipFlagX)
             {
-                spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
+                spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Drawcolor, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
                 //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch),new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
-            //new Vector2(CollisionRectangle.Width, 0)
             else
             {
-                spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Drawcolor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
                 //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
         }

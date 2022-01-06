@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GameTest1.GameObjects
+namespace GameTest1.Entities
 {
     public class Tile : Static
     {

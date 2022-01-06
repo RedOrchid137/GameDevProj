@@ -1,6 +1,6 @@
 ﻿using GameTest1.Animations;
 using GameTest1.World;
-using GameTest1.GameObjects;
+using GameTest1.Entities;
 using GameTest1.Inputs;
 using GameTest1.Misc;
 using GameTest1.Perspective;
@@ -16,6 +16,9 @@ using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using GameTest1.Extensions;
 using GameTest1.State;
 using GameTest1.States;
+using GameTest1.Enemies;
+using GameTest1.UI;
+using GameTest1.Engine;
 
 namespace GameTest1
 {
@@ -27,6 +30,7 @@ namespace GameTest1
         public Level Level1 { get; set; }
         public Level Level2 { get; set; }
 
+        GameAction<Object> testaction;
         public static Character CurPlayer { get; set; }
         public Game2():base()
         {
@@ -67,10 +71,10 @@ namespace GameTest1
             }
 
             _huidigeStatus.Update(gameTime);
-
             oMan.UpdateAll(gameTime,CurLevel,_spriteBatch);
-            _camera.Follow(testchar);
+            _camera.Follow(player);
             _tiledMapRenderer.Update(gameTime);
+            testaction.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -83,15 +87,30 @@ namespace GameTest1
 
         public new void InitObjects()
         {
-            Spritesheet test = new Spritesheet(Content.Load<Texture2D>("Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
-            Spritesheet testen = new Spritesheet(Content.Load<Texture2D>("Shardsoul Slayer Sprite Sheet"), new List<int> { 8,8,5,4,6 });
-            testchar = new Character(test, WindowRectangle,Level1, new Vector2(2, 16), new KeyboardReader(), 2f, 5);
-            CurPlayer = testchar;
-            HunterEnemy testenemy = new HunterEnemy(testen, WindowRectangle, Level1, new Vector2(2,7),new Vector2(1,13),1.5f,2);
-            
-            oMan.ObjectList.Add(testchar);
-            oMan.ObjectList.Add(testenemy);
+            HealthBar healthbar = new HealthBar(Content.Load<Texture2D>("UI/FullHeart"), Content.Load<Texture2D>("UI/HalfHeart"), WindowRectangle,_spriteBatch,3f,60,0.1f);
+
+
+            UI.AddElement(new Vector2(30,30), healthbar);
+
+
+            Spritesheet foxsheet = new Spritesheet(Content.Load<Texture2D>("Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
+            Spritesheet trollsheet = new Spritesheet(Content.Load<Texture2D>("Shardsoul Slayer Sprite Sheet"), new List<int> { 8,8,5,4,6 });
+            Spritesheet huntersheet = new Spritesheet(Content.Load<Texture2D>("Shardsoul Slayer Sprite Sheet"), new List<int> { 8, 8, 5, 4, 6 });
+
+            player = new Character(foxsheet, WindowRectangle,Level1, new Vector2(2, 16), new KeyboardReader(), 2f, 5);
+            CurPlayer = player;
+            TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(2,6),new Vector2(1,12),1.5f,2);
+            TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(30, 18), new Vector2(26, 45), 1.5f, 2);
+            TrollEnemy troll3 = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(45, 18), new Vector2(26, 45), 1.5f, 2);
+            oMan.ObjectList.Add(player);
+            oMan.ObjectList.Add(troll);
+            oMan.ObjectList.Add(troll2);
+            oMan.ObjectList.Add(troll3);
             _camera = new Camera();
+     
         }
+
     }
-    }
+
+   
+}

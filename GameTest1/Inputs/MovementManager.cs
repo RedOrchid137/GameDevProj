@@ -18,11 +18,15 @@ namespace GameTest1.Inputs
             int spriteheight = movable.curAnimation.CurrentFrame.SourceRectangle.Height;
             var direction = movable.InputReader.ReadInput();
 
-            if (movable.InputReader.IsDestinationInput)
+            if (movable.InputReader.IsDestinationInput&&movable.Alive==true)
             {
+                //Sprite orientation + horiz. speed
+
+                //Detect if keypress has persisted, if collision occurred, don't update position
+                //To prevent stuttering
                 if (!(movable.Speed.X == 0 && movable.hKeyPressed))
                 {
-                    //Sprite orientation + horiz. speed
+                    
                     if (direction.X > 0)
                     {
                         movable.FlipFlagX = false;
@@ -50,6 +54,8 @@ namespace GameTest1.Inputs
                         movable.hKeyPressed = false;
                     }
                 }
+
+
                 else if (direction.X==0)
                 {
                     movable.hKeyPressed = false;
@@ -75,19 +81,7 @@ namespace GameTest1.Inputs
                     movable.IsFalling = true;
                     movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y - movable.Acceleration.Y);
                 }
-                //if (movable.IsFalling)
-                //{
-                //    movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y + Physics.gravConst);
-                //}
-                //else
-                //{
-                //    if (direction.Y > 0)
-                //    {
-                //        movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y - movable.Acceleration.Y);
-                //        movable.IsFalling = true;
-                //    }
 
-                //}
                 //limit speed
                 if (movable.Speed.X > movable.MaxSpeed)
                 {
@@ -106,13 +100,13 @@ namespace GameTest1.Inputs
                     movable.Speed = new Vector2(movable.Speed.X, -Physics.terminalVel);
                 }
                 movable.CurPosition += movable.Speed;
-                movable.Offsets = ExtensionMethods.CalcOffsets(movable.curAnimation.CurrentFrame.SourceRectangle, movable.curAnimation.CurrentFrame.HitBox);
+                
                 if (movable.CurPosition != movable.PrevPosition)
                 {
-                    
+                    movable.Offsets = ExtensionMethods.CalcOffsets(movable.curAnimation.CurrentFrame.SourceRectangle, movable.curAnimation.CurrentFrame.HitBox);
                     movable.CollisionRectangle = new Rectangle((int)(movable.CurPosition.X + movable.Speed.X + movable.Offsets.X / 2 * movable.Scale), (int)(movable.CurPosition.Y + movable.Speed.Y + movable.Offsets.Y * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Width * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Height * movable.Scale));
                     curLevel.CheckCollision(movable, sb);
-                    //movable.CollisionCheckFull(Game2.ObjManager);
+                    movable.CollisionCheckFull(Game2.ObjManager);
                     CollisionManager.HandleCollisionsCharacter(movable);
                 }
                 if (movable.onGround)
@@ -129,25 +123,22 @@ namespace GameTest1.Inputs
                 {
                     movable.CurPosition = movable.StartingTile;
                 }
-                //if (movable.CurPosition.Y >= movable.Ground - spriteheight * movable.Scale)
-                //{
-                //    movable.IsFalling = false;
-                //    movable.CurPosition = new Vector2(movable.CurPosition.X, movable.Ground - spriteheight * movable.Scale);
-                //}
             }
         }
         public static void MoveEnemy(Enemy movable, Level curLevel, SpriteBatch sb)
         {
             int spriteheight = movable.curAnimation.CurrentFrame.SourceRectangle.Height;
 
+
+            //Update Direction and Flip Sprite
             movable.FlipFlagX = !movable.Direction;
             if (movable.Direction)
             {
-                movable.Speed = new Vector2(movable.Speed.X+movable.Acceleration.X, 0);
+                movable.Speed = new Vector2(movable.Speed.X+movable.Acceleration.X, movable.Speed.Y);
             }
             else
             {
-                movable.Speed = new Vector2(movable.Speed.X - movable.Acceleration.X, 0);
+                movable.Speed = new Vector2(movable.Speed.X - movable.Acceleration.X, movable.Speed.Y);
             }
 
             //handle jumping and falling
@@ -180,10 +171,15 @@ namespace GameTest1.Inputs
             {
                 movable.Speed = new Vector2(movable.Speed.X, -Physics.terminalVel);
             }
+
+            //Update Position after move
             movable.CurPosition += movable.Speed;
 
-
+            //update FOV Rectangle
             movable.UpdateFOV();
+
+
+            //Handle Player Observed
             if (movable.CurLevel.Player.CollisionRectangle.Intersects(movable.FieldOfView))
             {
                 movable.Chasing = true;
@@ -196,10 +192,12 @@ namespace GameTest1.Inputs
             }
             if (movable.Chasing&&!movable.Running)
             {
-                movable.MaxSpeed += 2;
+                movable.MaxSpeed += 4;
                 movable.Running = true;
             }
 
+
+            //Handle Path Limit Reached
             if (movable.CurPosition.X >= movable.Path.Y)
             {
                 movable.Direction = false;
@@ -208,17 +206,21 @@ namespace GameTest1.Inputs
             {
                 movable.Direction = true;
             }
-            movable.Offsets = ExtensionMethods.CalcOffsets(movable.curAnimation.CurrentFrame.SourceRectangle, movable.curAnimation.CurrentFrame.HitBox);
 
+
+
+            //Collision Detection if only if Sprite has moved
             if (movable.CurPosition != movable.PrevPosition)
             {
-                
+                movable.Offsets = ExtensionMethods.CalcOffsets(movable.curAnimation.CurrentFrame.SourceRectangle, movable.curAnimation.CurrentFrame.HitBox);
                 movable.CollisionRectangle = new Rectangle((int)(movable.CurPosition.X + movable.Speed.X + movable.Offsets.X / 2 * movable.Scale), (int)(movable.CurPosition.Y + movable.Speed.Y + movable.Offsets.Y * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Width * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Height * movable.Scale));
                 curLevel.CheckCollision(movable, sb);
                 //movable.CollisionCheckFull(Game2.ObjManager);
                 CollisionManager.HandleCollisionsCharacter(movable);
             }
 
+
+            //Handle Sprite without Support
             if (movable.onGround)
             {
                 movable.IsFalling = false;
@@ -229,6 +231,9 @@ namespace GameTest1.Inputs
                 movable.Ground = 99999999;
             }
             movable.PrevPosition = movable.CurPosition;
+
+
+            //Reset position if out of range
             if (movable.CurPosition.Y > 1000)
             {
                 movable.CurPosition = movable.StartingTile;

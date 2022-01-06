@@ -1,7 +1,7 @@
 ﻿using GameTest1.Animations;
 using GameTest1.Engine;
 using GameTest1.Extensions;
-using GameTest1.GameObjects;
+using GameTest1.Entities;
 using GameTest1.Inputs;
 using GameTest1.Interfaces;
 using GameTest1.World;
@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace GameTest1
 {
-    public abstract class Entity:INeedsUpdate
+    public abstract class Entity:INeedsUpdate, IMobile
     {
         //protected vars
         protected SpriteBatch _spriteBatch;
@@ -75,7 +75,7 @@ namespace GameTest1
         //LifeCycle Vars
 
         public bool Alive { get; set; }
-        public int Lives { get; set; }
+        public float Lives { get; set; }
 
         protected Vector2 Limit(Vector2 v, float max)
         {
@@ -106,7 +106,6 @@ namespace GameTest1
                     {
                         if (CollisionManager.CheckCollision(this.CollisionRectangle, item.CollisionRectangle))
                         {
-                            
                             CollisionType test = new CollisionType();
                             if (this.CollisionRectangle.Bottom>item.CollisionRectangle.Top && this.CollisionRectangle.Center.Y < item.CollisionRectangle.Top)
                             {
@@ -126,11 +125,6 @@ namespace GameTest1
                             }
 
                             this.CollisionList[item] = test;
-                            item.CollisionList[this] = test.GetOpposite();
-                        }
-                        else
-                        {
-                            this.CollisionList.Remove(item);
                         }
                     }
                 }

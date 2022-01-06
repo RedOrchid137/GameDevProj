@@ -1,5 +1,5 @@
 ﻿using GameTest1.Extensions;
-using GameTest1.GameObjects;
+using GameTest1.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

@@ -1,6 +1,6 @@
 ﻿using GameTest1.Animations;
 using GameTest1.World;
-using GameTest1.GameObjects;
+using GameTest1.Entities;
 using GameTest1.Inputs;
 using GameTest1.Misc;
 using GameTest1.Perspective;
@@ -16,6 +16,7 @@ using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using GameTest1.Extensions;
 using GameTest1.State;
 using GameTest1.States;
+using GameTest1.UI;
 
 namespace GameTest1
 {
@@ -23,26 +24,27 @@ namespace GameTest1
     {
         //testing vars
         protected static GraphicsDeviceManager _graphics;
-        public static GraphicsDeviceManager Graphics { get { return _graphics; }}
+        internal static GraphicsDeviceManager Graphics { get { return _graphics; }}
 
         protected static ObjectManager oMan { get; set; }
-        public static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
-        
+        internal static ObjectManager ObjManager { get { return oMan; } set { oMan = value; } }
 
-        public static List<Rectangle> tilelist { get; set; }
-        public static Rectangle WindowRectangle { get; set; }
-        public static Level CurLevel { get; set; }
 
-        protected SpriteBatch _spriteBatch { get; set; }
-        protected Character testchar;
+        internal static List<Rectangle> tilelist { get; set; }
+        internal static Rectangle WindowRectangle { get; set; }
+        internal static Level CurLevel { get; set; }
+
+        internal SpriteBatch _spriteBatch { get; set; }
+        internal Character player;
 
 
 
 
         //Rendering
 
-        protected Camera _camera;
+        internal Camera _camera;
         protected TiledMapRenderer _tiledMapRenderer;
+        protected UIOverlay UI;
 
 
         protected Status _huidigeStatus;
@@ -51,6 +53,7 @@ namespace GameTest1
         public GameBase()
         {
             oMan = new ObjectManager();
+            UI = new UIOverlay();
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -76,6 +79,7 @@ namespace GameTest1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 Exit();
+            UI.Update(gameTime, CurLevel, _spriteBatch);
             base.Update(gameTime);
         }
 
@@ -108,6 +112,10 @@ namespace GameTest1
                 oMan.DrawAll(_spriteBatch);
                 
                 _spriteBatch.End();
+
+                _spriteBatch.Begin();
+                UI.Draw(_spriteBatch);
+                _spriteBatch.End();
             }
 
             base.Draw(gameTime);
@@ -115,7 +123,7 @@ namespace GameTest1
 
 
 
-        public void InitObjects()
+        protected void InitObjects()
         {
             tilelist = new List<Rectangle>();     
             _graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width/1.3);

@@ -8,6 +8,6 @@ namespace GameTest1.Engine
     {
         public static float gravConst = 0.2f;
         public static float terminalVel = 10f;
-        public static float frictionConst = 0.3f;
+        public static float frictionConst = 0.5f;
     }
 }
