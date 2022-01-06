@@ -82,7 +82,7 @@ namespace GameTest1
         protected override void Draw(GameTime gameTime)
         {
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, CurLevel.Map);
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             if (_huidigeStatus.GetType() == typeof(MenuState))
             {
                 _huidigeStatus.Draw(gameTime, _spriteBatch);

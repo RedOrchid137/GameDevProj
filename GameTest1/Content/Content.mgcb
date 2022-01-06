@@ -235,3 +235,8 @@
 /processor:TiledMapProcessor
 /build:TileMapResources/Level1/Level1.tmx
 
+#begin TileMapResources/Level1/Level2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TileMapResources/Level1/Level2.tmx
+

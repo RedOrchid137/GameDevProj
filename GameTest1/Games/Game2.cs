@@ -46,6 +46,7 @@ namespace GameTest1
             //tiledmap renderer tekent de TileLayer
             base.InitObjects();
             Level1 = new Level(Content.Load<TiledMap>("TileMapResources/Level1/Level1"),32, Content.Load<Texture2D>("TileMapResources/Level1/Background"));
+            Level2 = new Level(Content.Load<TiledMap>("TileMapResources/Level1/Level2"), 32, Content.Load<Texture2D>("TileMapResources/Level1/Background"));
             _huidigeStatus = new MenuState(this, _graphics.GraphicsDevice, Content);
             CurLevel = Level1;
             base.LoadContent();
