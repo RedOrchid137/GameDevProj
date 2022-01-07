@@ -24,6 +24,7 @@ namespace GameTest1.Abstracts
         public float AttackRange { get; set; }
         public Vector2 Path { get; set; }
         public Rectangle FieldOfView { get; set; }
+        public float InitialMaxSpeed { get; set; }
 
         //Starting Tile is de coordinaat van de tegel waarop een gameobject zal spawnen. 
         //Niet hetzelfde als pixel coords, het is de coordinaat van de tegel in een 2d array zogezegd
@@ -32,8 +33,8 @@ namespace GameTest1.Abstracts
         {
             this.Chasing = false;
             this.Running = false;
-            this.Direction = true;
             Path = new Vector2(path.X*CurLevel.TileWidth,path.Y*CurLevel.TileWidth);
+            this.InitialMaxSpeed = maxSpeed;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {

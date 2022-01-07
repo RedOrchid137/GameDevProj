@@ -14,9 +14,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using GameTest1.Extensions;
-using GameTest1.State;
 using GameTest1.States;
 using GameTest1.UI;
+using GameTest1.Abstracts;
 
 namespace GameTest1
 {
@@ -53,9 +53,10 @@ namespace GameTest1
         protected UIOverlay UI;
 
 
-        protected Status _huidigeStatus;
-        protected Status _volgendeStatus;
-
+        public Status CurrentState { get; set; }
+        public Status MenuState { get; set; }
+        public Status GameState { get; set; }
+        public Status GameOverState { get; set; }
         public GameBase()
         {
             self = this;
@@ -63,11 +64,6 @@ namespace GameTest1
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-        }
-
-        internal void WisselStatus(GameState gameState)
-        {
-            _volgendeStatus = gameState;
         }
 
         protected override void Initialize()
@@ -85,8 +81,6 @@ namespace GameTest1
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
-                Exit();
             UI.Update(gameTime, CurLevel, _spriteBatch);
             base.Update(gameTime);
         }
@@ -95,16 +89,22 @@ namespace GameTest1
         {
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, CurLevel.Map);
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            if (_huidigeStatus.GetType() == typeof(MenuState))
+            if (CurrentState.GetType() == typeof(MenuState))
             {
-                _huidigeStatus.Draw(gameTime, _spriteBatch);
+                CurrentState.Draw(gameTime, _spriteBatch);
             }
-            else if (_huidigeStatus.GetType() == typeof(GameState))
+            else if (CurrentState.GetType() == typeof(GameState))
             {
+
+                //Background Tekenen
+
                 _spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null,Matrix.CreateScale(CurLevel.BackgroundScale));
                 //_spriteBatch.Draw(CurLevel.Background, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, CurLevel.BackgroundScale, SpriteEffects.None, 0f);
                 _spriteBatch.Draw(CurLevel.Background,new Rectangle(0,0,CurLevel.Background.Width,CurLevel.Background.Height),Color.White);
                 _spriteBatch.End();
+
+
+                //Map + Sprites Tekenen
                 _spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: _camera.Transform);
                 
                 foreach (var item in CurLevel.Map.Layers)
@@ -121,9 +121,15 @@ namespace GameTest1
                 
                 _spriteBatch.End();
 
+
+                //UI Tekenen
                 _spriteBatch.Begin();
                 UI.Draw(_spriteBatch);
                 _spriteBatch.End();
+            }
+            else if (CurrentState.GetType() != typeof(GameOverState))
+            {
+
             }
 
             base.Draw(gameTime);

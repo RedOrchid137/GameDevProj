@@ -59,7 +59,7 @@ namespace GameTest1.UI
 
         public override void Update(GameTime gametime, Level curLevel, SpriteBatch sb)
         {
-            _textcontent = curLevel.Player.Score + "/" + curLevel.RequiredScore;
+            _textcontent = "Collected:  "+curLevel.Player.Score + "/" + curLevel.RequiredScore;
         }
     }
 }

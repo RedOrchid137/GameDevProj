@@ -1,4 +1,5 @@
 ﻿using GameTest1.Animations;
+using GameTest1.Enemies;
 using GameTest1.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +13,7 @@ namespace GameTest1
 {
     public class Animation
     {
-        public enum AnimationType { Run, Jump, Idle, Crouch, Attack, Block, Sleep, Death, Damage }
+        public enum AnimationType { Run, Jump, Idle, Crouch, Attack, Block, Sleep, Death, Damage,Hit }
 
         private List<AnimationFrame> frames;
         private int curFrame;
@@ -21,7 +22,7 @@ namespace GameTest1
         private int fps;
         internal bool Looping { get; set; }
         public AnimationType Type { get; set; }
-
+        public Entity Owner { get; set; }
         public int Fps
         {
             get { return fps; }
@@ -70,6 +71,12 @@ namespace GameTest1
 
         public void Update(GameTime gameTime)
         {
+
+            if (Owner.GetType() == typeof(HunterEnemy) && this.Type == AnimationType.Attack && (Owner as HunterEnemy).Attacking == false)
+            {
+                Reset();
+            }
+
             CurrentFrame = frames[curFrame];
 
             secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
@@ -82,15 +89,18 @@ namespace GameTest1
 
             if (curFrame >= frames.Count)
             {
-                if(this.Type == AnimationType.Idle || this.Type == AnimationType.Run|| this.Type == AnimationType.Attack)
+                if(this.Type == AnimationType.Idle || this.Type == AnimationType.Run|| this.Type == AnimationType.Attack|| this.Type == AnimationType.Jump||this.Type == AnimationType.Hit)
                 {
+                    if (Owner.GetType()==typeof(HunterEnemy)&& this.Type == AnimationType.Attack&& (Owner as HunterEnemy).ShotsFired == false)
+                    {
+                        (Owner as HunterEnemy).ShotsFired = true;
+                    }
                     curFrame = 0;
                 }
                 else
                 {
                     curFrame = frames.Count-1;
-                }
-                
+                }               
             }
         }
         public void Reset()

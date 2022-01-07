@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GameTest1.State
+namespace GameTest1.Abstracts
 {
     public abstract class Status
     {

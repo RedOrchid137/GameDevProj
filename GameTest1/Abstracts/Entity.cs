@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using static GameTest1.Animation;
+using GameTest1.Abstracts;
+using System.Linq;
 
 namespace GameTest1
 {
@@ -59,6 +61,7 @@ namespace GameTest1
         public List<Rectangle> TileRectList { get; set; } = new List<Rectangle>();
         public float Ground { get; set; }
         public bool onGround { get; set; }
+        public Rectangle IntersectSurface { get; set; }
 
         //Animation+Drawing params
         internal Dictionary<AnimationType, Animation> animationList;
@@ -93,6 +96,7 @@ namespace GameTest1
         public void AddAnimation(AnimationType type, List<int> rowsNeeded)
         {
             Animation anime = new Animation();
+            anime.Owner = this;
             anime.Type = type;
             anime.GetFramesFromTextureProperties(spritesheet, rowsNeeded);
             anime.CurrentFrame = anime.Frames[0];
@@ -111,24 +115,50 @@ namespace GameTest1
                         if (CollisionManager.CheckCollision(this.CollisionRectangle, item.CollisionRectangle))
                         {
                             Rectangle intersectSurface = Rectangle.Intersect(this.CollisionRectangle, item.CollisionRectangle);
+
                             CollisionType test = new CollisionType();
-                            if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Top && this.Speed.Y >= 0 && intersectSurface.Width > intersectSurface.Height)
+                            var topdist = this.CollisionRectangle.Bottom - item.CollisionRectangle.Top;
+                            var botdist = item.CollisionRectangle.Bottom - this.CollisionRectangle.Top;
+                            var leftdist = this.CollisionRectangle.Right - item.CollisionRectangle.Left;
+                            var rightdist = item.CollisionRectangle.Right - this.CollisionRectangle.Left;
+                            int min = new[] { topdist, botdist, leftdist, rightdist }.Min();
+
+                            if (min == topdist)
                             {
                                 test = CollisionType.Top;
                             }
-                            else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Bottom && this.Speed.Y < 0 && intersectSurface.Width > intersectSurface.Height)
+                            else if(min== botdist)
                             {
                                 test = CollisionType.Bottom;
                             }
-                            else if (this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Right < item.CollisionRectangle.Right && this.Speed.X > 0 && intersectSurface.Width < intersectSurface.Height)
+                            else if (min == leftdist)
                             {
                                 test = CollisionType.Left;
                             }
-                            else if (this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Left > item.CollisionRectangle.Left && this.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
+                            else
                             {
                                 test = CollisionType.Right;
                             }
-
+                            //if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Top && this.Speed.Y >= 0 && intersectSurface.Width > intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Top;
+                            //}
+                            //else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Bottom && this.Speed.Y < 0 && intersectSurface.Width > intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Bottom;
+                            //}
+                            //else if (this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Right < item.CollisionRectangle.Right && this.Speed.X > 0 && intersectSurface.Width < intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Left;
+                            //}
+                            //else if (this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Left > item.CollisionRectangle.Left && this.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Right;
+                            //}
+                            if ((item as Enemy)!=null)
+                            {
+                                (item as Enemy).IntersectSurface = intersectSurface;
+                            }
                             this.CollisionList[item] = test;
                         }
                     }
@@ -148,22 +178,47 @@ namespace GameTest1
             {
                 Rectangle intersectSurface = Rectangle.Intersect(this.CollisionRectangle, item.CollisionRectangle);
                 CollisionType test = new CollisionType();
-                if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Top && this.Speed.Y >= 0 && intersectSurface.Width > intersectSurface.Height)
+                var topdist = this.CollisionRectangle.Bottom - item.CollisionRectangle.Top;
+                var botdist = item.CollisionRectangle.Bottom - this.CollisionRectangle.Top;
+                var leftdist = this.CollisionRectangle.Right - item.CollisionRectangle.Left;
+                var rightdist = item.CollisionRectangle.Right - this.CollisionRectangle.Left;
+                int min = new[] { topdist, botdist, leftdist, rightdist }.Min();
+
+                if (min == topdist)
                 {
                     test = CollisionType.Top;
                 }
-                else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Bottom && this.Speed.Y<0 && intersectSurface.Width > intersectSurface.Height)
+                else if (min == botdist)
                 {
                     test = CollisionType.Bottom;
                 }
-                else if (this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Right < item.CollisionRectangle.Right && this.Speed.X>0 && intersectSurface.Width < intersectSurface.Height)
+                else if (min == leftdist)
                 {
                     test = CollisionType.Left;
                 }
-                else if (this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Left > item.CollisionRectangle.Left && this.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
-                { 
+                else
+                {
                     test = CollisionType.Right;
                 }
+
+
+
+                //if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.Speed.Y > 0 && intersectSurface.Width > intersectSurface.Height)
+                //{
+                //    test = CollisionType.Top;
+                //}
+                //else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.Speed.Y<0 && intersectSurface.Width > intersectSurface.Height)
+                //{
+                //    test = CollisionType.Bottom;
+                //}
+                //else if(this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.Speed.X>0 && intersectSurface.Width < intersectSurface.Height)
+                //{
+                //    test = CollisionType.Left;
+                //}
+                //else if(this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
+                //{ 
+                //    test = CollisionType.Right;
+                //}
                 item.IntersectSurface = intersectSurface;
                 this.CollisionList[item] = test;
                 if (!this.TileRectList.Contains(CollisionRectangle))

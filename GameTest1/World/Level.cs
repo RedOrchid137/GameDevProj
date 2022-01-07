@@ -59,6 +59,7 @@ namespace GameTest1.World
             xvals.Add(tx2);
             xvals.Add(tx3);
             ushort tybot = (ushort)(entity.CollisionRectangle.Bottom / TileWidth);
+            //ushort tymid = (ushort)(entity.CollisionRectangle.Center.Y / TileWidth);
             ushort tytop = (ushort)(entity.CollisionRectangle.Top / TileWidth);
 
 
@@ -71,6 +72,16 @@ namespace GameTest1.World
                     tilelist.Add(tile);
                 }             
             }
+
+            //check mid
+            //foreach (var item in xvals)
+            //{
+            //    CollisionLayer.TryGetTile(item, tymid, out tile);
+            //    if (tile.HasValue && !tilelist.Contains(tile))
+            //    {
+            //        tilelist.Add(tile);
+            //    }
+            //}
 
             //check top
             foreach (var item in xvals)

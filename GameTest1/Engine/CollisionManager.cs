@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using GameTest1.Abstracts;
+using GameTest1.Enemies;
 using GameTest1.Entities;
 using GameTest1.World;
 using Microsoft.Xna.Framework;
@@ -49,60 +50,63 @@ namespace GameTest1.Engine
             int interactcount = 0;
             foreach (var item in entity.CollisionList)
             {
-                //if (item.Key.GetType().BaseType == typeof(Enemy)&&player != null)
-                //{
-                //    enemycount++;
-                //}
+                var obj = item.Key;
+
                 var tile = item.Key as Tile;
+                var enemy = item.Key as Enemy;
+                var collectible = item.Key as Collectible;
                 //Checken of tiles in lijst wel degelijk colliden met character
                 //Indien niet: verwijderen uit de lijst zodat character vrij kan bewegen
-                if (!CheckCollision(entity.CollisionRectangle, item.Key.CollisionRectangle))
+                if (!CheckCollision(entity.CollisionRectangle, obj.CollisionRectangle))
                 {
-                    entity.TileRectList.Remove(item.Key.CollisionRectangle);
-                    entity.CollisionList.Remove(item.Key);
+                    entity.TileRectList.Remove(obj.CollisionRectangle);
+                    entity.CollisionList.Remove(obj);
                 }
-                if (item.Key.GetType() == typeof(Tile))
+                if (player!=null)
                 {
-                    switch (item.Value)
-                    {
-                        //Type van collision is top, de rectangle raakt de andere aan de bovenkant
-                        //Dit wil zeggen dat de character er op moet blijven staan
-                        //De Ground variabele geeft aan wat de y-waarde van de huidige "vloer" voor char is
-                        //Met een boolean onGround kan nagegaan worden of de char op de grond staat en of deze dus moet vallen of niet
-                        case CollisionType.Top:
-                            entity.Speed = new Vector2(entity.Speed.X, 0);
-                            entity.Ground = tile.CollisionRectangle.Top;
-                            entity.CurPosition = new Vector2(entity.CurPosition.X, entity.Ground - spriteheight);
-                            topcount++;
-                            break;
+                    Debug.WriteLine("CollisionType: " + item.Value);
+                }
 
-
-                        //Char raakt een tile aan de zijkant, de positie wordt geupdate om te zorgen dat de char niet door de tile kan lopen
-                        case CollisionType.Left:
-                            entity.Speed = new Vector2(0, entity.Speed.Y);
-                            //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Left  - spritewidth + entity.Offsets.X-5, entity.CurPosition.Y);
-                            entity.CurPosition = new Vector2(entity.CurPosition.X - tile.IntersectSurface.Width, entity.CurPosition.Y);
-                            break;
-                        case CollisionType.Right:
-                            entity.Speed = new Vector2(0, entity.Speed.Y);
-                            //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Right - entity.Offsets.X+5, entity.CurPosition.Y);
-                            entity.CurPosition = new Vector2(entity.CurPosition.X + tile.IntersectSurface.Width, entity.CurPosition.Y);
-                            break;
-                        case CollisionType.Bottom:
-                            entity.Speed = new Vector2(entity.Speed.X, 0);
-                            //entity.CurPosition = new Vector2(entity.CurPosition.X, item.Key.CollisionRectangle.Bottom+entity.Offsets.Y);
-                            entity.CurPosition = new Vector2(entity.CurPosition.X, entity.CurPosition.Y + tile.IntersectSurface.Height);
-                            break;
-                    }
+                switch (item.Value)
+                {
+                    //Type van collision is top, de rectangle raakt de andere aan de bovenkant
+                    //Dit wil zeggen dat de character er op moet blijven staan
+                    //De Ground variabele geeft aan wat de y-waarde van de huidige "vloer" voor char is
+                    //Met een boolean onGround kan nagegaan worden of de char op de grond staat en of deze dus moet vallen of niet
+                    case CollisionType.Top:
+                        entity.Speed = new Vector2(entity.Speed.X, 0);
+                        entity.Ground = obj.CollisionRectangle.Top;
+                        entity.CurPosition = new Vector2(entity.CurPosition.X, entity.Ground - spriteheight);
+                        topcount++;
+                        break;
+                    //Char raakt een tile aan de zijkant, de positie wordt geupdate om te zorgen dat de char niet door de tile kan lopen
+                    case CollisionType.Left:
+                        entity.Speed = new Vector2(0, entity.Speed.Y);
+                        //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Left  - spritewidth + entity.Offsets.X-5, entity.CurPosition.Y);
+                        entity.CurPosition = new Vector2(entity.CurPosition.X - obj.IntersectSurface.Width, entity.CurPosition.Y);
+                        break;
+                    case CollisionType.Right:
+                        entity.Speed = new Vector2(0, entity.Speed.Y);
+                        //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Right - entity.Offsets.X+5, entity.CurPosition.Y);
+                        entity.CurPosition = new Vector2(entity.CurPosition.X + obj.IntersectSurface.Width, entity.CurPosition.Y);
+                        break;
+                    case CollisionType.Bottom:
+                        entity.Speed = new Vector2(entity.Speed.X, 0);
+                        //entity.CurPosition = new Vector2(entity.CurPosition.X, item.Key.CollisionRectangle.Bottom+entity.Offsets.Y);
+                        entity.CurPosition = new Vector2(entity.CurPosition.X, entity.CurPosition.Y + obj.IntersectSurface.Height);
+                        break;
+                }
+                if (tile != null)
+                {
                     if (tile.Id == 98 && player != null)
                     {
                         if (player.Hit == false)
                         {
                             player.Hit = true;
                             Func<Object> func = playerDamageFull;
-                            LavaDamage = new GameAction<Object>(func, 1500,3);
+                            LavaDamage = new GameAction<Object>(func, 1500, 3);
                         }
-                        
+
                         enemycount++;
                     }
                     else if (tile.Id == 4 && player != null)
@@ -115,7 +119,7 @@ namespace GameTest1.Engine
                         }
                         enemycount++;
                     }
-                    if(tile.Id == 274 && player != null)
+                    if (tile.Id == 274 && player != null)
                     {
                         if (!player.Interacting)
                         {
@@ -140,23 +144,30 @@ namespace GameTest1.Engine
                     }
                 }
 
-                else if (item.Key.GetType().BaseType == typeof(Enemy)&& player!=null)
+                else if (enemy != null && player != null)
                 {
-                    var enemy = item.Key as Enemy;
 
-                    if (enemy.Attacking&&!player.Hit)
+                    if (enemy.Attacking && !player.Hit)
                     {
                         player.Lives--;
                         player.Hit = true;
+                        if (enemy.FlipFlagX)
+                        {
+                            player.Speed = new Vector2(player.Speed.X-2, player.Speed.Y);
+                        }
+                        else
+                        {
+                            player.Speed = new Vector2(player.Speed.X + 2, player.Speed.Y);
+                        }
+
                     }
-                    Debug.WriteLine(item.Value);
                     if (item.Value == CollisionType.Top)
                     {
                         enemy.Alive = false;
                     }
                     enemycount++;
                 }
-                else if (item.Key.GetType() == typeof(Collectible) && player != null)
+                else if (collectible != null && player != null)
                 {
                     (item.Key as Collectible).PickedUp = true;
                     if (!player.Interacting)
@@ -164,7 +175,7 @@ namespace GameTest1.Engine
                         player.Score += 1;
                         player.Lives += 0.5f;
                         player.Interacting = true;
-                    }              
+                    }
                     interactcount++;
                 }
 
@@ -177,10 +188,10 @@ namespace GameTest1.Engine
             {
                 entity.onGround = false;
             }
-            if (enemycount==0 && player != null)
+            if (enemycount == 0 && player != null)
             {
                 player.Hit = false;
-                if (LavaDamage != null )
+                if (LavaDamage != null)
                 {
                     LavaDamage = null;
                 }
@@ -194,9 +205,30 @@ namespace GameTest1.Engine
                 }
             }
         }
+
+        public static void HandleCollisionsProjectile(Arrow a)
+        {
+            foreach (var item in a.CollisionList)
+            {
+                var tile = item.Key as Tile;
+                var player = item.Key as Character;
+
+                if (tile != null)
+                {
+                    a.Hunter.CurArrow = null;
+                }
+                else if (player!=null)
+                {
+                    a.Hunter.CurArrow = null;
+                    player.Lives -= 1;
+                    player.Hit = true;
+                }
+            }
+        }
+
+
         public static Object playerDamageFull()
         {
-            Debug.WriteLine("Called Full");
             var player = Game2.CurLevel.Player;
             if (player.Hit == true)
             {
@@ -206,7 +238,6 @@ namespace GameTest1.Engine
         }
         public static Object playerDamageHalf()
         {
-            Debug.WriteLine("Called Half");
             var player = Game2.CurLevel.Player;
             if (player.Hit == true)
             {
@@ -216,7 +247,6 @@ namespace GameTest1.Engine
         }
         public static Object playerHealHalf()
         {
-            Debug.WriteLine("Called Halfheal");
             var player = Game2.CurLevel.Player;
             player.Lives += 0.5f;
             return null;

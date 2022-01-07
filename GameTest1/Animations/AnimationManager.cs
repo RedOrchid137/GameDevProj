@@ -1,4 +1,5 @@
 ﻿using GameTest1.Abstracts;
+using GameTest1.Enemies;
 using GameTest1.Entities;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -15,7 +16,7 @@ namespace GameTest1.Animations
     {
         private static KeyboardState state;
         private static Animation CurAnimation = new Animation();
-        public static void setCurrentAnimationCharacter(Entity o)
+        public static void setCurrentAnimationCharacter(Character o)
         {
             state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.Up))
@@ -31,6 +32,10 @@ namespace GameTest1.Animations
                 CurAnimation.Type = AnimationType.Idle;
             }
 
+            if (o.Hit==true)
+            {
+                CurAnimation.Type = AnimationType.Hit;
+            }
             if (o.Alive==false)
             {
                 CurAnimation.Type = AnimationType.Death;
@@ -39,9 +44,9 @@ namespace GameTest1.Animations
         }
         public static void setCurrentAnimationEnemy(Enemy o)
         {
-
-            if (o.Chasing==true && o.distanceToPlayer(o.CurLevel.Player.CollisionRectangle)<o.AttackRange)
-            {
+            var hunter = o as HunterEnemy;
+            if (o.Chasing==true && o.distanceToPlayer(o.CurLevel.Player.CollisionRectangle)<o.AttackRange&&!(hunter != null && hunter.ArrowCount <= 0))
+            {      
                 o.Attacking = true;
                 o.curAnimation = o.animationList[AnimationType.Attack];
                 return;

@@ -27,6 +27,7 @@ namespace GameTest1.Entities
             AddAnimation(AnimationType.Idle,new List<int>{0,1});
             AddAnimation(AnimationType.Run, new List<int> {2});
             AddAnimation(AnimationType.Jump, new List<int> { 3 });
+            AddAnimation(AnimationType.Hit, new List<int> { 4 });
             AddAnimation(AnimationType.Death, new List<int> { 6 });
             this.curAnimation = animationList[AnimationType.Idle];
             this.Lives = 3;
@@ -48,7 +49,6 @@ namespace GameTest1.Entities
             if (Lives<=0)
             {
                 this.Alive = false;
-                Debug.WriteLine("ded");
             }
         }
 
@@ -63,12 +63,12 @@ namespace GameTest1.Entities
             if (FlipFlagX)
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Drawcolor, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
-                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch),new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch),new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
             else
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Drawcolor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
-                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
         }
     }
