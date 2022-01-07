@@ -7,6 +7,7 @@ using GameTest1.Enemies;
 using GameTest1.Entities;
 using GameTest1.World;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Media;
 using static GameTest1.Entity;
 
 namespace GameTest1.Engine
@@ -16,6 +17,11 @@ namespace GameTest1.Engine
         internal static List<GameAction<Object>> ActionList;
         internal static GameAction<Object> LavaDamage { get; set; }
         internal static GameAction<Object> HealPool { get; set; }
+
+        internal const int lavaID = 98;
+        internal const int hotBlockID = 4;
+        internal const int healPoolID = 274;
+        internal const int levelExitID = 104;
 
         public static bool CheckCollision(Rectangle rect1, Rectangle rect2)
         {
@@ -62,10 +68,6 @@ namespace GameTest1.Engine
                     entity.TileRectList.Remove(obj.CollisionRectangle);
                     entity.CollisionList.Remove(obj);
                 }
-                if (player!=null)
-                {
-                    Debug.WriteLine("CollisionType: " + item.Value);
-                }
 
                 switch (item.Value)
                 {
@@ -98,7 +100,7 @@ namespace GameTest1.Engine
                 }
                 if (tile != null)
                 {
-                    if (tile.Id == 98 && player != null)
+                    if (tile.Id == lavaID && player != null)
                     {
                         if (player.Hit == false)
                         {
@@ -109,7 +111,7 @@ namespace GameTest1.Engine
 
                         enemycount++;
                     }
-                    else if (tile.Id == 4 && player != null)
+                    else if (tile.Id == hotBlockID && player != null)
                     {
                         if (player.Hit == false)
                         {
@@ -119,7 +121,7 @@ namespace GameTest1.Engine
                         }
                         enemycount++;
                     }
-                    if (tile.Id == 274 && player != null)
+                    if (tile.Id == healPoolID && player != null)
                     {
                         if (!player.Interacting)
                         {
@@ -129,17 +131,21 @@ namespace GameTest1.Engine
                         }
                         interactcount++;
                     }
-                    if (tile.Id == 104 && player != null)
+                    if (tile.Id == levelExitID && player != null)
                     {
+                        //Game2.Victory = true;
+                        //Game2.CurPlayer.EndGame = true;
                         if (player.Score >= Game2.CurLevel.RequiredScore)
                         {
                             Game2.lvlCount++;
                             if (Game2.lvlCount == Game2.lvlAmount)
                             {
-                                Game2.self.Exit();
+                                Game2.Victory = true;
+                                Game2.CurPlayer.EndGame = true;
                             }
                             Game2.CurLevel = Game2.lvlList[Game2.lvlCount];
                             Game2.CurLevel.Player.StartingTile = Game2.CurLevel.StartingTile;
+                            Game2.SoundLibrary[GameBase.SoundType.LevelComplete].Play();
                         }
                     }
                 }
@@ -149,7 +155,7 @@ namespace GameTest1.Engine
 
                     if (enemy.Attacking && !player.Hit)
                     {
-                        player.Lives--;
+                        player.TakeDamage(1);
                         player.Hit = true;
                         if (enemy.FlipFlagX)
                         {
@@ -163,7 +169,7 @@ namespace GameTest1.Engine
                     }
                     if (item.Value == CollisionType.Top)
                     {
-                        enemy.Alive = false;
+                        enemy.Alive = false;                       
                     }
                     enemycount++;
                 }
@@ -172,8 +178,9 @@ namespace GameTest1.Engine
                     (item.Key as Collectible).PickedUp = true;
                     if (!player.Interacting)
                     {
+                        Game2.SoundLibrary[GameBase.SoundType.Collect].Play();
                         player.Score += 1;
-                        player.Lives += 0.5f;
+                        player.Heal(0.5f);
                         player.Interacting = true;
                     }
                     interactcount++;
@@ -220,7 +227,7 @@ namespace GameTest1.Engine
                 else if (player!=null)
                 {
                     a.Hunter.CurArrow = null;
-                    player.Lives -= 1;
+                    player.TakeDamage(1);
                     player.Hit = true;
                 }
             }
@@ -232,7 +239,7 @@ namespace GameTest1.Engine
             var player = Game2.CurLevel.Player;
             if (player.Hit == true)
             {
-                player.Lives--;
+                player.TakeDamage(1);
             }
             return null;
         }
@@ -241,14 +248,14 @@ namespace GameTest1.Engine
             var player = Game2.CurLevel.Player;
             if (player.Hit == true)
             {
-                player.Lives-=0.5f;
+                player.TakeDamage(0.5f);
             }
             return null;
         }
         public static Object playerHealHalf()
         {
             var player = Game2.CurLevel.Player;
-            player.Lives += 0.5f;
+            player.Heal(0.5f);
             return null;
         }
         public static bool AnyCollisionsCharacter(Entity entity)

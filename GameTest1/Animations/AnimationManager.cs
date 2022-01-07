@@ -18,6 +18,11 @@ namespace GameTest1.Animations
         private static Animation CurAnimation = new Animation();
         public static void setCurrentAnimationCharacter(Character o)
         {
+            if (!o.Alive)
+            {
+                o.curAnimation = o.animationList[AnimationType.Death];
+                return;
+            }
             state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.Up))
             {
@@ -36,14 +41,15 @@ namespace GameTest1.Animations
             {
                 CurAnimation.Type = AnimationType.Hit;
             }
-            if (o.Alive==false)
-            {
-                CurAnimation.Type = AnimationType.Death;
-            }
             o.curAnimation = o.animationList[CurAnimation.Type];
         }
         public static void setCurrentAnimationEnemy(Enemy o)
         {
+            if (!o.Alive)
+            {
+                o.curAnimation = o.animationList[AnimationType.Death];
+                return;
+            }
             var hunter = o as HunterEnemy;
             if (o.Chasing==true && o.distanceToPlayer(o.CurLevel.Player.CollisionRectangle)<o.AttackRange&&!(hunter != null && hunter.ArrowCount <= 0))
             {      

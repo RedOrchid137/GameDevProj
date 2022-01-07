@@ -17,16 +17,21 @@ using GameTest1.Extensions;
 using GameTest1.States;
 using GameTest1.UI;
 using GameTest1.Abstracts;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GameTest1
 {
     public abstract class GameBase : Game
     {
-        //testing vars
+        public enum SoundType { CharHit, EnemyHit, Music, Jump, Collect, LevelComplete,Click,Lose,Victory}
+
         protected static GraphicsDeviceManager _graphics;
         internal static GraphicsDeviceManager Graphics { get { return _graphics; }}
         internal static Rectangle WindowRectangle { get; set; }
         private static Level curLevel;
+        public static Dictionary<SoundType,SoundEffect>SoundLibrary = new Dictionary<SoundType, SoundEffect>();
+        public Song BGMusic { get; set; }
 
         public static Level CurLevel
         {
@@ -57,6 +62,10 @@ namespace GameTest1
         public Status MenuState { get; set; }
         public Status GameState { get; set; }
         public Status GameOverState { get; set; }
+
+        public static bool Victory { get; set; } = false;
+        public bool StaticScreen { get; set; } = false;
+
         public GameBase()
         {
             self = this;
@@ -127,16 +136,16 @@ namespace GameTest1
                 UI.Draw(_spriteBatch);
                 _spriteBatch.End();
             }
-            else if (CurrentState.GetType() != typeof(GameOverState))
+            else if (CurrentState.GetType() == typeof(GameOverState))
             {
-
+                GameOverState.Draw(gameTime,_spriteBatch);
             }
 
             base.Draw(gameTime);
         }
-
-
-
+        protected abstract void LoadSounds();
+        protected abstract void LoadUI();
+        protected abstract void LoadLevels();
         protected void InitObjects()
         {
             _graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width/1.3);

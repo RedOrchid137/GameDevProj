@@ -23,6 +23,7 @@ namespace GameTest1.Enemies
             AddAnimation(AnimationType.Jump, new List<int> { 3 });
             AddAnimation(AnimationType.Attack, new List<int> { 2 });
             AddAnimation(AnimationType.Death, new List<int> { 4 });
+            animationList[AnimationType.Death].Fps = 8;
             this.curAnimation = animationList[AnimationType.Idle];
             this.Direction = true;
         }

@@ -12,9 +12,20 @@ namespace GameTest1.Inputs
     { 
 
         public bool IsDestinationInput => true;
+        public KeyboardState prevState;
+        public KeyboardState state;
+        public bool InputDifferent { get; set; }
         public Vector2 ReadInput()
         {
-            KeyboardState state = Keyboard.GetState();
+            state = Keyboard.GetState();
+            if (prevState != state)
+            {
+                InputDifferent = true;
+            }
+            else
+            {
+                InputDifferent = false;
+            }
             Vector2 direction = Vector2.Zero;
             if (state.IsKeyDown(Keys.Left))
             {
@@ -28,6 +39,7 @@ namespace GameTest1.Inputs
             {
                 direction.Y += 1;
             }
+            prevState = state;
             return direction;
 
         }

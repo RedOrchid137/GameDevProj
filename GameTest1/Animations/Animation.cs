@@ -1,5 +1,7 @@
-﻿using GameTest1.Animations;
+﻿using GameTest1.Abstracts;
+using GameTest1.Animations;
 using GameTest1.Enemies;
+using GameTest1.Entities;
 using GameTest1.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -100,7 +102,16 @@ namespace GameTest1
                 else
                 {
                     curFrame = frames.Count-1;
-                }               
+                }
+                if (Owner.GetType().BaseType == typeof(Enemy) && this.Type == AnimationType.Death)
+                {
+                    (Owner as Enemy).ToBeRemoved = true;
+                    Game2.SoundLibrary[GameBase.SoundType.EnemyHit].Play();
+                }
+                if (Owner.GetType() == typeof(Character) && this.Type == AnimationType.Death)
+                {
+                    (Owner as Character).EndGame = true;
+                }
             }
         }
         public void Reset()

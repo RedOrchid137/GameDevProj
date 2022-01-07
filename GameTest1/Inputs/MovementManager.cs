@@ -27,7 +27,7 @@ namespace GameTest1.Inputs
                 //To prevent stuttering
                 if (!(movable.Speed.X == 0 && movable.hKeyPressed))
                 {
-                    
+
                     if (direction.X > 0)
                     {
                         movable.FlipFlagX = false;
@@ -59,13 +59,25 @@ namespace GameTest1.Inputs
 
                 else if (direction.X==0)
                 {
-                    movable.hKeyPressed = false;
+                   movable.hKeyPressed = false;
                 }
 
 
                 //handle jumping and falling
 
-                if (movable.CurPosition.Y >= movable.Ground - spriteheight * movable.Scale)
+
+
+                if (movable.onGround)
+                {
+                    movable.IsFalling = false;
+                }
+                else
+                {
+                    movable.IsFalling = true;
+                    movable.Ground = 99999999;
+                }
+
+                if (movable.CurPosition.Y > movable.Ground - spriteheight * movable.Scale)
                 {
                     movable.Speed = new Vector2(movable.Speed.X, 0);
                     movable.IsFalling = false;
@@ -79,6 +91,10 @@ namespace GameTest1.Inputs
 
                 if (direction.Y > 0 && !movable.IsFalling)
                 {
+                    if ((movable.InputReader as KeyboardReader).InputDifferent)
+                    {
+                        Game2.SoundLibrary[GameBase.SoundType.Jump].Play();
+                    }
                     movable.IsFalling = true;
                     movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y - movable.Acceleration.Y);
                 }
@@ -100,6 +116,7 @@ namespace GameTest1.Inputs
                 {
                     movable.Speed = new Vector2(movable.Speed.X, -Physics.terminalVel);
                 }
+
                 movable.CurPosition += movable.Speed;
                 
                 if (movable.CurPosition != movable.PrevPosition)
@@ -109,15 +126,6 @@ namespace GameTest1.Inputs
                     curLevel.CheckCollision(movable, sb);
                     movable.CollisionCheckFull(Game2.CurLevel.oMan);
                     CollisionManager.HandleCollisionsCharacter(movable);
-                }
-                if (movable.onGround)
-                {
-                    movable.IsFalling = false;
-                }
-                else
-                {
-                    movable.IsFalling = true;
-                    movable.Ground = 99999999;
                 }
                 movable.PrevPosition = movable.CurPosition;
                 if (movable.CurPosition.Y > 1000)
@@ -139,14 +147,14 @@ namespace GameTest1.Inputs
             {
                 if (movable.FlipFlagX)
                 {
-                    movable.Speed = new Vector2(0.1f, movable.Speed.Y);
+                    movable.Speed = new Vector2(-0.1f, movable.Speed.Y);
                 }
                 else
                 {
-                    movable.Speed = new Vector2(-0.1f, movable.Speed.Y);
+                    movable.Speed = new Vector2(0.1f, movable.Speed.Y);
                 }
             }
-            else if(troll!=null)
+            else if(hunter==null)
             {
                 if (movable.Direction)
                 {
@@ -218,16 +226,17 @@ namespace GameTest1.Inputs
 
 
             //Handle Path Limit Reached
-            if (movable.CurPosition.X >= movable.Path.Y)
+            if (hunter==null)
             {
-                movable.Direction = false;
+                if (movable.CurPosition.X >= movable.Path.Y)
+                {
+                    movable.Direction = false;
+                }
+                else if (movable.CurPosition.X <= movable.Path.X)
+                {
+                    movable.Direction = true;
+                }
             }
-            else if (movable.CurPosition.X <= movable.Path.X)
-            {
-                movable.Direction = true;
-            }
-
-
             movable.Offsets = ExtensionMethods.CalcOffsets(movable.curAnimation.CurrentFrame.SourceRectangle, movable.curAnimation.CurrentFrame.HitBox);
             movable.CollisionRectangle = new Rectangle((int)(movable.CurPosition.X + movable.Speed.X + movable.Offsets.X / 2 * movable.Scale), (int)(movable.CurPosition.Y + movable.Speed.Y + movable.Offsets.Y * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Width * movable.Scale), (int)(movable.curAnimation.CurrentFrame.HitBox.Height * movable.Scale));
             //Collision Detection if only if Sprite has moved

@@ -56,7 +56,6 @@ namespace GameTest1.Engine
                 return;
             }
             double millisecs = gametime.TotalGameTime.TotalMilliseconds;
-            //Debug.WriteLine("ms: " + millisecs);
             if (Start == 0)
             {
                 Start = millisecs;
@@ -68,8 +67,6 @@ namespace GameTest1.Engine
             if (Repeat)
             {
                 ElapsedMilliSecondsInterval = millisecs - IntervalStart;
-                //Debug.WriteLine("-----Cur Elapsed ms: "+ElapsedMilliSecondsInterval);
-                //Debug.WriteLine("Interval: " + Interval);
                 if (ElapsedMilliSecondsInterval == 0)
                 {
                     performAction();

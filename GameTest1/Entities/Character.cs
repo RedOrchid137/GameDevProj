@@ -16,8 +16,7 @@ namespace GameTest1.Entities
 {
     public class Character : Entity, IMobile, INeedsUpdate 
     {
-        public bool IsSleeping { get; set; }
-
+        public bool EndGame { get; set; } 
         public bool Hit { get; set; }
         public int Score { get; set; }
         public Character(Spritesheet spritesheet, Rectangle window,Level curlevel,Vector2 startingtile, IInputReader reader,float scale, float maxSpeed) : base(spritesheet, window, curlevel,startingtile, scale, maxSpeed)
@@ -69,6 +68,23 @@ namespace GameTest1.Entities
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Drawcolor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
                 spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+            }
+        }
+        public void TakeDamage(float amt)
+        {
+            Lives -= amt;
+            if (Lives<=0)
+            {
+                Alive = false;
+            }
+            Game2.SoundLibrary[GameBase.SoundType.CharHit].Play();
+        }
+        public void Heal(float amt)
+        {
+            Lives += amt;
+            if (Lives > 3)
+            {
+                Lives = 3;
             }
         }
     }

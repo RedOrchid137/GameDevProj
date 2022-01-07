@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static GameTest1.GameBase;
 
 namespace GameTest1.Knop
 {
@@ -78,6 +79,7 @@ namespace GameTest1.Knop
                 if (_huidigeMuis.LeftButton == ButtonState.Released && _vorigeMuis.LeftButton == ButtonState.Pressed)
                 {
                     Klik?.Invoke(this, new EventArgs());
+                    GameBase.SoundLibrary[SoundType.Click].Play();
                 }
             }
         }

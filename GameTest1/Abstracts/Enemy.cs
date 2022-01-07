@@ -19,6 +19,7 @@ namespace GameTest1.Abstracts
         public bool Running { get; set; }
         public bool Attacking { get; set; }
         public bool Direction { get; set; }
+        public bool ToBeRemoved { get; set; }
 
         //Calc vars
         public float AttackRange { get; set; }

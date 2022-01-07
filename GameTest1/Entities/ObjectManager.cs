@@ -58,7 +58,7 @@ namespace GameTest1.Entities
         }
         public void RemoveDeadEnemies()
         {
-            _objectList.RemoveAll(o => o.GetType().BaseType == typeof(Enemy) && !(o as Enemy).Alive);
+            _objectList.RemoveAll(o => o.GetType().BaseType == typeof(Enemy)&&(o as Enemy).ToBeRemoved == true);
         }
     }
 }

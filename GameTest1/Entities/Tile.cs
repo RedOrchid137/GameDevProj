@@ -11,7 +11,6 @@ namespace GameTest1.Entities
     public class Tile : Static
     {
         public int Id { get; set; }
-        public Rectangle IntersectSurface { get; set; }
         public bool Solid { get; set; }
         public float Resistance { get; set; }
         public Tile(Texture2D texture, Rectangle window, float scale,int id) : base(texture, window, scale)

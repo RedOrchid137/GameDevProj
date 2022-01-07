@@ -30,6 +30,7 @@ namespace GameTest1.Enemies
             AddAnimation(AnimationType.Attack, new List<int> { 0 });
             animationList[AnimationType.Attack].Fps = 7;
             AddAnimation(AnimationType.Death, new List<int> { 4 });
+            animationList[AnimationType.Death].Fps = 8;
             this.curAnimation = animationList[AnimationType.Idle];
             this.Direction = false;
             this.FlipFlagX = true;

@@ -117,13 +117,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Font/Font.spritefont
 
-#begin Font/Font.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Font/Font.spritefont
-
 #begin Font/ScoreFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -239,6 +232,60 @@
 /processorParam:TextureFormat=Color
 /build:ScrollingBackground/Trees.png
 
+#begin Sound/BGTrack.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sound/BGTrack.mp3
+
+#begin Sound/click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/click.wav
+
+#begin Sound/Collect1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Collect1.wav
+
+#begin Sound/Hit1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Hit1.wav
+
+#begin Sound/HurtEnemy.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/HurtEnemy.wav
+
+#begin Sound/jump1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/jump1.wav
+
+#begin Sound/LevelComplete.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/LevelComplete.wav
+
+#begin Sound/Lost.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Lost.wav
+
+#begin Sound/Victory.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Victory.wav
+
 #begin TileMapResources/Level1/5z1KX.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -290,6 +337,18 @@
 /processorParam:TextureFormat=Color
 /build:UI/FullHeart.png
 
+#begin UI/GameOverScreen.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/GameOverScreen.jpg
+
 #begin UI/HalfHeart.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -301,4 +360,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/HalfHeart.png
+
+#begin UI/WinScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/WinScreen.png
 
