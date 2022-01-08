@@ -127,7 +127,7 @@ namespace GameTest1
             Spritesheet huntersheet = new Spritesheet(Content.Load<Texture2D>("Enemies/SpriteSheetHuntress"), new List<int> { 6, 2, 10, 8, 10, 3, 2 });
             Spritesheet berrysheet = new Spritesheet(Content.Load<Texture2D>("Collectibles/Raspberry"), new List<int> { 6 });
 
-            player = new Character(foxsheet, WindowRectangle, Level1, new Vector2(2, 19), new KeyboardReader(), 2f, 5);
+            player = new Character(foxsheet, WindowRectangle, Level1, new Vector2(2, 17), new KeyboardReader(), 2f, 5);
             CurPlayer = player;
             TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(2, 6), new Vector2(1, 12), 1.5f, 2);
             TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(36, 20), new Vector2(27, 42), 1.5f, 2);
@@ -170,6 +170,8 @@ namespace GameTest1
             SoundEffect lose = Content.Load<SoundEffect>("Sound/Lost");
             SoundEffect win = Content.Load<SoundEffect>("Sound/Victory");
             SoundEffect levelComplete = Content.Load<SoundEffect>("Sound/LevelComplete");
+            SoundEffect heal = Content.Load<SoundEffect>("Sound/Heal");
+            SoundEffect shot = Content.Load<SoundEffect>("Sound/BowShot");
 
             SoundLibrary[SoundType.CharHit] = charhit;
             SoundLibrary[SoundType.EnemyHit] = enemyhit;
@@ -179,6 +181,8 @@ namespace GameTest1
             SoundLibrary[SoundType.Lose] = lose;
             SoundLibrary[SoundType.Victory] = win;
             SoundLibrary[SoundType.LevelComplete] = levelComplete;
+            SoundLibrary[SoundType.Heal] = heal;
+            SoundLibrary[SoundType.Shot] = shot;
         }
 
         protected override void LoadUI()

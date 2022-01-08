@@ -24,7 +24,7 @@ namespace GameTest1
 {
     public abstract class GameBase : Game
     {
-        public enum SoundType { CharHit, EnemyHit, Music, Jump, Collect, LevelComplete,Click,Lose,Victory}
+        public enum SoundType { CharHit, EnemyHit, Music, Jump, Collect, LevelComplete,Click,Lose,Victory,Heal,Shot }
 
         protected static GraphicsDeviceManager _graphics;
         internal static GraphicsDeviceManager Graphics { get { return _graphics; }}

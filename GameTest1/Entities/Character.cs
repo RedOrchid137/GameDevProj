@@ -81,11 +81,17 @@ namespace GameTest1.Entities
         }
         public void Heal(float amt)
         {
-            Lives += amt;
-            if (Lives > 3)
+            
+            if (Lives < 3)
+            {
+                Game2.SoundLibrary[GameBase.SoundType.Heal].Play();
+                Lives += amt;
+            }
+            else
             {
                 Lives = 3;
             }
+            
         }
     }
 }

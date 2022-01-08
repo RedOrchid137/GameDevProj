@@ -20,7 +20,7 @@ namespace GameTest1.Engine
 
         internal const int lavaID = 98;
         internal const int hotBlockID = 4;
-        internal const int healPoolID = 274;
+        internal const int healPoolID = 236;
         internal const int levelExitID = 104;
 
         public static bool CheckCollision(Rectangle rect1, Rectangle rect2)

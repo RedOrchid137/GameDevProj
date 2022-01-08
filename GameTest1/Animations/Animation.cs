@@ -97,6 +97,10 @@ namespace GameTest1
                     {
                         (Owner as HunterEnemy).ShotsFired = true;
                     }
+                    else if((Owner as HunterEnemy)!=null)
+                    {
+                        (Owner as HunterEnemy).ShotsFired = false;
+                    }
                     curFrame = 0;
                 }
                 else

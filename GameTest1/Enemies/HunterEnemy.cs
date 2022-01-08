@@ -46,8 +46,9 @@ namespace GameTest1.Enemies
                 CurArrow.CurPosition = new Vector2(this.CurPosition.X, this.CurPosition.Y+this.curAnimation.CurrentFrame.SourceRectangle.Height/1.12f);
                 CurArrow.FlipFlagX = this.FlipFlagX;
                 ArrowCount--;
+                Game2.SoundLibrary[GameBase.SoundType.Shot].Play();
             }
-            else if(ShotsFired&&CurArrow != null)
+            else if(CurArrow != null)
             {
                 MovementManager.MoveArrow(CurArrow,curLevel,sb);
             }
