@@ -46,17 +46,17 @@ namespace GameTest1.Abstracts
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
                 
                 //CollisionRectangle
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);           
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);           
                 
                 //Field of View               
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
             }
             else
             {
                 
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(FieldOfView.X, FieldOfView.Y), FieldOfView, Color.Blue * 0.1f);
             }
         }
 
@@ -139,7 +139,16 @@ namespace GameTest1.Abstracts
         public int distanceToPlayer(Rectangle playerCollisionRectangle)
         {
             Rectangle overlap = Rectangle.Intersect(this.FieldOfView, playerCollisionRectangle);
-            int distance = Math.Abs(overlap.X - this.CollisionRectangle.Center.X);
+            int distance = 0;
+            if (this.FlipFlagX)
+            {
+                distance = Math.Abs(overlap.X+overlap.Width - this.CollisionRectangle.Left);
+            }
+            else
+            {
+                distance = Math.Abs(overlap.X - this.CollisionRectangle.Right);
+            }
+            
             return distance;
         }
     }

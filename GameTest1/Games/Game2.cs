@@ -122,8 +122,8 @@ namespace GameTest1
 
             player = new Character(foxsheet, WindowRectangle, Level1, Level1.StartingTile, new KeyboardReader(), 2f, 5);
             CurPlayer = player;
-            TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(2, 5), new Vector2(1, 12), 1.5f,5);
-            TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(36, 20), new Vector2(27, 42), 1.5f, 5);
+            TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(2, 5), new Vector2(1, 12), 1.5f,3);
+            TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(36, 20), new Vector2(27, 42), 1.5f, 4);
             Collectible berry1 = new Collectible(raspberrysheet, WindowRectangle, Level1, new Vector2(45, 5), CollectibleType.Raspberry, 1.5f);
             Collectible berry2 = new Collectible(raspberrysheet, WindowRectangle, Level1, new Vector2(24, 17), CollectibleType.Raspberry, 1.5f);
             Collectible berry3 = new Collectible(raspberrysheet, WindowRectangle, Level1, new Vector2(2, 4), CollectibleType.Raspberry, 1.5f);
@@ -148,11 +148,14 @@ namespace GameTest1
             Level2 = new Level(Content.Load<TiledMap>("TileMapResources/Levels/Level2"), 32, Content.Load<Texture2D>("TileMapResources/Levels/Background"), 5, new Vector2(2, 25));
             Spritesheet trollsheet = new Spritesheet(Content.Load<Texture2D>("Enemies/Shardsoul Slayer Sprite Sheet"), new List<int> { 8, 8, 5, 4, 6 });
             Spritesheet huntersheet = new Spritesheet(Content.Load<Texture2D>("Enemies/SpriteSheetHuntress"), new List<int> { 6, 2, 10, 8, 10, 3, 2 });
+            Spritesheet skeletonsheet = new Spritesheet(Content.Load<Texture2D>("Enemies/Skeleton"), new List<int> { 13, 13, 12, 4, 3 });
+            
             Spritesheet raspberrysheet = new Spritesheet(Content.Load<Texture2D>("Collectibles/Raspberry"), new List<int> { 6 });
             Spritesheet blueberrysheet = new Spritesheet(Content.Load<Texture2D>("Collectibles/blueberry"), new List<int> { 6 });
             
             TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level2, new Vector2(29, 9), new Vector2(24, 32), 1.5f, 3);
-            TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level2, new Vector2(41, 24), new Vector2(37, 45), 1.5f, 5);
+            //TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level2, new Vector2(41, 24), new Vector2(37, 45), 1.5f, 5);
+            SkeletonEnemy skeleton1 = new SkeletonEnemy(skeletonsheet, WindowRectangle, Level1, new Vector2(41, 24), new Vector2(37, 45), 1.5f, 3);
             Collectible berry1 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(1, 1),CollectibleType.Raspberry, 1.5f);
             Collectible berry2 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(18, 25), CollectibleType.Raspberry, 1.5f);
             Collectible berry3 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(35, 6), CollectibleType.Raspberry, 1.5f);
@@ -165,7 +168,8 @@ namespace GameTest1
             Level2.Player = player;
             Level2.oMan.ObjectList.Add(player);
             Level2.oMan.ObjectList.Add(troll);
-            Level2.oMan.ObjectList.Add(troll2);
+            //Level2.oMan.ObjectList.Add(troll2);
+            Level2.oMan.ObjectList.Add(skeleton1);
             Level2.oMan.ObjectList.Add(berry1);
             Level2.oMan.ObjectList.Add(berry2);
             Level2.oMan.ObjectList.Add(berry3);

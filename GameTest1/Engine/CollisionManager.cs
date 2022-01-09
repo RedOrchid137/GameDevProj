@@ -73,7 +73,7 @@ namespace GameTest1.Engine
                     entity.CollisionList.Remove(obj);
                 }
 
-                if (tile!=null||enemy!=null)
+                if (tile!=null)
                 {
                     switch (item.Value)
                     {
@@ -169,7 +169,11 @@ namespace GameTest1.Engine
                     }
                     if (item.Value == CollisionType.Top)
                     {
-                        enemy.Alive = false;                       
+                        enemy.Alive = false;
+                        player.Speed = new Vector2(player.Speed.X, 0);
+                        player.Ground = obj.CollisionRectangle.Top;
+                        player.CurPosition = new Vector2(player.CurPosition.X, player.Ground - spriteheight);
+                        topcount++;
                     }
                     enemycount++;
                 }
