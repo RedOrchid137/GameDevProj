@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace GameTest1.UI
@@ -11,7 +12,7 @@ namespace GameTest1.UI
     public class Score : Text
     { 
 
-        public Score(Rectangle window,SpriteBatch sb,SpriteFont font,Color color,Vector2 dimensions) : base(window, sb,font,color,dimensions)
+        public Score(Rectangle window,SpriteBatch sb,SpriteFont font,Color color) : base(window, sb,font,color)
         {
         }
 

@@ -102,130 +102,14 @@ namespace GameTest1
             anime.CurrentFrame = anime.Frames[0];
             animationList[type] = anime;
         }
-
         #region Collisions
         public void CollisionCheckFull(ObjectManager man)
         {
-            foreach (var item in man.ObjectList)
-            {
-                for (int i = 0; i < man.ObjectList.Count; i++)
-                {
-                    if (item != this)
-                    {
-                        if (CollisionManager.CheckCollision(this.CollisionRectangle, item.CollisionRectangle))
-                        {
-                            Rectangle intersectSurface = Rectangle.Intersect(this.CollisionRectangle, item.CollisionRectangle);
-
-                            CollisionType test = new CollisionType();
-                            var topdist = this.CollisionRectangle.Bottom - item.CollisionRectangle.Top;
-                            var botdist = item.CollisionRectangle.Bottom - this.CollisionRectangle.Top;
-                            var leftdist = this.CollisionRectangle.Right - item.CollisionRectangle.Left;
-                            var rightdist = item.CollisionRectangle.Right - this.CollisionRectangle.Left;
-                            int min = new[] { topdist, botdist, leftdist, rightdist }.Min();
-
-                            if (min == topdist)
-                            {
-                                test = CollisionType.Top;
-                            }
-                            else if(min== botdist)
-                            {
-                                test = CollisionType.Bottom;
-                            }
-                            else if (min == leftdist)
-                            {
-                                test = CollisionType.Left;
-                            }
-                            else
-                            {
-                                test = CollisionType.Right;
-                            }
-                            //if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Top && this.Speed.Y >= 0 && intersectSurface.Width > intersectSurface.Height)
-                            //{
-                            //    test = CollisionType.Top;
-                            //}
-                            //else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Bottom && this.Speed.Y < 0 && intersectSurface.Width > intersectSurface.Height)
-                            //{
-                            //    test = CollisionType.Bottom;
-                            //}
-                            //else if (this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Right < item.CollisionRectangle.Right && this.Speed.X > 0 && intersectSurface.Width < intersectSurface.Height)
-                            //{
-                            //    test = CollisionType.Left;
-                            //}
-                            //else if (this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Left > item.CollisionRectangle.Left && this.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
-                            //{
-                            //    test = CollisionType.Right;
-                            //}
-                            if ((item as Enemy)!=null)
-                            {
-                                (item as Enemy).IntersectSurface = intersectSurface;
-                            }
-                            this.CollisionList[item] = test;
-                        }
-                    }
-                }
-            }
+            CollisionManager.CollisionCheckFull(man, this);
         }
         public void CollisionCheckTile(Rectangle CollisionRectangle, SpriteBatch sb,int id)
         {
-            if (this.TileRectList.Contains(CollisionRectangle))
-            {
-                return;
-            }
-            var item = new Tile(ExtensionMethods.BlankTexture(sb), CollisionRectangle, 1, id);
-            item.CollisionRectangle = CollisionRectangle;
-
-            if (CollisionManager.CheckCollision(this.CollisionRectangle, CollisionRectangle))
-            {
-                Rectangle intersectSurface = Rectangle.Intersect(this.CollisionRectangle, item.CollisionRectangle);
-                CollisionType test = new CollisionType();
-                var topdist = this.CollisionRectangle.Bottom - item.CollisionRectangle.Top;
-                var botdist = item.CollisionRectangle.Bottom - this.CollisionRectangle.Top;
-                var leftdist = this.CollisionRectangle.Right - item.CollisionRectangle.Left;
-                var rightdist = item.CollisionRectangle.Right - this.CollisionRectangle.Left;
-                int min = new[] { topdist, botdist, leftdist, rightdist }.Min();
-
-                if (min == topdist)
-                {
-                    test = CollisionType.Top;
-                }
-                else if (min == botdist)
-                {
-                    test = CollisionType.Bottom;
-                }
-                else if (min == leftdist)
-                {
-                    test = CollisionType.Left;
-                }
-                else
-                {
-                    test = CollisionType.Right;
-                }
-
-
-
-                //if (this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.Speed.Y > 0 && intersectSurface.Width > intersectSurface.Height)
-                //{
-                //    test = CollisionType.Top;
-                //}
-                //else if (this.CollisionRectangle.Top < item.CollisionRectangle.Bottom && this.CollisionRectangle.Bottom > item.CollisionRectangle.Top && this.Speed.Y<0 && intersectSurface.Width > intersectSurface.Height)
-                //{
-                //    test = CollisionType.Bottom;
-                //}
-                //else if(this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.Speed.X>0 && intersectSurface.Width < intersectSurface.Height)
-                //{
-                //    test = CollisionType.Left;
-                //}
-                //else if(this.CollisionRectangle.Left < item.CollisionRectangle.Right && this.CollisionRectangle.Right > item.CollisionRectangle.Left && this.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
-                //{ 
-                //    test = CollisionType.Right;
-                //}
-                item.IntersectSurface = intersectSurface;
-                this.CollisionList[item] = test;
-                if (!this.TileRectList.Contains(CollisionRectangle))
-                {
-                    this.TileRectList.Add(CollisionRectangle);
-                }
-            }
+            CollisionManager.CollisionCheckTile(CollisionRectangle,sb ,id,this);
         }
         #endregion
         public abstract void Update(GameTime gametime,Level curLevel, SpriteBatch sb);

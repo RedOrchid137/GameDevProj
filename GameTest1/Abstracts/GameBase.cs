@@ -24,7 +24,7 @@ namespace GameTest1
 {
     public abstract class GameBase : Game
     {
-        public enum SoundType { CharHit, EnemyHit, Music, Jump, Collect, LevelComplete,Click,Lose,Victory,Heal,Shot }
+        public enum SoundType { CharHit, EnemyHit, Music, Jump, Collect, LevelComplete,Click,Lose,Victory,Heal,Shot,SpeedUp }
 
         protected static GraphicsDeviceManager _graphics;
         internal static GraphicsDeviceManager Graphics { get { return _graphics; }}
@@ -43,6 +43,7 @@ namespace GameTest1
         internal static List<Level> lvlList { get; set; }
         internal static int lvlAmount{ get; set; }
         internal static int lvlCount { get; set; }
+        
         internal SpriteBatch _spriteBatch { get; set; }
         internal Character player;
 
@@ -64,6 +65,7 @@ namespace GameTest1
         public Status GameOverState { get; set; }
 
         public static bool Victory { get; set; } = false;
+        public static bool Switching { get; set; } = false;
         public bool StaticScreen { get; set; } = false;
 
         public GameBase()
@@ -90,7 +92,18 @@ namespace GameTest1
 
         protected override void Update(GameTime gameTime)
         {
+            if (CurrentState == this.GameState)
+            {
+                CurLevel.oMan.UpdateAll(gameTime, CurLevel, _spriteBatch);
+                _camera.Follow(player);
+                _tiledMapRenderer.Update(gameTime);
+            }
+            if (CurLevel.Player.CurPosition.X/CurLevel.TileWidth == CurLevel.StartingTile.X)
+            {
+                Switching = false;
+            }
             UI.Update(gameTime, CurLevel, _spriteBatch);
+            CurrentState.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -148,12 +161,31 @@ namespace GameTest1
         protected abstract void LoadLevels();
         protected void InitObjects()
         {
-            _graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width/1.3);
-            _graphics.PreferredBackBufferHeight = (int)(GraphicsDevice.DisplayMode.Height / 1.3);
+            _graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width/1.2);
+            _graphics.PreferredBackBufferHeight = (int)(GraphicsDevice.DisplayMode.Height / 1.2);
             _graphics.ApplyChanges();
-            WindowRectangle = new Rectangle(0, 0, Game2.Graphics.PreferredBackBufferWidth, Game2.Graphics.PreferredBackBufferHeight);
+            WindowRectangle = new Rectangle(0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight);
             Level.screenWidth = _graphics.PreferredBackBufferWidth;
             Level.screenHeight = _graphics.PreferredBackBufferHeight;
         }
+
+        internal static void SwitchLevel()
+        {
+            lvlCount++;
+            if (lvlCount == lvlAmount)
+            {
+                Victory = true;
+                CurPlayer.EndGame = true;
+                return;
+            }
+            CurLevel = lvlList[lvlCount];
+            CurLevel.Player = CurPlayer;
+            CurLevel.Player.Score = 0;
+            CurLevel.Player.StartingTile = CurLevel.StartingTile;
+            SoundLibrary[SoundType.LevelComplete].Play();
+            Switching = true;
+            CurLevel.Player.onGround = false;
+        }
+
     }
     }

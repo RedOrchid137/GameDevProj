@@ -36,6 +36,7 @@ namespace GameTest1.Abstracts
             this.Running = false;
             Path = new Vector2(path.X*CurLevel.TileWidth,path.Y*CurLevel.TileWidth);
             this.InitialMaxSpeed = maxSpeed;
+            CurLevel = curlevel;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -64,6 +65,27 @@ namespace GameTest1.Abstracts
             //Update Location
             MovementManager.MoveEnemy(this, curLevel, sb);
 
+            //update FOV Rectangle
+            UpdateFOV();
+
+
+            //Handle Player Observed
+            if (CurLevel.Player.CollisionRectangle.Intersects(FieldOfView))
+            {
+                Chasing = true;
+            }
+            else
+            {
+                Chasing = false;
+                Running = false;
+                MaxSpeed = InitialMaxSpeed;
+            }
+            if (Chasing && !Running)
+            {
+                MaxSpeed += 2;
+                Running = true;
+            }
+
             //Update Animation
             AnimationManager.setCurrentAnimationEnemy(this);
             this.curAnimation.Update(gametime);
@@ -80,7 +102,7 @@ namespace GameTest1.Abstracts
                 {
                     scanRect = new Rectangle(scanRect.X+1, scanRect.Y, 1, 1);
                     distance++;
-                    if (distance>Game2.CurLevel.TileWidth*Game2.CurLevel.Map.Width)
+                    if (distance>CurLevel.TileWidth*CurLevel.Map.Width)
                     {
                         break;
                     }
@@ -93,13 +115,14 @@ namespace GameTest1.Abstracts
                 {
                     scanRect = new Rectangle(scanRect.X - 1, scanRect.Y,1,1);
                     distance++;
-                    if (distance > Game2.CurLevel.TileWidth * Game2.CurLevel.Map.Width)
+                    if (distance > CurLevel.TileWidth * CurLevel.Map.Width)
                     {
                         break;
                     }
                 }
             }
             return distance;
+
         }
         public void UpdateFOV()
         {

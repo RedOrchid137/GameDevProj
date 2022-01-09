@@ -18,8 +18,15 @@ namespace GameTest1.States
         public Knoppen StartKnop { get; private set; }
 
         public Knoppen ExitKnop { get; private set; }
+
+        public SpriteFont Tutorial { get; private set; }
+
+
+        private string tutorialText = "Collect all raspberries and find the exit door to progress.\nJump on top of enemies to kill them.\nKeep an eye on your health, better not jump into the lava.\nHeal using the lightblue health pools.\nGet extra distance on a jump using the floating blueberries.";
         public MenuState(GameBase spel, GraphicsDevice graphicsDevice, ContentManager content) : base(spel, graphicsDevice, content )
         {
+
+            Tutorial = spel.Content.Load<SpriteFont>("Font/TutFont");
             var buttonTexture = _content.Load<Texture2D>("Knop/Button");
             var buttonFont = _content.Load<SpriteFont>("Font/Font");
 
@@ -53,7 +60,7 @@ namespace GameTest1.States
 
             foreach (var component in _spelComponenten)
                 component.Draw(gameTime, spriteBatch);
-
+            spriteBatch.DrawString(Tutorial,tutorialText, new Vector2(Level.screenWidth/2-350, Level.screenHeight - 200), Color.White);
             spriteBatch.End();
         }
         private void StartKnop_Klik(object sender, EventArgs e)

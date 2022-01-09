@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using GameTest1.Abstracts;
 using GameTest1.Enemies;
 using GameTest1.Entities;
+using GameTest1.Extensions;
 using GameTest1.World;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using static GameTest1.Entities.Collectible;
 using static GameTest1.Entity;
 
 namespace GameTest1.Engine
@@ -69,35 +73,39 @@ namespace GameTest1.Engine
                     entity.CollisionList.Remove(obj);
                 }
 
-                switch (item.Value)
+                if (tile!=null||enemy!=null)
                 {
-                    //Type van collision is top, de rectangle raakt de andere aan de bovenkant
-                    //Dit wil zeggen dat de character er op moet blijven staan
-                    //De Ground variabele geeft aan wat de y-waarde van de huidige "vloer" voor char is
-                    //Met een boolean onGround kan nagegaan worden of de char op de grond staat en of deze dus moet vallen of niet
-                    case CollisionType.Top:
-                        entity.Speed = new Vector2(entity.Speed.X, 0);
-                        entity.Ground = obj.CollisionRectangle.Top;
-                        entity.CurPosition = new Vector2(entity.CurPosition.X, entity.Ground - spriteheight);
-                        topcount++;
-                        break;
-                    //Char raakt een tile aan de zijkant, de positie wordt geupdate om te zorgen dat de char niet door de tile kan lopen
-                    case CollisionType.Left:
-                        entity.Speed = new Vector2(0, entity.Speed.Y);
-                        //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Left  - spritewidth + entity.Offsets.X-5, entity.CurPosition.Y);
-                        entity.CurPosition = new Vector2(entity.CurPosition.X - obj.IntersectSurface.Width, entity.CurPosition.Y);
-                        break;
-                    case CollisionType.Right:
-                        entity.Speed = new Vector2(0, entity.Speed.Y);
-                        //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Right - entity.Offsets.X+5, entity.CurPosition.Y);
-                        entity.CurPosition = new Vector2(entity.CurPosition.X + obj.IntersectSurface.Width, entity.CurPosition.Y);
-                        break;
-                    case CollisionType.Bottom:
-                        entity.Speed = new Vector2(entity.Speed.X, 0);
-                        //entity.CurPosition = new Vector2(entity.CurPosition.X, item.Key.CollisionRectangle.Bottom+entity.Offsets.Y);
-                        entity.CurPosition = new Vector2(entity.CurPosition.X, entity.CurPosition.Y + obj.IntersectSurface.Height);
-                        break;
+                    switch (item.Value)
+                    {
+                        //Type van collision is top, de rectangle raakt de andere aan de bovenkant
+                        //Dit wil zeggen dat de character er op moet blijven staan
+                        //De Ground variabele geeft aan wat de y-waarde van de huidige "vloer" voor char is
+                        //Met een boolean onGround kan nagegaan worden of de char op de grond staat en of deze dus moet vallen of niet
+                        case CollisionType.Top:
+                            entity.Speed = new Vector2(entity.Speed.X, 0);
+                            entity.Ground = obj.CollisionRectangle.Top;
+                            entity.CurPosition = new Vector2(entity.CurPosition.X, entity.Ground - spriteheight);
+                            topcount++;
+                            break;
+                        //Char raakt een tile aan de zijkant, de positie wordt geupdate om te zorgen dat de char niet door de tile kan lopen
+                        case CollisionType.Left:
+                            entity.Speed = new Vector2(0, entity.Speed.Y);
+                            //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Left  - spritewidth + entity.Offsets.X-5, entity.CurPosition.Y);
+                            entity.CurPosition = new Vector2(entity.CurPosition.X - obj.IntersectSurface.Width, entity.CurPosition.Y);
+                            break;
+                        case CollisionType.Right:
+                            entity.Speed = new Vector2(0, entity.Speed.Y);
+                            //entity.CurPosition = new Vector2(item.Key.CollisionRectangle.Right - entity.Offsets.X+5, entity.CurPosition.Y);
+                            entity.CurPosition = new Vector2(entity.CurPosition.X + obj.IntersectSurface.Width, entity.CurPosition.Y);
+                            break;
+                        case CollisionType.Bottom:
+                            entity.Speed = new Vector2(entity.Speed.X, 0);
+                            //entity.CurPosition = new Vector2(entity.CurPosition.X, item.Key.CollisionRectangle.Bottom+entity.Offsets.Y);
+                            entity.CurPosition = new Vector2(entity.CurPosition.X, entity.CurPosition.Y + obj.IntersectSurface.Height);
+                            break;
+                    }
                 }
+               
                 if (tile != null)
                 {
                     if (tile.Id == lavaID && player != null)
@@ -135,17 +143,9 @@ namespace GameTest1.Engine
                     {
                         //Game2.Victory = true;
                         //Game2.CurPlayer.EndGame = true;
-                        if (player.Score >= Game2.CurLevel.RequiredScore)
+                        if (player.Score >= Game2.CurLevel.RequiredScore&&!Game2.Switching)
                         {
-                            Game2.lvlCount++;
-                            if (Game2.lvlCount == Game2.lvlAmount)
-                            {
-                                Game2.Victory = true;
-                                Game2.CurPlayer.EndGame = true;
-                            }
-                            Game2.CurLevel = Game2.lvlList[Game2.lvlCount];
-                            Game2.CurLevel.Player.StartingTile = Game2.CurLevel.StartingTile;
-                            Game2.SoundLibrary[GameBase.SoundType.LevelComplete].Play();
+                            Game2.SwitchLevel();
                         }
                     }
                 }
@@ -175,12 +175,19 @@ namespace GameTest1.Engine
                 }
                 else if (collectible != null && player != null)
                 {
-                    (item.Key as Collectible).PickedUp = true;
-                    if (!player.Interacting)
+                    
+                    if (!player.Interacting && collectible.Type==CollectibleType.Raspberry)
                     {
+                        collectible.PickedUp = true;
                         Game2.SoundLibrary[GameBase.SoundType.Collect].Play();
                         player.Score += 1;
                         player.Heal(0.5f);
+                        player.Interacting = true;
+                    }
+                    else if (!player.Interacting && collectible.Type == CollectibleType.BlueBerry)
+                    {
+                        Game2.SoundLibrary[GameBase.SoundType.SpeedUp].Play();
+                        player.Speed = new Vector2(player.Speed.X, player.Speed.Y - 4f);
                         player.Interacting = true;
                     }
                     interactcount++;
@@ -233,6 +240,131 @@ namespace GameTest1.Engine
             }
         }
 
+        #region EntityCollisionChecks
+        public static void CollisionCheckFull(ObjectManager man,Entity en)
+        {
+            foreach (var item in man.ObjectList)
+            {
+                for (int i = 0; i < man.ObjectList.Count; i++)
+                {
+                    if (item != en)
+                    {
+                        if (CollisionManager.CheckCollision(en.CollisionRectangle, item.CollisionRectangle))
+                        {
+                            Rectangle intersectSurface = Rectangle.Intersect(en.CollisionRectangle, item.CollisionRectangle);
+
+                            CollisionType test = new CollisionType();
+                            var topdist = en.CollisionRectangle.Bottom - item.CollisionRectangle.Top;
+                            var botdist = item.CollisionRectangle.Bottom - en.CollisionRectangle.Top;
+                            var leftdist = en.CollisionRectangle.Right - item.CollisionRectangle.Left;
+                            var rightdist = item.CollisionRectangle.Right - en.CollisionRectangle.Left;
+                            int min = new[] { topdist, botdist, leftdist, rightdist }.Min();
+
+                            if (min == topdist)
+                            {
+                                test = CollisionType.Top;
+                            }
+                            else if (min == botdist)
+                            {
+                                test = CollisionType.Bottom;
+                            }
+                            else if (min == leftdist)
+                            {
+                                test = CollisionType.Left;
+                            }
+                            else
+                            {
+                                test = CollisionType.Right;
+                            }
+                            //if (en.CollisionRectangle.Bottom > item.CollisionRectangle.Top && en.CollisionRectangle.Top < item.CollisionRectangle.Top && en.Speed.Y >= 0 && intersectSurface.Width > intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Top;
+                            //}
+                            //else if (en.CollisionRectangle.Top < item.CollisionRectangle.Bottom && en.CollisionRectangle.Bottom > item.CollisionRectangle.Bottom && en.Speed.Y < 0 && intersectSurface.Width > intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Bottom;
+                            //}
+                            //else if (en.CollisionRectangle.Right > item.CollisionRectangle.Left && en.CollisionRectangle.Right < item.CollisionRectangle.Right && en.Speed.X > 0 && intersectSurface.Width < intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Left;
+                            //}
+                            //else if (en.CollisionRectangle.Left < item.CollisionRectangle.Right && en.CollisionRectangle.Left > item.CollisionRectangle.Left && en.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
+                            //{
+                            //    test = CollisionType.Right;
+                            //}
+                            if ((item as Enemy) != null)
+                            {
+                                (item as Enemy).IntersectSurface = intersectSurface;
+                            }
+                            en.CollisionList[item] = test;
+                        }
+                    }
+                }
+            }
+        }
+        public static void CollisionCheckTile(Rectangle CollisionRectangle, SpriteBatch sb, int id,Entity en)
+        {
+            if (en.TileRectList.Contains(CollisionRectangle))
+            {
+                return;
+            }
+            var item = new Tile(ExtensionMethods.BlankTexture(sb), CollisionRectangle, 1, id);
+            item.CollisionRectangle = CollisionRectangle;
+
+            if (CollisionManager.CheckCollision(en.CollisionRectangle, CollisionRectangle))
+            {
+                Rectangle intersectSurface = Rectangle.Intersect(en.CollisionRectangle, item.CollisionRectangle);
+                CollisionType test = new CollisionType();
+                var topdist = en.CollisionRectangle.Bottom - item.CollisionRectangle.Top;
+                var botdist = item.CollisionRectangle.Bottom - en.CollisionRectangle.Top;
+                var leftdist = en.CollisionRectangle.Right - item.CollisionRectangle.Left;
+                var rightdist = item.CollisionRectangle.Right - en.CollisionRectangle.Left;
+                int min = new[] { topdist, botdist, leftdist, rightdist }.Min();
+
+                if (min == topdist)
+                {
+                    test = CollisionType.Top;
+                }
+                else if (min == botdist)
+                {
+                    test = CollisionType.Bottom;
+                }
+                else if (min == leftdist)
+                {
+                    test = CollisionType.Left;
+                }
+                else
+                {
+                    test = CollisionType.Right;
+                }
+
+
+
+                //if (en.CollisionRectangle.Bottom > item.CollisionRectangle.Top && en.CollisionRectangle.Top < item.CollisionRectangle.Bottom && en.Speed.Y > 0 && intersectSurface.Width > intersectSurface.Height)
+                //{
+                //    test = CollisionType.Top;
+                //}
+                //else if (en.CollisionRectangle.Top < item.CollisionRectangle.Bottom && en.CollisionRectangle.Bottom > item.CollisionRectangle.Top && en.Speed.Y<0 && intersectSurface.Width > intersectSurface.Height)
+                //{
+                //    test = CollisionType.Bottom;
+                //}
+                //else if(en.CollisionRectangle.Right > item.CollisionRectangle.Left && en.CollisionRectangle.Left < item.CollisionRectangle.Right && en.Speed.X>0 && intersectSurface.Width < intersectSurface.Height)
+                //{
+                //    test = CollisionType.Left;
+                //}
+                //else if(en.CollisionRectangle.Left < item.CollisionRectangle.Right && en.CollisionRectangle.Right > item.CollisionRectangle.Left && en.Speed.X < 0 && intersectSurface.Width < intersectSurface.Height)
+                //{ 
+                //    test = CollisionType.Right;
+                //}
+                item.IntersectSurface = intersectSurface;
+                en.CollisionList[item] = test;
+                if (!en.TileRectList.Contains(CollisionRectangle))
+                {
+                    en.TileRectList.Add(CollisionRectangle);
+                }
+            }
+        }
+        #endregion
 
         public static Object playerDamageFull()
         {

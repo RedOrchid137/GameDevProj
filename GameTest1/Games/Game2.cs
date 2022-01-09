@@ -21,6 +21,7 @@ using GameTest1.Engine;
 using GameTest1.Abstracts;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
+using static GameTest1.Entities.Collectible;
 
 namespace GameTest1
 {
@@ -95,15 +96,6 @@ namespace GameTest1
                 (this.MenuState as MenuState).StartKnop.Text = "Continue";
                 CurrentState = MenuState;
             }
-
-            if (CurrentState == this.GameState)
-            {
-                CurLevel.oMan.UpdateAll(gameTime, CurLevel, _spriteBatch);
-                _camera.Follow(player);
-                _tiledMapRenderer.Update(gameTime);
-                
-            }
-            CurrentState.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -121,20 +113,24 @@ namespace GameTest1
 
         public void LoadLevel1()
         {
-            Level1 = new Level(Content.Load<TiledMap>("TileMapResources/Level1/Level1"), 32, Content.Load<Texture2D>("TileMapResources/Level1/Background"), 3, new Vector2(3, 18));
+            Level1 = new Level(Content.Load<TiledMap>("TileMapResources/Levels/Level1"), 32, Content.Load<Texture2D>("TileMapResources/Levels/Background"), 3, new Vector2(2, 17));
             Spritesheet foxsheet = new Spritesheet(Content.Load<Texture2D>("Characters/Fox Sprite Sheet"), new List<int> { 5, 14, 8, 11, 5, 6, 7 });
             Spritesheet trollsheet = new Spritesheet(Content.Load<Texture2D>("Enemies/Shardsoul Slayer Sprite Sheet"), new List<int> { 8, 8, 5, 4, 6 });
             Spritesheet huntersheet = new Spritesheet(Content.Load<Texture2D>("Enemies/SpriteSheetHuntress"), new List<int> { 6, 2, 10, 8, 10, 3, 2 });
-            Spritesheet berrysheet = new Spritesheet(Content.Load<Texture2D>("Collectibles/Raspberry"), new List<int> { 6 });
+            Spritesheet raspberrysheet = new Spritesheet(Content.Load<Texture2D>("Collectibles/Raspberry"), new List<int> { 6 });
+            
 
-            player = new Character(foxsheet, WindowRectangle, Level1, new Vector2(2, 17), new KeyboardReader(), 2f, 5);
+            player = new Character(foxsheet, WindowRectangle, Level1, Level1.StartingTile, new KeyboardReader(), 2f, 5);
             CurPlayer = player;
-            TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(2, 6), new Vector2(1, 12), 1.5f, 2);
-            TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(36, 20), new Vector2(27, 42), 1.5f, 2);
-            Collectible berry1 = new Collectible(berrysheet, WindowRectangle, Level1, new Vector2(45, 5), 1.5f);
-            Collectible berry2 = new Collectible(berrysheet, WindowRectangle, Level1, new Vector2(24, 17), 1.5f);
-            Collectible berry3 = new Collectible(berrysheet, WindowRectangle, Level1, new Vector2(2, 4), 1.5f);
+            TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(2, 5), new Vector2(1, 12), 1.5f,5);
+            TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level1, new Vector2(36, 20), new Vector2(27, 42), 1.5f, 5);
+            Collectible berry1 = new Collectible(raspberrysheet, WindowRectangle, Level1, new Vector2(45, 5), CollectibleType.Raspberry, 1.5f);
+            Collectible berry2 = new Collectible(raspberrysheet, WindowRectangle, Level1, new Vector2(24, 17), CollectibleType.Raspberry, 1.5f);
+            Collectible berry3 = new Collectible(raspberrysheet, WindowRectangle, Level1, new Vector2(2, 4), CollectibleType.Raspberry, 1.5f);
             HunterEnemy huntress = new HunterEnemy(huntersheet, Content.Load<Texture2D>("Arrows/Static"), WindowRectangle, Level1, new Vector2(43, 5), Vector2.Zero, 10, 1.3f, 1);
+
+            Level1.Player = player;
+
             Level1.oMan.ObjectList.Add(player);
             Level1.oMan.ObjectList.Add(troll);
             Level1.oMan.ObjectList.Add(troll2);
@@ -149,7 +145,38 @@ namespace GameTest1
 
         public void LoadLevel2()
         {
-            Level2 = new Level(Content.Load<TiledMap>("TileMapResources/Level1/Level2"), 32, Content.Load<Texture2D>("TileMapResources/Level1/Background"), 3, new Vector2(2, 24));
+            Level2 = new Level(Content.Load<TiledMap>("TileMapResources/Levels/Level2"), 32, Content.Load<Texture2D>("TileMapResources/Levels/Background"), 5, new Vector2(2, 25));
+            Spritesheet trollsheet = new Spritesheet(Content.Load<Texture2D>("Enemies/Shardsoul Slayer Sprite Sheet"), new List<int> { 8, 8, 5, 4, 6 });
+            Spritesheet huntersheet = new Spritesheet(Content.Load<Texture2D>("Enemies/SpriteSheetHuntress"), new List<int> { 6, 2, 10, 8, 10, 3, 2 });
+            Spritesheet raspberrysheet = new Spritesheet(Content.Load<Texture2D>("Collectibles/Raspberry"), new List<int> { 6 });
+            Spritesheet blueberrysheet = new Spritesheet(Content.Load<Texture2D>("Collectibles/blueberry"), new List<int> { 6 });
+            
+            TrollEnemy troll = new TrollEnemy(trollsheet, WindowRectangle, Level2, new Vector2(29, 9), new Vector2(24, 32), 1.5f, 3);
+            TrollEnemy troll2 = new TrollEnemy(trollsheet, WindowRectangle, Level2, new Vector2(41, 24), new Vector2(37, 45), 1.5f, 5);
+            Collectible berry1 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(1, 1),CollectibleType.Raspberry, 1.5f);
+            Collectible berry2 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(18, 25), CollectibleType.Raspberry, 1.5f);
+            Collectible berry3 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(35, 6), CollectibleType.Raspberry, 1.5f);
+            Collectible berry4 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(47, 8), CollectibleType.Raspberry, 1.5f);
+            Collectible berry5 = new Collectible(raspberrysheet, WindowRectangle, Level2, new Vector2(12,24), CollectibleType.Raspberry, 1.5f);
+            Collectible blueberry1 = new Collectible(blueberrysheet, WindowRectangle, Level2, new Vector2(1, 5), CollectibleType.BlueBerry, 1.5f);
+            Collectible blueberry2 = new Collectible(blueberrysheet, WindowRectangle, Level2, new Vector2(24, 6), CollectibleType.BlueBerry, 1.5f);
+            HunterEnemy huntress = new HunterEnemy(huntersheet, Content.Load<Texture2D>("Arrows/Static"), WindowRectangle, Level2, new Vector2(32, 16), Vector2.Zero, 10, 1.3f, 1);
+
+            Level2.Player = player;
+            Level2.oMan.ObjectList.Add(player);
+            Level2.oMan.ObjectList.Add(troll);
+            Level2.oMan.ObjectList.Add(troll2);
+            Level2.oMan.ObjectList.Add(berry1);
+            Level2.oMan.ObjectList.Add(berry2);
+            Level2.oMan.ObjectList.Add(berry3);
+            Level2.oMan.ObjectList.Add(berry4);
+            Level2.oMan.ObjectList.Add(berry5);
+            Level2.oMan.ObjectList.Add(blueberry1);
+            Level2.oMan.ObjectList.Add(blueberry2);
+            Level2.oMan.ObjectList.Add(huntress);
+
+
+            //player.StartingTile = Level2.StartingTile;
             lvlList.Add(Level2);
         }
 
@@ -172,6 +199,7 @@ namespace GameTest1
             SoundEffect levelComplete = Content.Load<SoundEffect>("Sound/LevelComplete");
             SoundEffect heal = Content.Load<SoundEffect>("Sound/Heal");
             SoundEffect shot = Content.Load<SoundEffect>("Sound/BowShot");
+            SoundEffect speedup = Content.Load<SoundEffect>("Sound/SpeedUp");
 
             SoundLibrary[SoundType.CharHit] = charhit;
             SoundLibrary[SoundType.EnemyHit] = enemyhit;
@@ -183,15 +211,16 @@ namespace GameTest1
             SoundLibrary[SoundType.LevelComplete] = levelComplete;
             SoundLibrary[SoundType.Heal] = heal;
             SoundLibrary[SoundType.Shot] = shot;
+            SoundLibrary[SoundType.SpeedUp] = speedup;
         }
 
         protected override void LoadUI()
         {
             HealthBar healthbar = new HealthBar(Content.Load<Texture2D>("UI/FullHeart"), Content.Load<Texture2D>("UI/HalfHeart"), WindowRectangle, _spriteBatch, 3f, 60, 0.1f);
-            Score score = new Score(WindowRectangle, _spriteBatch, Content.Load<SpriteFont>("Font/ScoreFont"), Color.White, new Vector2(200, 200));
+            Score score = new Score(WindowRectangle, _spriteBatch, Content.Load<SpriteFont>("Font/ScoreFont"), Color.Red);
 
             UI.AddElement(new Vector2(30, 30), healthbar);
-            UI.AddElement(new Vector2(WindowRectangle.Width - 300, WindowRectangle.Height - 200), score);
+            UI.AddElement(new Vector2(30, WindowRectangle.Height-150), score);
         }
     }
 }

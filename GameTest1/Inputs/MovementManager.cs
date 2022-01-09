@@ -93,7 +93,7 @@ namespace GameTest1.Inputs
                 {
                     if ((movable.InputReader as KeyboardReader).InputDifferent)
                     {
-                        Game2.SoundLibrary[GameBase.SoundType.Jump].Play();
+                        Game2.SoundLibrary[GameBase.SoundType.Jump].Play(0.2f,0f,0f);
                     }
                     movable.IsFalling = true;
                     movable.Speed = new Vector2(movable.Speed.X, movable.Speed.Y - movable.Acceleration.Y);
@@ -143,18 +143,7 @@ namespace GameTest1.Inputs
             //Update Direction and Flip Sprite
 
             movable.FlipFlagX = !movable.Direction;
-            if (movable.Attacking&&hunter!=null)
-            {
-                if (movable.FlipFlagX)
-                {
-                    movable.Speed = new Vector2(-0.1f, movable.Speed.Y);
-                }
-                else
-                {
-                    movable.Speed = new Vector2(0.1f, movable.Speed.Y);
-                }
-            }
-            else if(hunter==null)
+            if(hunter==null)
             {
                 if (movable.Direction)
                 {
@@ -202,27 +191,6 @@ namespace GameTest1.Inputs
 
             //Update Position after move
             movable.CurPosition += movable.Speed;
-
-            //update FOV Rectangle
-            movable.UpdateFOV();
-
-
-            //Handle Player Observed
-            if (movable.CurLevel.Player.CollisionRectangle.Intersects(movable.FieldOfView))
-            {
-                movable.Chasing = true;
-            }
-            else
-            {
-                movable.Chasing = false;
-                movable.Running = false;
-                movable.MaxSpeed = movable.InitialMaxSpeed;
-            }
-            if (movable.Chasing&&!movable.Running)
-            {
-                movable.MaxSpeed += 2;
-                movable.Running = true;
-            }
 
 
             //Handle Path Limit Reached

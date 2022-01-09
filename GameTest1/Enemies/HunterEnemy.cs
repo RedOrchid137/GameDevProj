@@ -28,7 +28,7 @@ namespace GameTest1.Enemies
             animationList[AnimationType.Run].Fps = 8;
             AddAnimation(AnimationType.Jump, new List<int> { 6 });
             AddAnimation(AnimationType.Attack, new List<int> { 0 });
-            animationList[AnimationType.Attack].Fps = 7;
+            animationList[AnimationType.Attack].Fps = 10;
             AddAnimation(AnimationType.Death, new List<int> { 4 });
             animationList[AnimationType.Death].Fps = 8;
             this.curAnimation = animationList[AnimationType.Idle];

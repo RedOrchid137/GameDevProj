@@ -62,12 +62,12 @@ namespace GameTest1.Entities
             if (FlipFlagX)
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Drawcolor, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch),new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch),new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
             else
             {
                 spriteBatch.Draw(_texture, CurPosition, curAnimation.CurrentFrame.SourceRectangle, Drawcolor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
+                //spriteBatch.Draw(ExtensionMethods.BlankTexture(spriteBatch), new Vector2(CollisionRectangle.X, CollisionRectangle.Y), CollisionRectangle, Color.Red * 0.5f);
             }
         }
         public void TakeDamage(float amt)

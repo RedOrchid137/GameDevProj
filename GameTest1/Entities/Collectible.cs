@@ -12,11 +12,16 @@ namespace GameTest1.Entities
 {
     public class Collectible : Entity
     {
+        public enum CollectibleType {Raspberry, BlueBerry, StrawBerry}
+
+
+        public CollectibleType Type { get; set; }
         public bool PickedUp { get; set; } = false;
-        public Collectible(Spritesheet spritesheet, Rectangle window, Level curlevel, Vector2 startingtile, float scale = 1, float maxSpeed = 0) : base(spritesheet, window, curlevel, startingtile, scale, maxSpeed)
+        public Collectible(Spritesheet spritesheet, Rectangle window, Level curlevel, Vector2 startingtile,CollectibleType type, float scale = 1, float maxSpeed = 0) : base(spritesheet, window, curlevel, startingtile, scale, maxSpeed)
         {
             AddAnimation(AnimationType.Idle, new List<int> {0});
             curAnimation = animationList[AnimationType.Idle];
+            this.Type = type;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

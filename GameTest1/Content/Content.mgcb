@@ -124,6 +124,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Font/ScoreFont.spritefont
 
+#begin Font/TutFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font/TutFont.spritefont
+
 #begin Knop/Button.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -292,13 +299,19 @@
 /processorParam:Quality=Best
 /build:Sound/Lost.wav
 
+#begin Sound/SpeedUp.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/SpeedUp.wav
+
 #begin Sound/Victory.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sound/Victory.wav
 
-#begin TileMapResources/Level1/5z1KX.png
+#begin TileMapResources/Levels/5z1KX.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -308,14 +321,14 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:TileMapResources/Level1/5z1KX.png
+/build:TileMapResources/Levels/5z1KX.png
 
-#begin TileMapResources/Level1/8bitTiles.tsx
+#begin TileMapResources/Levels/8bitTiles.tsx
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
-/build:TileMapResources/Level1/8bitTiles.tsx
+/build:TileMapResources/Levels/8bitTiles.tsx
 
-#begin TileMapResources/Level1/Background.png
+#begin TileMapResources/Levels/Background.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -325,17 +338,17 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:TileMapResources/Level1/Background.png
+/build:TileMapResources/Levels/Background.png
 
-#begin TileMapResources/Level1/Level1.tmx
+#begin TileMapResources/Levels/Level1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:TileMapResources/Level1/Level1.tmx
+/build:TileMapResources/Levels/Level1.tmx
 
-#begin TileMapResources/Level1/Level2.tmx
+#begin TileMapResources/Levels/Level2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:TileMapResources/Level1/Level2.tmx
+/build:TileMapResources/Levels/Level2.tmx
 
 #begin UI/FullHeart.png
 /importer:TextureImporter
